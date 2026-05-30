@@ -5,311 +5,305 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>文宣資料 ─ 優學補習班</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700;900&family=Inter:wght@700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
 </head>
-<body class="font-sans bg-white">
+<body class="bg-white">
 
-  <!-- ── Navbar ── -->
-  <nav class="bg-white/95 backdrop-blur-sm shadow-sm fixed w-full top-0 z-50 border-b border-gray-100">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex justify-between h-16">
-        <div class="flex items-center">
-          <a href="index.html" class="flex items-center space-x-2">
-            <div class="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center"><span class="text-white font-bold text-sm">優</span></div>
-            <span class="text-xl font-bold text-gray-900">優學補習班</span>
-          </a>
-        </div>
-        <div class="hidden md:flex items-center space-x-1">
-          <a href="index.html"      class="px-4 py-2 text-gray-700 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg font-medium transition-all">首頁</a>
-          <a href="about.html"      class="px-4 py-2 text-gray-700 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg font-medium transition-all">關於我們</a>
-          <a href="pricing.html"    class="px-4 py-2 text-gray-700 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg font-medium transition-all">課程費用</a>
-          <a href="promotions.html" class="px-4 py-2 text-indigo-600 bg-indigo-50 rounded-lg font-semibold">文宣資料</a>
-          <a href="quote.html"      class="ml-2 bg-indigo-600 text-white px-5 py-2 rounded-lg hover:bg-indigo-700 font-medium transition-all shadow-sm">📋 開立報價單</a>
-        </div>
-        <div class="md:hidden flex items-center">
-          <button id="mobile-menu-btn" class="p-2 text-gray-700 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg">
-            <svg id="menu-open-icon"  class="h-6 w-6"        fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
-            <svg id="menu-close-icon" class="h-6 w-6 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
-          </button>
-        </div>
-      </div>
+<!-- Navbar -->
+<nav class="fixed w-full top-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-100/60">
+  <div class="max-w-7xl mx-auto px-5 sm:px-8 flex justify-between h-16 items-center">
+    <a href="index.html" class="flex items-center gap-2.5">
+      <div class="w-9 h-9 rounded-xl flex items-center justify-center text-white font-black text-base" style="background:linear-gradient(135deg,#4F46E5,#7C3AED)">優</div>
+      <span class="text-xl font-black text-slate-900">優學補習班</span>
+    </a>
+    <div class="hidden md:flex items-center gap-1">
+      <a href="index.html"      class="px-4 py-2 text-slate-700 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg font-medium text-sm transition-all">首頁</a>
+      <a href="about.html"      class="px-4 py-2 text-slate-700 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg font-medium text-sm transition-all">關於我們</a>
+      <a href="pricing.html"    class="px-4 py-2 text-slate-700 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg font-medium text-sm transition-all">課程費用</a>
+      <a href="promotions.html" class="px-4 py-2 text-indigo-600 bg-indigo-50 rounded-lg font-semibold text-sm">文宣資料</a>
+      <a href="quote.html"      class="ml-3 btn-primary inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-sm">📋 開立報價單</a>
     </div>
-    <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100">
-      <div class="px-4 py-3 space-y-1">
-        <a href="index.html"      class="block px-3 py-2 text-gray-700 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg">首頁</a>
-        <a href="about.html"      class="block px-3 py-2 text-gray-700 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg">關於我們</a>
-        <a href="pricing.html"    class="block px-3 py-2 text-gray-700 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg">課程費用</a>
-        <a href="promotions.html" class="block px-3 py-2 text-indigo-600 font-semibold bg-indigo-50 rounded-lg">文宣資料</a>
-        <a href="quote.html"      class="block px-3 py-2 text-indigo-600 font-medium hover:bg-indigo-50 rounded-lg">📋 開立報價單</a>
-      </div>
-    </div>
-  </nav>
+    <button id="mobile-menu-btn" class="md:hidden p-2 rounded-lg text-slate-700 hover:bg-indigo-50">
+      <svg id="menu-open-icon"  class="h-6 w-6"        fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+      <svg id="menu-close-icon" class="h-6 w-6 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+    </button>
+  </div>
+  <div id="mobile-menu" class="hidden md:hidden bg-white border-t px-5 py-3 space-y-1">
+    <a href="index.html"      class="block px-3 py-2.5 rounded-xl text-slate-700 hover:bg-indigo-50 font-medium">首頁</a>
+    <a href="about.html"      class="block px-3 py-2.5 rounded-xl text-slate-700 hover:bg-indigo-50 font-medium">關於我們</a>
+    <a href="pricing.html"    class="block px-3 py-2.5 rounded-xl text-slate-700 hover:bg-indigo-50 font-medium">課程費用</a>
+    <a href="promotions.html" class="block px-3 py-2.5 rounded-xl text-indigo-600 font-semibold bg-indigo-50">文宣資料</a>
+    <a href="quote.html"      class="block px-3 py-2.5 rounded-xl text-indigo-600 font-semibold">📋 開立報價單</a>
+  </div>
+</nav>
 
-  <!-- ── Banner ── -->
-  <section class="pt-16 bg-gradient-to-br from-pink-500 to-rose-600">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center text-white">
-      <h1 class="text-5xl font-bold mb-4">文宣資料</h1>
-      <p class="text-xl text-pink-100">最新消息、優惠活動與補習班介紹資料</p>
-    </div>
-  </section>
+<!-- Banner -->
+<section class="pt-16 relative overflow-hidden" style="background:linear-gradient(135deg,#831843,#9d174d,#be185d)">
+  <div class="blob blob-1" style="background:rgba(244,114,182,0.25);opacity:1"></div>
+  <div class="blob blob-2" style="background:rgba(251,113,133,0.2);opacity:1"></div>
+  <div class="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 py-24 text-center">
+    <div class="inline-flex items-center border border-white/20 text-white/80 px-4 py-2 rounded-full text-sm font-semibold mb-5">📢 文宣資料</div>
+    <h1 class="text-5xl lg:text-6xl font-black text-white mb-5">最新公告、<span class="gradient-text-blue">優惠活動</span></h1>
+    <p class="text-pink-100 text-xl max-w-xl mx-auto">掌握最新消息，把握優惠機會</p>
+  </div>
+  <div class="absolute bottom-0 left-0 w-full overflow-hidden" style="height:60px">
+    <svg viewBox="0 0 1440 60" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" class="w-full h-full">
+      <path d="M0,30 C360,60 1080,0 1440,30 L1440,60 L0,60 Z" fill="white"/>
+    </svg>
+  </div>
+</section>
 
-  <!-- ── Latest News ── -->
-  <section class="py-20 bg-white">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center mb-16">
-        <h2 class="text-4xl font-bold text-gray-900 mb-4">最新公告</h2>
-        <div class="w-16 h-1 bg-indigo-600 mx-auto"></div>
-      </div>
-      <div class="space-y-6 max-w-4xl mx-auto">
-        <div class="flex gap-6 p-6 bg-red-50 border border-red-200 rounded-2xl">
-          <div class="flex-shrink-0">
-            <span class="bg-red-500 text-white text-xs px-3 py-1 rounded-full font-bold">最新</span>
-          </div>
-          <div>
-            <div class="text-sm text-gray-500 mb-1">2025/05/15</div>
-            <h4 class="font-bold text-gray-900 mb-2">【暑假班開放報名】7月正式開課，名額有限！</h4>
-            <p class="text-gray-600 text-sm">2025 年暑假課程即日起開始報名，提供全日班、半日班及單科加強班。名額有限，歡迎儘早報名。</p>
-          </div>
-        </div>
-        <div class="flex gap-6 p-6 bg-amber-50 border border-amber-200 rounded-2xl">
-          <div class="flex-shrink-0">
-            <span class="bg-amber-500 text-white text-xs px-3 py-1 rounded-full font-bold">優惠</span>
-          </div>
-          <div>
-            <div class="text-sm text-gray-500 mb-1">2025/04/20</div>
-            <h4 class="font-bold text-gray-900 mb-2">【端午節優惠】6 月份報名享 9 折優惠</h4>
-            <p class="text-gray-600 text-sm">即日起至 6 月 30 日止，新生報名享課程費用 9 折優惠。老生介紹新生雙方各享 $500 折扣券。</p>
-          </div>
-        </div>
-        <div class="flex gap-6 p-6 bg-blue-50 border border-blue-200 rounded-2xl">
-          <div class="flex-shrink-0">
-            <span class="bg-blue-500 text-white text-xs px-3 py-1 rounded-full font-bold">公告</span>
-          </div>
-          <div>
-            <div class="text-sm text-gray-500 mb-1">2025/04/01</div>
-            <h4 class="font-bold text-gray-900 mb-2">【新增課程】高中學測衝刺班正式開班</h4>
-            <p class="text-gray-600 text-sm">針對高三學生推出學測衝刺班，由具豐富學測輔導經驗的師資主導，每週六日開課，限額 8 人小班。</p>
-          </div>
-        </div>
-        <div class="flex gap-6 p-6 bg-green-50 border border-green-200 rounded-2xl">
-          <div class="flex-shrink-0">
-            <span class="bg-green-500 text-white text-xs px-3 py-1 rounded-full font-bold">活動</span>
-          </div>
-          <div>
-            <div class="text-sm text-gray-500 mb-1">2025/03/15</div>
-            <h4 class="font-bold text-gray-900 mb-2">【免費試聽】3–4 月份開放免費試聽課程</h4>
-            <p class="text-gray-600 text-sm">歡迎家長帶孩子來體驗我們的教學品質，每科提供一堂免費試聽，不滿意無需報名。</p>
-          </div>
-        </div>
-      </div>
+<!-- News -->
+<section class="py-24 bg-white">
+  <div class="max-w-4xl mx-auto px-5 sm:px-8">
+    <div class="text-center mb-12">
+      <div class="inline-flex items-center bg-indigo-50 text-indigo-600 px-4 py-2 rounded-full text-sm font-semibold mb-4">📋 最新公告</div>
+      <h2 class="text-4xl font-black text-slate-900">重要消息一覽</h2>
     </div>
-  </section>
-
-  <!-- ── Current Promotions ── -->
-  <section class="py-20 bg-gray-50">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center mb-16">
-        <h2 class="text-4xl font-bold text-gray-900 mb-4">目前優惠活動</h2>
-        <p class="text-xl text-gray-500">把握有限名額，及早報名享優惠</p>
-      </div>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <div class="card-hover bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl p-8 text-white">
-          <div class="text-5xl mb-4">☀️</div>
-          <h3 class="text-2xl font-bold mb-3">2025 暑假特惠方案</h3>
-          <p class="text-indigo-200 mb-4">暑假 7–8 月（共 2 個月），報名即享學期方案優惠</p>
-          <ul class="space-y-2 text-sm text-indigo-100 mb-6">
-            <li>✓ 課程費用 9 折</li>
-            <li>✓ 每週可上 5 天</li>
-            <li>✓ 加贈作業指導服務</li>
-            <li>✓ 前 20 名加贈精選講義一份</li>
-          </ul>
-          <div class="text-2xl font-bold">報名截止：6 月 30 日</div>
-        </div>
-        <div class="card-hover bg-gradient-to-br from-amber-400 to-orange-500 rounded-2xl p-8 text-white">
-          <div class="text-5xl mb-4">👨‍👩‍👧‍👦</div>
-          <h3 class="text-2xl font-bold mb-3">兄弟姐妹優惠</h3>
-          <p class="text-amber-100 mb-4">同一家庭 2 位以上學生同時報名</p>
-          <ul class="space-y-2 text-sm text-amber-100 mb-6">
-            <li>✓ 第 2 位學生享 9 折</li>
-            <li>✓ 第 3 位學生享 85 折</li>
-            <li>✓ 可選擇不同科目與年級</li>
-            <li>✓ 無使用期限限制</li>
-          </ul>
-          <div class="text-2xl font-bold">長期有效，歡迎諮詢</div>
-        </div>
-        <div class="card-hover bg-gradient-to-br from-emerald-400 to-teal-500 rounded-2xl p-8 text-white">
-          <div class="text-5xl mb-4">👋</div>
-          <h3 class="text-2xl font-bold mb-3">新生首月優惠</h3>
-          <p class="text-emerald-100 mb-4">全新加入的學生，第一個月享特別優惠</p>
-          <ul class="space-y-2 text-sm text-emerald-100 mb-6">
-            <li>✓ 首月課費 8 折</li>
-            <li>✓ 免費程度評測一次</li>
-            <li>✓ 免費個人學習計畫</li>
-            <li>✓ 首月不滿意全額退費</li>
-          </ul>
-          <div class="text-2xl font-bold">適用所有新報名學生</div>
-        </div>
-        <div class="card-hover bg-gradient-to-br from-pink-400 to-rose-500 rounded-2xl p-8 text-white">
-          <div class="text-5xl mb-4">🤝</div>
-          <h3 class="text-2xl font-bold mb-3">老生介紹優惠</h3>
-          <p class="text-pink-100 mb-4">介紹好友加入，介紹人與新生雙方都有優惠</p>
-          <ul class="space-y-2 text-sm text-pink-100 mb-6">
-            <li>✓ 介紹人獲 $500 折扣券</li>
-            <li>✓ 新生獲 $300 折扣券</li>
-            <li>✓ 折扣券可累積使用</li>
-            <li>✓ 無介紹人數上限</li>
-          </ul>
-          <div class="text-2xl font-bold">長期有效</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ── Brochure / Materials ── -->
-  <section class="py-20 bg-white">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center mb-16">
-        <h2 class="text-4xl font-bold text-gray-900 mb-4">補習班介紹資料</h2>
-        <p class="text-xl text-gray-500">下載或列印，分享給需要的家長</p>
-      </div>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <div class="card-hover bg-white rounded-2xl p-6 shadow-sm border border-gray-100 text-center">
-          <div class="w-20 h-28 bg-gradient-to-b from-indigo-500 to-indigo-600 rounded-xl mx-auto mb-4 flex items-center justify-center">
-            <span class="text-white text-3xl">📄</span>
-          </div>
-          <h4 class="font-bold text-gray-900 mb-2">補習班總介紹</h4>
-          <p class="text-sm text-gray-500 mb-4">包含師資、課程、費用的完整介紹</p>
-          <button onclick="handleDownload('補習班總介紹')" class="w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 transition-all text-sm font-medium">⬇ 下載 PDF</button>
-        </div>
-        <div class="card-hover bg-white rounded-2xl p-6 shadow-sm border border-gray-100 text-center">
-          <div class="w-20 h-28 bg-gradient-to-b from-green-500 to-green-600 rounded-xl mx-auto mb-4 flex items-center justify-center">
-            <span class="text-white text-3xl">📋</span>
-          </div>
-          <h4 class="font-bold text-gray-900 mb-2">課程費率一覽表</h4>
-          <p class="text-sm text-gray-500 mb-4">各科目、各授課形式完整費率對照</p>
-          <button onclick="handleDownload('課程費率一覽表')" class="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition-all text-sm font-medium">⬇ 下載 PDF</button>
-        </div>
-        <div class="card-hover bg-white rounded-2xl p-6 shadow-sm border border-gray-100 text-center">
-          <div class="w-20 h-28 bg-gradient-to-b from-amber-500 to-amber-600 rounded-xl mx-auto mb-4 flex items-center justify-center">
-            <span class="text-white text-3xl">🎪</span>
-          </div>
-          <h4 class="font-bold text-gray-900 mb-2">暑假班招生海報</h4>
-          <p class="text-sm text-gray-500 mb-4">2025 暑假課程詳細內容與優惠</p>
-          <button onclick="handleDownload('暑假班招生海報')" class="w-full bg-amber-600 text-white py-2 rounded-lg hover:bg-amber-700 transition-all text-sm font-medium">⬇ 下載 PDF</button>
-        </div>
-        <div class="card-hover bg-white rounded-2xl p-6 shadow-sm border border-gray-100 text-center">
-          <div class="w-20 h-28 bg-gradient-to-b from-purple-500 to-purple-600 rounded-xl mx-auto mb-4 flex items-center justify-center">
-            <span class="text-white text-3xl">📊</span>
-          </div>
-          <h4 class="font-bold text-gray-900 mb-2">成績進步報告</h4>
-          <p class="text-sm text-gray-500 mb-4">歷屆學員成績進步統計數據</p>
-          <button onclick="handleDownload('成績進步報告')" class="w-full bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-700 transition-all text-sm font-medium">⬇ 下載 PDF</button>
-        </div>
-        <div class="card-hover bg-white rounded-2xl p-6 shadow-sm border border-gray-100 text-center">
-          <div class="w-20 h-28 bg-gradient-to-b from-rose-500 to-rose-600 rounded-xl mx-auto mb-4 flex items-center justify-center">
-            <span class="text-white text-3xl">📝</span>
-          </div>
-          <h4 class="font-bold text-gray-900 mb-2">報名表</h4>
-          <p class="text-sm text-gray-500 mb-4">可列印填寫的報名申請表格</p>
-          <button onclick="handleDownload('報名表')" class="w-full bg-rose-600 text-white py-2 rounded-lg hover:bg-rose-700 transition-all text-sm font-medium">⬇ 下載 PDF</button>
-        </div>
-        <div class="card-hover bg-white rounded-2xl p-6 shadow-sm border border-gray-100 text-center">
-          <div class="w-20 h-28 bg-gradient-to-b from-teal-500 to-teal-600 rounded-xl mx-auto mb-4 flex items-center justify-center">
-            <span class="text-white text-3xl">📱</span>
-          </div>
-          <h4 class="font-bold text-gray-900 mb-2">LINE 官方帳號</h4>
-          <p class="text-sm text-gray-500 mb-4">加入 LINE 即時獲得最新消息</p>
-          <button onclick="handleDownload('LINE QR Code')" class="w-full bg-teal-600 text-white py-2 rounded-lg hover:bg-teal-700 transition-all text-sm font-medium">📷 掃描 QR Code</button>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ── Registration Info ── -->
-  <section class="py-20 bg-indigo-50">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="bg-white rounded-3xl p-10 shadow-sm">
-        <h2 class="text-3xl font-bold text-gray-900 mb-8 text-center">報名方式</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div>
-            <h4 class="font-bold text-gray-800 mb-4 text-lg">📞 電話報名</h4>
-            <p class="text-gray-600 mb-2">(02) 2345-6789</p>
-            <p class="text-gray-500 text-sm">週一至週六 10:00–20:00</p>
-          </div>
-          <div>
-            <h4 class="font-bold text-gray-800 mb-4 text-lg">📧 Email 報名</h4>
-            <p class="text-gray-600 mb-2">info@youxue.edu.tw</p>
-            <p class="text-gray-500 text-sm">留下聯絡資訊，我們於 24 小時內回覆</p>
-          </div>
-          <div>
-            <h4 class="font-bold text-gray-800 mb-4 text-lg">🚶 現場報名</h4>
-            <p class="text-gray-600 mb-2">台北市中山區學習路100號</p>
-            <p class="text-gray-500 text-sm">歡迎直接來訪，諮詢當天即可安排試聽</p>
-          </div>
-          <div>
-            <h4 class="font-bold text-gray-800 mb-4 text-lg">📋 線上報價</h4>
-            <p class="text-gray-600 mb-2">使用報價單功能</p>
-            <a href="quote.html" class="text-indigo-600 text-sm hover:underline">點此開立課程報價單 →</a>
-          </div>
-        </div>
-        <div class="mt-8 p-6 bg-indigo-50 rounded-xl">
-          <p class="text-indigo-800 text-center font-medium">
-            🎉 所有新生享免費程度評測 + 第一堂課免費試聽
-          </p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ── Footer ── -->
-  <footer class="bg-gray-900 text-white">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <div class="col-span-1 md:col-span-2">
-          <div class="flex items-center space-x-2 mb-4">
-            <div class="w-8 h-8 bg-indigo-500 rounded-lg flex items-center justify-center"><span class="text-white font-bold text-sm">優</span></div>
-            <span class="text-xl font-bold">優學補習班</span>
-          </div>
-          <div class="text-gray-400 space-y-2">
-            <div class="flex items-center gap-2"><span>📍</span> 台北市中山區學習路100號</div>
-            <div class="flex items-center gap-2"><span>📞</span> (02) 2345-6789</div>
-            <div class="flex items-center gap-2"><span>📧</span> info@youxue.edu.tw</div>
-          </div>
-        </div>
+    <div class="space-y-5">
+      <div class="card-lift flex gap-5 p-6 rounded-2xl border-l-4 border-red-500 bg-red-50/50 shadow-sm">
+        <div class="flex-shrink-0 pt-1"><span class="inline-block bg-red-500 text-white text-xs px-2.5 py-1 rounded-full font-bold">最新</span></div>
         <div>
-          <h3 class="font-bold text-lg mb-4">快速連結</h3>
-          <ul class="space-y-2 text-gray-400">
-            <li><a href="index.html"      class="hover:text-white">首頁</a></li>
-            <li><a href="about.html"      class="hover:text-white">關於我們</a></li>
-            <li><a href="pricing.html"    class="hover:text-white">課程費用</a></li>
-            <li><a href="promotions.html" class="hover:text-white">文宣資料</a></li>
-            <li><a href="quote.html"      class="hover:text-white">開立報價單</a></li>
-          </ul>
+          <div class="text-xs text-slate-400 mb-1.5">2025/05/15</div>
+          <h4 class="font-black text-slate-900 mb-2">【暑假班開放報名】7月正式開課，名額有限！</h4>
+          <p class="text-slate-600 text-sm leading-relaxed">2025 年暑假課程即日起開始報名，提供全日班、半日班及單科加強班。前 20 名報名享加贈精選講義。</p>
         </div>
       </div>
-      <div class="border-t border-gray-700 mt-8 pt-6 text-center text-gray-500">
-        <p>© 2025 優學補習班 版權所有</p>
+      <div class="card-lift flex gap-5 p-6 rounded-2xl border-l-4 border-amber-500 bg-amber-50/50 shadow-sm">
+        <div class="flex-shrink-0 pt-1"><span class="inline-block bg-amber-500 text-white text-xs px-2.5 py-1 rounded-full font-bold">優惠</span></div>
+        <div>
+          <div class="text-xs text-slate-400 mb-1.5">2025/04/20</div>
+          <h4 class="font-black text-slate-900 mb-2">【端午節優惠】6 月份報名享 9 折優惠</h4>
+          <p class="text-slate-600 text-sm leading-relaxed">即日起至 6 月 30 日止，新生報名享課程費用 9 折優惠。老生介紹新生，雙方各享 $500 折扣券。</p>
+        </div>
       </div>
-    </div>
-  </footer>
-
-  <!-- Download notification modal -->
-  <div id="download-modal" class="hidden fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-    <div class="bg-white rounded-2xl p-8 max-w-sm mx-4 shadow-2xl text-center">
-      <div class="text-5xl mb-4">📄</div>
-      <h3 class="text-xl font-bold text-gray-900 mb-2" id="download-modal-title"></h3>
-      <p class="text-gray-500 mb-6 text-sm">此功能於網站正式上線後開放，目前請電洽我們索取紙本資料。</p>
-      <div class="text-gray-700 font-medium mb-6">📞 (02) 2345-6789</div>
-      <button onclick="document.getElementById('download-modal').classList.add('hidden')" class="bg-indigo-600 text-white px-8 py-3 rounded-xl hover:bg-indigo-700 font-medium">關閉</button>
+      <div class="card-lift flex gap-5 p-6 rounded-2xl border-l-4 border-indigo-500 bg-indigo-50/50 shadow-sm">
+        <div class="flex-shrink-0 pt-1"><span class="inline-block bg-indigo-500 text-white text-xs px-2.5 py-1 rounded-full font-bold">公告</span></div>
+        <div>
+          <div class="text-xs text-slate-400 mb-1.5">2025/04/01</div>
+          <h4 class="font-black text-slate-900 mb-2">【新增課程】高中學測衝刺班正式開班</h4>
+          <p class="text-slate-600 text-sm leading-relaxed">針對高三學生推出學測衝刺班，限額 8 人小班，每週六日開課，名師主導精準破解題型。</p>
+        </div>
+      </div>
+      <div class="card-lift flex gap-5 p-6 rounded-2xl border-l-4 border-emerald-500 bg-emerald-50/50 shadow-sm">
+        <div class="flex-shrink-0 pt-1"><span class="inline-block bg-emerald-500 text-white text-xs px-2.5 py-1 rounded-full font-bold">活動</span></div>
+        <div>
+          <div class="text-xs text-slate-400 mb-1.5">2025/03/15</div>
+          <h4 class="font-black text-slate-900 mb-2">【免費試聽】3–4 月開放免費試聽課程</h4>
+          <p class="text-slate-600 text-sm leading-relaxed">歡迎家長帶孩子體驗優質教學，每科提供一堂免費試聽，不滿意無需報名，完全無壓力。</p>
+        </div>
+      </div>
     </div>
   </div>
+</section>
 
-  <script src="js/main.js"></script>
-  <script>
-    function handleDownload(name) {
-      document.getElementById('download-modal-title').textContent = name;
-      document.getElementById('download-modal').classList.remove('hidden');
-    }
-  </script>
+<!-- Promotions -->
+<section class="py-24 section-dots bg-slate-50">
+  <div class="max-w-7xl mx-auto px-5 sm:px-8">
+    <div class="text-center mb-16">
+      <div class="inline-flex items-center bg-indigo-50 text-indigo-600 px-4 py-2 rounded-full text-sm font-semibold mb-4">🎁 目前優惠</div>
+      <h2 class="text-4xl font-black text-slate-900 mb-4">把握優惠，<span class="gradient-text">及早報名</span></h2>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div class="card-lift rounded-3xl p-8 text-white relative overflow-hidden" style="background:linear-gradient(135deg,#4F46E5,#7C3AED)">
+        <div class="blob blob-1" style="width:250px;height:250px;background:rgba(255,255,255,0.06);top:-50px;left:-50px"></div>
+        <div class="relative z-10">
+          <div class="text-5xl mb-4">☀️</div>
+          <h3 class="text-2xl font-black mb-2">2025 暑假特惠</h3>
+          <p class="text-indigo-200 text-sm mb-5">7–8 月，報名即享學期方案優惠</p>
+          <ul class="space-y-2 text-sm text-indigo-100 mb-6">
+            <li class="flex items-center gap-2">✓ 課程費用 9 折</li>
+            <li class="flex items-center gap-2">✓ 每週最多 5 天</li>
+            <li class="flex items-center gap-2">✓ 加贈作業指導</li>
+            <li class="flex items-center gap-2">✓ 前 20 名加贈講義</li>
+          </ul>
+          <div class="bg-white/15 rounded-xl px-4 py-3 text-sm font-bold">報名截止：6 月 30 日</div>
+        </div>
+      </div>
+      <div class="card-lift rounded-3xl p-8 text-white relative overflow-hidden" style="background:linear-gradient(135deg,#D97706,#EA580C)">
+        <div class="blob blob-2" style="width:200px;height:200px;background:rgba(255,255,255,0.06);bottom:-30px;right:-30px"></div>
+        <div class="relative z-10">
+          <div class="text-5xl mb-4">👨‍👩‍👧‍👦</div>
+          <h3 class="text-2xl font-black mb-2">兄弟姐妹優惠</h3>
+          <p class="text-amber-100 text-sm mb-5">同家庭 2 位以上同時報名</p>
+          <ul class="space-y-2 text-sm text-amber-100 mb-6">
+            <li class="flex items-center gap-2">✓ 第 2 位享 9 折</li>
+            <li class="flex items-center gap-2">✓ 第 3 位享 85 折</li>
+            <li class="flex items-center gap-2">✓ 可選不同科目</li>
+            <li class="flex items-center gap-2">✓ 無使用期限</li>
+          </ul>
+          <div class="bg-white/15 rounded-xl px-4 py-3 text-sm font-bold">長期有效，歡迎諮詢</div>
+        </div>
+      </div>
+      <div class="card-lift rounded-3xl p-8 text-white relative overflow-hidden" style="background:linear-gradient(135deg,#059669,#0891B2)">
+        <div class="relative z-10">
+          <div class="text-5xl mb-4">👋</div>
+          <h3 class="text-2xl font-black mb-2">新生首月優惠</h3>
+          <p class="text-emerald-100 text-sm mb-5">全新加入的學生，首月特別優惠</p>
+          <ul class="space-y-2 text-sm text-emerald-100 mb-6">
+            <li class="flex items-center gap-2">✓ 首月課費 8 折</li>
+            <li class="flex items-center gap-2">✓ 免費程度評測</li>
+            <li class="flex items-center gap-2">✓ 免費個人計畫</li>
+            <li class="flex items-center gap-2">✓ 不滿意全額退費</li>
+          </ul>
+          <div class="bg-white/15 rounded-xl px-4 py-3 text-sm font-bold">適用所有新報名學生</div>
+        </div>
+      </div>
+      <div class="card-lift rounded-3xl p-8 text-white relative overflow-hidden" style="background:linear-gradient(135deg,#DB2777,#9333EA)">
+        <div class="relative z-10">
+          <div class="text-5xl mb-4">🤝</div>
+          <h3 class="text-2xl font-black mb-2">老生介紹優惠</h3>
+          <p class="text-pink-100 text-sm mb-5">介紹好友加入，雙方都有好禮</p>
+          <ul class="space-y-2 text-sm text-pink-100 mb-6">
+            <li class="flex items-center gap-2">✓ 介紹人獲 $500 券</li>
+            <li class="flex items-center gap-2">✓ 新生獲 $300 券</li>
+            <li class="flex items-center gap-2">✓ 折扣券可累積</li>
+            <li class="flex items-center gap-2">✓ 無介紹人數上限</li>
+          </ul>
+          <div class="bg-white/15 rounded-xl px-4 py-3 text-sm font-bold">長期有效</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Downloads -->
+<section class="py-24 bg-white">
+  <div class="max-w-7xl mx-auto px-5 sm:px-8">
+    <div class="text-center mb-16">
+      <div class="inline-flex items-center bg-indigo-50 text-indigo-600 px-4 py-2 rounded-full text-sm font-semibold mb-4">📥 文宣資料</div>
+      <h2 class="text-4xl font-black text-slate-900 mb-4">下載或列印，<span class="gradient-text">分享給有需要的家長</span></h2>
+    </div>
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+      <div class="card-lift bg-slate-50 rounded-2xl p-5 text-center cursor-pointer" onclick="handleDownload('補習班總介紹')">
+        <div class="w-14 h-18 rounded-xl mx-auto mb-3 flex items-center justify-center text-3xl" style="background:linear-gradient(135deg,#4F46E5,#7C3AED);width:56px;height:72px">📄</div>
+        <div class="text-sm font-bold text-slate-800 mb-1">補習班總介紹</div>
+        <div class="text-xs text-indigo-600 font-semibold">⬇ 下載 PDF</div>
+      </div>
+      <div class="card-lift bg-slate-50 rounded-2xl p-5 text-center cursor-pointer" onclick="handleDownload('課程費率一覽表')">
+        <div class="w-14 rounded-xl mx-auto mb-3 flex items-center justify-center text-3xl" style="background:linear-gradient(135deg,#059669,#0891B2);width:56px;height:72px">📊</div>
+        <div class="text-sm font-bold text-slate-800 mb-1">費率一覽表</div>
+        <div class="text-xs text-emerald-600 font-semibold">⬇ 下載 PDF</div>
+      </div>
+      <div class="card-lift bg-slate-50 rounded-2xl p-5 text-center cursor-pointer" onclick="handleDownload('暑假班招生海報')">
+        <div class="w-14 rounded-xl mx-auto mb-3 flex items-center justify-center text-3xl" style="background:linear-gradient(135deg,#D97706,#EA580C);width:56px;height:72px">🎪</div>
+        <div class="text-sm font-bold text-slate-800 mb-1">暑假班海報</div>
+        <div class="text-xs text-amber-600 font-semibold">⬇ 下載 PDF</div>
+      </div>
+      <div class="card-lift bg-slate-50 rounded-2xl p-5 text-center cursor-pointer" onclick="handleDownload('成績進步報告')">
+        <div class="w-14 rounded-xl mx-auto mb-3 flex items-center justify-center text-3xl" style="background:linear-gradient(135deg,#7C3AED,#A855F7);width:56px;height:72px">📈</div>
+        <div class="text-sm font-bold text-slate-800 mb-1">成績進步報告</div>
+        <div class="text-xs text-violet-600 font-semibold">⬇ 下載 PDF</div>
+      </div>
+      <div class="card-lift bg-slate-50 rounded-2xl p-5 text-center cursor-pointer" onclick="handleDownload('報名表')">
+        <div class="w-14 rounded-xl mx-auto mb-3 flex items-center justify-center text-3xl" style="background:linear-gradient(135deg,#DB2777,#9333EA);width:56px;height:72px">📝</div>
+        <div class="text-sm font-bold text-slate-800 mb-1">報名表</div>
+        <div class="text-xs text-rose-600 font-semibold">⬇ 下載 PDF</div>
+      </div>
+      <div class="card-lift bg-slate-50 rounded-2xl p-5 text-center cursor-pointer" onclick="handleDownload('LINE QR Code')">
+        <div class="w-14 rounded-xl mx-auto mb-3 flex items-center justify-center text-3xl" style="background:linear-gradient(135deg,#059669,#10B981);width:56px;height:72px">📱</div>
+        <div class="text-sm font-bold text-slate-800 mb-1">LINE 官方帳號</div>
+        <div class="text-xs text-emerald-600 font-semibold">📷 掃描 QR</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Registration -->
+<section class="py-24 bg-indigo-50">
+  <div class="max-w-4xl mx-auto px-5 sm:px-8">
+    <div class="bg-white rounded-3xl p-10 shadow-sm">
+      <h2 class="text-3xl font-black text-slate-900 mb-10 text-center">報名方式</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div class="flex items-start gap-4">
+          <div class="w-12 h-12 rounded-2xl flex items-center justify-center text-2xl flex-shrink-0" style="background:linear-gradient(135deg,#EEF2FF,#E0E7FF)">📞</div>
+          <div>
+            <h4 class="font-black text-slate-900 mb-1">電話報名</h4>
+            <p class="text-indigo-600 font-bold">(02) 2345-6789</p>
+            <p class="text-slate-400 text-xs mt-1">週一至週六 10:00–20:00</p>
+          </div>
+        </div>
+        <div class="flex items-start gap-4">
+          <div class="w-12 h-12 rounded-2xl flex items-center justify-center text-2xl flex-shrink-0" style="background:linear-gradient(135deg,#ECFDF5,#D1FAE5)">📧</div>
+          <div>
+            <h4 class="font-black text-slate-900 mb-1">Email 報名</h4>
+            <p class="text-emerald-600 font-bold">info@youxue.edu.tw</p>
+            <p class="text-slate-400 text-xs mt-1">24 小時內回覆</p>
+          </div>
+        </div>
+        <div class="flex items-start gap-4">
+          <div class="w-12 h-12 rounded-2xl flex items-center justify-center text-2xl flex-shrink-0" style="background:linear-gradient(135deg,#FFFBEB,#FEF3C7)">🚶</div>
+          <div>
+            <h4 class="font-black text-slate-900 mb-1">現場報名</h4>
+            <p class="text-amber-600 font-bold">台北市中山區學習路100號</p>
+            <p class="text-slate-400 text-xs mt-1">歡迎直接來訪洽詢</p>
+          </div>
+        </div>
+        <div class="flex items-start gap-4">
+          <div class="w-12 h-12 rounded-2xl flex items-center justify-center text-2xl flex-shrink-0" style="background:linear-gradient(135deg,#EDE9FE,#DDD6FE)">📋</div>
+          <div>
+            <h4 class="font-black text-slate-900 mb-1">線上報價</h4>
+            <a href="quote.html" class="text-violet-600 font-bold hover:underline">點此開立報價單 →</a>
+            <p class="text-slate-400 text-xs mt-1">即時生成，可列印</p>
+          </div>
+        </div>
+      </div>
+      <div class="mt-8 rounded-2xl p-5" style="background:linear-gradient(135deg,#EEF2FF,#E0E7FF)">
+        <p class="text-indigo-700 text-center font-bold">🎉 所有新生享免費程度評測 + 第一堂課免費試聽</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="py-20" style="background:linear-gradient(135deg,#4F46E5,#7C3AED,#A855F7)">
+  <div class="max-w-3xl mx-auto px-5 text-center">
+    <h2 class="text-4xl font-black text-white mb-4">立即行動</h2>
+    <p class="text-indigo-200 mb-8 text-lg">不要讓孩子輸在起跑點，現在就開始！</p>
+    <a href="quote.html" class="inline-flex items-center justify-center gap-2 bg-white text-indigo-600 font-black px-10 py-5 rounded-2xl text-lg hover:bg-indigo-50 transition-all shadow-2xl">📋 立即開立報價單</a>
+  </div>
+</section>
+
+<!-- Modal -->
+<div id="download-modal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+  <div class="bg-white rounded-3xl p-10 max-w-sm w-full shadow-2xl text-center">
+    <div class="text-5xl mb-4">📄</div>
+    <h3 class="text-xl font-black text-slate-900 mb-2" id="download-modal-title"></h3>
+    <p class="text-slate-500 mb-6 text-sm">此功能於網站正式上線後開放，目前請來電索取紙本。</p>
+    <p class="text-indigo-600 font-bold mb-6">📞 (02) 2345-6789</p>
+    <button onclick="document.getElementById('download-modal').classList.add('hidden')" class="btn-primary w-full py-3 rounded-2xl font-bold">關閉</button>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer class="bg-slate-950 text-white">
+  <div class="max-w-7xl mx-auto px-5 sm:px-8 py-10">
+    <div class="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-slate-500 border-t border-white/10 pt-8">
+      <div class="flex items-center gap-2">
+        <div class="w-7 h-7 rounded-lg flex items-center justify-center text-white font-black text-xs" style="background:linear-gradient(135deg,#4F46E5,#7C3AED)">優</div>
+        <span class="text-white font-bold">優學補習班</span>
+      </div>
+      <div class="flex gap-5 text-slate-400">
+        <a href="index.html"      class="hover:text-white">首頁</a>
+        <a href="about.html"      class="hover:text-white">關於我們</a>
+        <a href="pricing.html"    class="hover:text-white">課程費用</a>
+        <a href="promotions.html" class="hover:text-white">文宣資料</a>
+        <a href="quote.html"      class="hover:text-white">報價單</a>
+      </div>
+      <p>© 2025 優學補習班</p>
+    </div>
+  </div>
+</footer>
+
+<script src="js/main.js"></script>
+<script>
+function handleDownload(name) {
+  document.getElementById('download-modal-title').textContent = name;
+  document.getElementById('download-modal').classList.remove('hidden');
+}
+</script>
 </body>
 </html>

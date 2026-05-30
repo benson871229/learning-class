@@ -5,329 +5,311 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>課程費用 ─ 優學補習班</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700;900&family=Inter:wght@700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
 </head>
-<body class="font-sans bg-white">
+<body class="bg-white">
 
-  <!-- ── Navbar ── -->
-  <nav class="bg-white/95 backdrop-blur-sm shadow-sm fixed w-full top-0 z-50 border-b border-gray-100">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex justify-between h-16">
-        <div class="flex items-center">
-          <a href="index.html" class="flex items-center space-x-2">
-            <div class="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center"><span class="text-white font-bold text-sm">優</span></div>
-            <span class="text-xl font-bold text-gray-900">優學補習班</span>
-          </a>
-        </div>
-        <div class="hidden md:flex items-center space-x-1">
-          <a href="index.html"      class="px-4 py-2 text-gray-700 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg font-medium transition-all">首頁</a>
-          <a href="about.html"      class="px-4 py-2 text-gray-700 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg font-medium transition-all">關於我們</a>
-          <a href="pricing.html"    class="px-4 py-2 text-indigo-600 bg-indigo-50 rounded-lg font-semibold">課程費用</a>
-          <a href="promotions.html" class="px-4 py-2 text-gray-700 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg font-medium transition-all">文宣資料</a>
-          <a href="quote.html"      class="ml-2 bg-indigo-600 text-white px-5 py-2 rounded-lg hover:bg-indigo-700 font-medium transition-all shadow-sm">📋 開立報價單</a>
-        </div>
-        <div class="md:hidden flex items-center">
-          <button id="mobile-menu-btn" class="p-2 text-gray-700 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg">
-            <svg id="menu-open-icon"  class="h-6 w-6"        fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
-            <svg id="menu-close-icon" class="h-6 w-6 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
-          </button>
-        </div>
-      </div>
+<!-- Navbar -->
+<nav class="fixed w-full top-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-100/60">
+  <div class="max-w-7xl mx-auto px-5 sm:px-8 flex justify-between h-16 items-center">
+    <a href="index.html" class="flex items-center gap-2.5">
+      <div class="w-9 h-9 rounded-xl flex items-center justify-center text-white font-black text-base" style="background:linear-gradient(135deg,#4F46E5,#7C3AED)">優</div>
+      <span class="text-xl font-black text-slate-900">優學補習班</span>
+    </a>
+    <div class="hidden md:flex items-center gap-1">
+      <a href="index.html"      class="px-4 py-2 text-slate-700 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg font-medium text-sm transition-all">首頁</a>
+      <a href="about.html"      class="px-4 py-2 text-slate-700 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg font-medium text-sm transition-all">關於我們</a>
+      <a href="pricing.html"    class="px-4 py-2 text-indigo-600 bg-indigo-50 rounded-lg font-semibold text-sm">課程費用</a>
+      <a href="promotions.html" class="px-4 py-2 text-slate-700 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg font-medium text-sm transition-all">文宣資料</a>
+      <a href="quote.html"      class="ml-3 btn-primary inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-sm">📋 開立報價單</a>
     </div>
-    <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100">
-      <div class="px-4 py-3 space-y-1">
-        <a href="index.html"      class="block px-3 py-2 text-gray-700 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg">首頁</a>
-        <a href="about.html"      class="block px-3 py-2 text-gray-700 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg">關於我們</a>
-        <a href="pricing.html"    class="block px-3 py-2 text-indigo-600 font-semibold bg-indigo-50 rounded-lg">課程費用</a>
-        <a href="promotions.html" class="block px-3 py-2 text-gray-700 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg">文宣資料</a>
-        <a href="quote.html"      class="block px-3 py-2 text-indigo-600 font-medium hover:bg-indigo-50 rounded-lg">📋 開立報價單</a>
-      </div>
-    </div>
-  </nav>
+    <button id="mobile-menu-btn" class="md:hidden p-2 rounded-lg text-slate-700 hover:bg-indigo-50">
+      <svg id="menu-open-icon"  class="h-6 w-6"        fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+      <svg id="menu-close-icon" class="h-6 w-6 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+    </button>
+  </div>
+  <div id="mobile-menu" class="hidden md:hidden bg-white border-t px-5 py-3 space-y-1">
+    <a href="index.html"      class="block px-3 py-2.5 rounded-xl text-slate-700 hover:bg-indigo-50 font-medium">首頁</a>
+    <a href="about.html"      class="block px-3 py-2.5 rounded-xl text-slate-700 hover:bg-indigo-50 font-medium">關於我們</a>
+    <a href="pricing.html"    class="block px-3 py-2.5 rounded-xl text-indigo-600 font-semibold bg-indigo-50">課程費用</a>
+    <a href="promotions.html" class="block px-3 py-2.5 rounded-xl text-slate-700 hover:bg-indigo-50 font-medium">文宣資料</a>
+    <a href="quote.html"      class="block px-3 py-2.5 rounded-xl text-indigo-600 font-semibold">📋 開立報價單</a>
+  </div>
+</nav>
 
-  <!-- ── Banner ── -->
-  <section class="pt-16 bg-gradient-to-br from-emerald-500 to-teal-600">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center text-white">
-      <h1 class="text-5xl font-bold mb-4">課程費用</h1>
-      <p class="text-xl text-emerald-100">透明收費，多元方案，量身打造最適合您的組合</p>
-    </div>
-  </section>
+<!-- Banner -->
+<section class="pt-16 relative overflow-hidden" style="background:linear-gradient(135deg,#064e3b,#065f46,#047857)">
+  <div class="blob blob-1" style="background:rgba(52,211,153,0.2);opacity:1"></div>
+  <div class="blob blob-2" style="background:rgba(16,185,129,0.15);opacity:1"></div>
+  <div class="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 py-24 text-center">
+    <div class="inline-flex items-center border border-white/20 text-white/80 px-4 py-2 rounded-full text-sm font-semibold mb-5">💰 課程費用</div>
+    <h1 class="text-5xl lg:text-6xl font-black text-white mb-5">透明收費，<span class="gradient-text-blue">量身打造</span>方案</h1>
+    <p class="text-emerald-100 text-xl max-w-xl mx-auto">多種方案可選，長期繳費享額外折扣</p>
+  </div>
+  <div class="absolute bottom-0 left-0 w-full overflow-hidden" style="height:60px">
+    <svg viewBox="0 0 1440 60" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" class="w-full h-full">
+      <path d="M0,30 C360,60 1080,0 1440,30 L1440,60 L0,60 Z" fill="white"/>
+    </svg>
+  </div>
+</section>
 
-  <!-- ── Price Note ── -->
-  <section class="py-10 bg-amber-50 border-b border-amber-200">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex items-start gap-4">
-        <span class="text-2xl">💡</span>
+<!-- Note -->
+<section class="py-6 bg-amber-50 border-b border-amber-100">
+  <div class="max-w-7xl mx-auto px-5 sm:px-8 flex items-center gap-4">
+    <div class="w-10 h-10 rounded-xl bg-amber-100 flex items-center justify-center text-xl flex-shrink-0">💡</div>
+    <p class="text-amber-800 text-sm"><strong>計費說明：</strong>以下費率為每小時單價（$/hr）。月費 = 單價 × 每堂時數 × 每週堂數 × 4 週。如需精確報價，請使用「<a href="quote.html" class="underline font-semibold">開立報價單</a>」功能。</p>
+  </div>
+</section>
+
+<!-- Price Tables -->
+<section class="py-24 bg-white">
+  <div class="max-w-7xl mx-auto px-5 sm:px-8 space-y-16">
+
+    <!-- 國小 -->
+    <div>
+      <div class="flex items-center gap-3 mb-6">
+        <div class="w-12 h-12 rounded-2xl flex items-center justify-center text-2xl" style="background:linear-gradient(135deg,#ECFDF5,#D1FAE5)">🌱</div>
         <div>
-          <h3 class="font-bold text-amber-800 mb-1">計費說明</h3>
-          <p class="text-amber-700 text-sm leading-relaxed">
-            以下費率為每小時單價（$/hr）。每堂課時數可選 1 小時、1.5 小時或 2 小時。月費試算：單價 × 每堂時數 × 每週堂數 × 4 週。
-            如需精確報價，請使用右上角「開立報價單」功能。
-          </p>
+          <h3 class="text-2xl font-black text-slate-900">國小課程</h3>
+          <div class="text-sm text-slate-400">1 ~ 6 年級</div>
         </div>
+      </div>
+      <div class="overflow-x-auto rounded-2xl border border-slate-100 shadow-sm">
+        <table class="w-full text-sm">
+          <thead>
+            <tr style="background:linear-gradient(90deg,#ECFDF5,#D1FAE5)">
+              <th class="px-6 py-4 text-left font-bold text-slate-700">科目</th>
+              <th class="px-6 py-4 text-center font-bold text-violet-700">👤 一對一</th>
+              <th class="px-6 py-4 text-center font-bold text-indigo-700">👥 小班（2–4人）</th>
+              <th class="px-6 py-4 text-center font-bold text-teal-700">🏫 大班（5人+）</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-50">
+            <tr class="hover:bg-slate-50 transition-colors"><td class="px-6 py-4 font-semibold text-slate-800">數學</td><td class="px-6 py-4 text-center"><span class="font-num font-black text-violet-600">$600</span></td><td class="px-6 py-4 text-center"><span class="font-num font-black text-indigo-600">$350</span></td><td class="px-6 py-4 text-center"><span class="font-num font-black text-teal-600">$250</span></td></tr>
+            <tr class="hover:bg-slate-50 transition-colors"><td class="px-6 py-4 font-semibold text-slate-800">英語</td><td class="px-6 py-4 text-center"><span class="font-num font-black text-violet-600">$600</span></td><td class="px-6 py-4 text-center"><span class="font-num font-black text-indigo-600">$350</span></td><td class="px-6 py-4 text-center"><span class="font-num font-black text-teal-600">$250</span></td></tr>
+            <tr class="hover:bg-slate-50 transition-colors"><td class="px-6 py-4 font-semibold text-slate-800">國語文</td><td class="px-6 py-4 text-center"><span class="font-num font-black text-violet-600">$550</span></td><td class="px-6 py-4 text-center"><span class="font-num font-black text-indigo-600">$320</span></td><td class="px-6 py-4 text-center"><span class="font-num font-black text-teal-600">$220</span></td></tr>
+            <tr class="hover:bg-slate-50 transition-colors"><td class="px-6 py-4 font-semibold text-slate-800">自然科學</td><td class="px-6 py-4 text-center"><span class="font-num font-black text-violet-600">$550</span></td><td class="px-6 py-4 text-center"><span class="font-num font-black text-indigo-600">$320</span></td><td class="px-6 py-4 text-center"><span class="font-num font-black text-teal-600">$220</span></td></tr>
+            <tr class="hover:bg-slate-50 transition-colors"><td class="px-6 py-4 font-semibold text-slate-800">社會</td><td class="px-6 py-4 text-center"><span class="font-num font-black text-violet-600">$550</span></td><td class="px-6 py-4 text-center"><span class="font-num font-black text-indigo-600">$300</span></td><td class="px-6 py-4 text-center"><span class="font-num font-black text-teal-600">$220</span></td></tr>
+          </tbody>
+        </table>
       </div>
     </div>
-  </section>
 
-  <!-- ── Price Tables ── -->
-  <section class="py-20 bg-white">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center mb-16">
-        <h2 class="text-4xl font-bold text-gray-900 mb-4">各級課程費率一覽</h2>
-        <p class="text-gray-500">依課程等級與授課形式分類</p>
-      </div>
-
-      <!-- 國小 -->
-      <div class="mb-16">
-        <div class="flex items-center gap-3 mb-6">
-          <div class="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center text-xl">🌱</div>
-          <h3 class="text-2xl font-bold text-gray-900">國小課程（1–6 年級）</h3>
-        </div>
-        <div class="overflow-x-auto rounded-2xl border border-gray-200 shadow-sm">
-          <table class="w-full text-sm">
-            <thead>
-              <tr class="bg-green-50">
-                <th class="px-6 py-4 text-left font-semibold text-gray-700">科目</th>
-                <th class="px-6 py-4 text-center font-semibold text-purple-700">一對一（$/hr）</th>
-                <th class="px-6 py-4 text-center font-semibold text-blue-700">小班制（$/hr）</th>
-                <th class="px-6 py-4 text-center font-semibold text-teal-700">大班制（$/hr）</th>
-              </tr>
-            </thead>
-            <tbody class="divide-y divide-gray-100">
-              <tr class="hover:bg-gray-50"><td class="px-6 py-4 font-medium">數學</td><td class="px-6 py-4 text-center text-purple-700 font-semibold">$600</td><td class="px-6 py-4 text-center text-blue-700 font-semibold">$350</td><td class="px-6 py-4 text-center text-teal-700 font-semibold">$250</td></tr>
-              <tr class="hover:bg-gray-50"><td class="px-6 py-4 font-medium">英語</td><td class="px-6 py-4 text-center text-purple-700 font-semibold">$600</td><td class="px-6 py-4 text-center text-blue-700 font-semibold">$350</td><td class="px-6 py-4 text-center text-teal-700 font-semibold">$250</td></tr>
-              <tr class="hover:bg-gray-50"><td class="px-6 py-4 font-medium">國語文</td><td class="px-6 py-4 text-center text-purple-700 font-semibold">$550</td><td class="px-6 py-4 text-center text-blue-700 font-semibold">$320</td><td class="px-6 py-4 text-center text-teal-700 font-semibold">$220</td></tr>
-              <tr class="hover:bg-gray-50"><td class="px-6 py-4 font-medium">自然科學</td><td class="px-6 py-4 text-center text-purple-700 font-semibold">$550</td><td class="px-6 py-4 text-center text-blue-700 font-semibold">$320</td><td class="px-6 py-4 text-center text-teal-700 font-semibold">$220</td></tr>
-              <tr class="hover:bg-gray-50"><td class="px-6 py-4 font-medium">社會</td><td class="px-6 py-4 text-center text-purple-700 font-semibold">$550</td><td class="px-6 py-4 text-center text-blue-700 font-semibold">$300</td><td class="px-6 py-4 text-center text-teal-700 font-semibold">$220</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- 國中 -->
-      <div class="mb-16">
-        <div class="flex items-center gap-3 mb-6">
-          <div class="w-10 h-10 bg-indigo-100 rounded-xl flex items-center justify-center text-xl">🚀</div>
-          <h3 class="text-2xl font-bold text-gray-900">國中課程（7–9 年級）</h3>
-        </div>
-        <div class="overflow-x-auto rounded-2xl border border-gray-200 shadow-sm">
-          <table class="w-full text-sm">
-            <thead>
-              <tr class="bg-indigo-50">
-                <th class="px-6 py-4 text-left font-semibold text-gray-700">科目</th>
-                <th class="px-6 py-4 text-center font-semibold text-purple-700">一對一（$/hr）</th>
-                <th class="px-6 py-4 text-center font-semibold text-blue-700">小班制（$/hr）</th>
-                <th class="px-6 py-4 text-center font-semibold text-teal-700">大班制（$/hr）</th>
-              </tr>
-            </thead>
-            <tbody class="divide-y divide-gray-100">
-              <tr class="hover:bg-gray-50"><td class="px-6 py-4 font-medium">數學</td><td class="px-6 py-4 text-center text-purple-700 font-semibold">$700</td><td class="px-6 py-4 text-center text-blue-700 font-semibold">$400</td><td class="px-6 py-4 text-center text-teal-700 font-semibold">$300</td></tr>
-              <tr class="hover:bg-gray-50"><td class="px-6 py-4 font-medium">英語</td><td class="px-6 py-4 text-center text-purple-700 font-semibold">$700</td><td class="px-6 py-4 text-center text-blue-700 font-semibold">$400</td><td class="px-6 py-4 text-center text-teal-700 font-semibold">$300</td></tr>
-              <tr class="hover:bg-gray-50"><td class="px-6 py-4 font-medium">國文</td><td class="px-6 py-4 text-center text-purple-700 font-semibold">$650</td><td class="px-6 py-4 text-center text-blue-700 font-semibold">$380</td><td class="px-6 py-4 text-center text-teal-700 font-semibold">$280</td></tr>
-              <tr class="hover:bg-gray-50"><td class="px-6 py-4 font-medium">理化</td><td class="px-6 py-4 text-center text-purple-700 font-semibold">$750</td><td class="px-6 py-4 text-center text-blue-700 font-semibold">$420</td><td class="px-6 py-4 text-center text-teal-700 font-semibold">$320</td></tr>
-              <tr class="hover:bg-gray-50"><td class="px-6 py-4 font-medium">生物</td><td class="px-6 py-4 text-center text-purple-700 font-semibold">$700</td><td class="px-6 py-4 text-center text-blue-700 font-semibold">$400</td><td class="px-6 py-4 text-center text-teal-700 font-semibold">$300</td></tr>
-              <tr class="hover:bg-gray-50"><td class="px-6 py-4 font-medium">社會</td><td class="px-6 py-4 text-center text-purple-700 font-semibold">$650</td><td class="px-6 py-4 text-center text-blue-700 font-semibold">$370</td><td class="px-6 py-4 text-center text-teal-700 font-semibold">$270</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- 高中 -->
-      <div class="mb-16">
-        <div class="flex items-center gap-3 mb-6">
-          <div class="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center text-xl">🎓</div>
-          <h3 class="text-2xl font-bold text-gray-900">高中課程（10–12 年級）</h3>
-        </div>
-        <div class="overflow-x-auto rounded-2xl border border-gray-200 shadow-sm">
-          <table class="w-full text-sm">
-            <thead>
-              <tr class="bg-amber-50">
-                <th class="px-6 py-4 text-left font-semibold text-gray-700">科目</th>
-                <th class="px-6 py-4 text-center font-semibold text-purple-700">一對一（$/hr）</th>
-                <th class="px-6 py-4 text-center font-semibold text-blue-700">小班制（$/hr）</th>
-                <th class="px-6 py-4 text-center font-semibold text-teal-700">大班制（$/hr）</th>
-              </tr>
-            </thead>
-            <tbody class="divide-y divide-gray-100">
-              <tr class="hover:bg-gray-50"><td class="px-6 py-4 font-medium">數學</td><td class="px-6 py-4 text-center text-purple-700 font-semibold">$800</td><td class="px-6 py-4 text-center text-blue-700 font-semibold">$480</td><td class="px-6 py-4 text-center text-teal-700 font-semibold">$350</td></tr>
-              <tr class="hover:bg-gray-50"><td class="px-6 py-4 font-medium">英語</td><td class="px-6 py-4 text-center text-purple-700 font-semibold">$800</td><td class="px-6 py-4 text-center text-blue-700 font-semibold">$480</td><td class="px-6 py-4 text-center text-teal-700 font-semibold">$350</td></tr>
-              <tr class="hover:bg-gray-50"><td class="px-6 py-4 font-medium">國文</td><td class="px-6 py-4 text-center text-purple-700 font-semibold">$750</td><td class="px-6 py-4 text-center text-blue-700 font-semibold">$440</td><td class="px-6 py-4 text-center text-teal-700 font-semibold">$330</td></tr>
-              <tr class="hover:bg-gray-50"><td class="px-6 py-4 font-medium">物理</td><td class="px-6 py-4 text-center text-purple-700 font-semibold">$850</td><td class="px-6 py-4 text-center text-blue-700 font-semibold">$500</td><td class="px-6 py-4 text-center text-teal-700 font-semibold">$380</td></tr>
-              <tr class="hover:bg-gray-50"><td class="px-6 py-4 font-medium">化學</td><td class="px-6 py-4 text-center text-purple-700 font-semibold">$850</td><td class="px-6 py-4 text-center text-blue-700 font-semibold">$500</td><td class="px-6 py-4 text-center text-teal-700 font-semibold">$380</td></tr>
-              <tr class="hover:bg-gray-50"><td class="px-6 py-4 font-medium">歷史 / 地理</td><td class="px-6 py-4 text-center text-purple-700 font-semibold">$780</td><td class="px-6 py-4 text-center text-blue-700 font-semibold">$450</td><td class="px-6 py-4 text-center text-teal-700 font-semibold">$340</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ── Packages ── -->
-  <section class="py-20 bg-gray-50">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center mb-16">
-        <h2 class="text-4xl font-bold text-gray-900 mb-4">優惠方案</h2>
-        <p class="text-xl text-gray-500">長期繳費更優惠，多科同時報名享額外折扣</p>
-      </div>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <div class="card-hover bg-white rounded-2xl p-8 shadow-sm border border-gray-100">
-          <div class="text-4xl mb-4">📅</div>
-          <h3 class="text-xl font-bold text-gray-900 mb-3">月繳方案</h3>
-          <div class="text-3xl font-bold text-gray-900 mb-2">原價</div>
-          <p class="text-gray-500 mb-6">彈性方便，無長期綁約</p>
-          <ul class="space-y-3 text-sm text-gray-700">
-            <li class="flex items-center gap-2"><span class="text-gray-400">─</span> 每月結算費用</li>
-            <li class="flex items-center gap-2"><span class="text-gray-400">─</span> 隨時調整課程</li>
-            <li class="flex items-center gap-2"><span class="text-gray-400">─</span> 適合短期加強</li>
-          </ul>
-        </div>
-        <div class="card-hover bg-white rounded-2xl p-8 shadow-sm ring-2 ring-indigo-300">
-          <div class="flex justify-between items-start mb-4">
-            <div class="text-4xl">🎯</div>
-            <span class="bg-indigo-600 text-white text-xs px-3 py-1 rounded-full">最受歡迎</span>
-          </div>
-          <h3 class="text-xl font-bold text-gray-900 mb-3">季繳方案（3個月）</h3>
-          <div class="mb-2">
-            <span class="text-3xl font-bold text-indigo-600">95折</span>
-          </div>
-          <p class="text-gray-500 mb-6">繳 3 個月享 95 折優惠</p>
-          <ul class="space-y-3 text-sm text-gray-700">
-            <li class="flex items-center gap-2"><span class="text-indigo-500">✓</span> 較月繳省約 5%</li>
-            <li class="flex items-center gap-2"><span class="text-indigo-500">✓</span> 保留席次，免擔心額滿</li>
-            <li class="flex items-center gap-2"><span class="text-indigo-500">✓</span> 適合學期制學習</li>
-          </ul>
-        </div>
-        <div class="card-hover bg-white rounded-2xl p-8 shadow-sm border border-gray-100">
-          <div class="text-4xl mb-4">🏆</div>
-          <h3 class="text-xl font-bold text-gray-900 mb-3">學期方案（6個月）</h3>
-          <div class="mb-2">
-            <span class="text-3xl font-bold text-emerald-600">9折</span>
-          </div>
-          <p class="text-gray-500 mb-6">繳 6 個月享 9 折優惠</p>
-          <ul class="space-y-3 text-sm text-gray-700">
-            <li class="flex items-center gap-2"><span class="text-emerald-500">✓</span> 最大化節省費用</li>
-            <li class="flex items-center gap-2"><span class="text-emerald-500">✓</span> 完整學習計畫</li>
-            <li class="flex items-center gap-2"><span class="text-emerald-500">✓</span> 加贈期中期末衝刺課</li>
-          </ul>
-        </div>
-      </div>
-
-      <!-- Multi-subject discount -->
-      <div class="mt-12 bg-gradient-to-r from-amber-50 to-orange-50 rounded-2xl p-8 border border-amber-200">
-        <h3 class="text-xl font-bold text-gray-900 mb-4">🎁 多科同報優惠</h3>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div class="text-center p-4 bg-white rounded-xl">
-            <div class="text-2xl font-bold text-amber-600 mb-1">同報 2 科</div>
-            <div class="text-gray-600">第 2 科 95折</div>
-          </div>
-          <div class="text-center p-4 bg-white rounded-xl">
-            <div class="text-2xl font-bold text-amber-600 mb-1">同報 3 科</div>
-            <div class="text-gray-600">第 3 科 9折</div>
-          </div>
-          <div class="text-center p-4 bg-white rounded-xl">
-            <div class="text-2xl font-bold text-amber-600 mb-1">同報 4 科以上</div>
-            <div class="text-gray-600">第 4 科起 85折</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ── FAQ ── -->
-  <section class="py-20 bg-white">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center mb-16">
-        <h2 class="text-4xl font-bold text-gray-900 mb-4">常見問題</h2>
-      </div>
-      <div class="space-y-4" id="faq-container">
-        <div class="border border-gray-200 rounded-2xl overflow-hidden">
-          <button onclick="toggleFaq(this)" class="w-full flex justify-between items-center px-6 py-4 text-left font-semibold text-gray-900 hover:bg-gray-50">
-            <span>費用是否包含教材？</span>
-            <svg class="w-5 h-5 text-gray-400 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
-          </button>
-          <div class="hidden px-6 pb-4 text-gray-600">課程費用不含教材，但我們提供自製精選講義，費用另計（每份約 $100–$200）。若使用坊間教科書，請自行購買。</div>
-        </div>
-        <div class="border border-gray-200 rounded-2xl overflow-hidden">
-          <button onclick="toggleFaq(this)" class="w-full flex justify-between items-center px-6 py-4 text-left font-semibold text-gray-900 hover:bg-gray-50">
-            <span>可以試聽嗎？</span>
-            <svg class="w-5 h-5 text-gray-400 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
-          </button>
-          <div class="hidden px-6 pb-4 text-gray-600">第一堂課提供免費試聽，讓學生和家長確認是否適合後再正式報名。</div>
-        </div>
-        <div class="border border-gray-200 rounded-2xl overflow-hidden">
-          <button onclick="toggleFaq(this)" class="w-full flex justify-between items-center px-6 py-4 text-left font-semibold text-gray-900 hover:bg-gray-50">
-            <span>如何付款？</span>
-            <svg class="w-5 h-5 text-gray-400 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
-          </button>
-          <div class="hidden px-6 pb-4 text-gray-600">接受現金、轉帳、Line Pay 等方式。月繳請於每月 5 日前繳清；季繳及學期繳請於報名時一次繳清。</div>
-        </div>
-        <div class="border border-gray-200 rounded-2xl overflow-hidden">
-          <button onclick="toggleFaq(this)" class="w-full flex justify-between items-center px-6 py-4 text-left font-semibold text-gray-900 hover:bg-gray-50">
-            <span>請假或取消課程如何處理？</span>
-            <svg class="w-5 h-5 text-gray-400 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
-          </button>
-          <div class="hidden px-6 pb-4 text-gray-600">請假須於上課前 24 小時告知。每月可補課一次，依雙方時間安排。連續請假超過一個月者，席次無法保留。</div>
-        </div>
-        <div class="border border-gray-200 rounded-2xl overflow-hidden">
-          <button onclick="toggleFaq(this)" class="w-full flex justify-between items-center px-6 py-4 text-left font-semibold text-gray-900 hover:bg-gray-50">
-            <span>退費政策為何？</span>
-            <svg class="w-5 h-5 text-gray-400 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
-          </button>
-          <div class="hidden px-6 pb-4 text-gray-600">季繳或學期繳若中途退出，依實際上課堂數以月繳費率計算，退還剩餘費用。行政費用 $500 不退還。</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ── CTA ── -->
-  <section class="py-16 bg-indigo-600">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-      <h2 class="text-3xl font-bold text-white mb-4">需要精確報價？</h2>
-      <p class="text-indigo-200 mb-8">使用我們的報價單工具，輸入您的需求即可立即生成報價</p>
-      <a href="quote.html" class="inline-flex items-center justify-center bg-white text-indigo-600 px-8 py-4 rounded-xl text-lg font-semibold hover:bg-indigo-50 transition-all shadow-lg">📋 立即開立報價單</a>
-    </div>
-  </section>
-
-  <!-- ── Footer ── -->
-  <footer class="bg-gray-900 text-white">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <div class="col-span-1 md:col-span-2">
-          <div class="flex items-center space-x-2 mb-4">
-            <div class="w-8 h-8 bg-indigo-500 rounded-lg flex items-center justify-center"><span class="text-white font-bold text-sm">優</span></div>
-            <span class="text-xl font-bold">優學補習班</span>
-          </div>
-          <div class="text-gray-400 space-y-2">
-            <div class="flex items-center gap-2"><span>📍</span> 台北市中山區學習路100號</div>
-            <div class="flex items-center gap-2"><span>📞</span> (02) 2345-6789</div>
-            <div class="flex items-center gap-2"><span>📧</span> info@youxue.edu.tw</div>
-          </div>
-        </div>
+    <!-- 國中 -->
+    <div>
+      <div class="flex items-center gap-3 mb-6">
+        <div class="w-12 h-12 rounded-2xl flex items-center justify-center text-2xl" style="background:linear-gradient(135deg,#EEF2FF,#E0E7FF)">🚀</div>
         <div>
-          <h3 class="font-bold text-lg mb-4">快速連結</h3>
-          <ul class="space-y-2 text-gray-400">
-            <li><a href="index.html"      class="hover:text-white">首頁</a></li>
-            <li><a href="about.html"      class="hover:text-white">關於我們</a></li>
-            <li><a href="pricing.html"    class="hover:text-white">課程費用</a></li>
-            <li><a href="promotions.html" class="hover:text-white">文宣資料</a></li>
-            <li><a href="quote.html"      class="hover:text-white">開立報價單</a></li>
-          </ul>
+          <h3 class="text-2xl font-black text-slate-900">國中課程</h3>
+          <div class="text-sm text-slate-400">7 ~ 9 年級</div>
         </div>
       </div>
-      <div class="border-t border-gray-700 mt-8 pt-6 text-center text-gray-500">
-        <p>© 2025 優學補習班 版權所有</p>
+      <div class="overflow-x-auto rounded-2xl border border-slate-100 shadow-sm">
+        <table class="w-full text-sm">
+          <thead>
+            <tr style="background:linear-gradient(90deg,#EEF2FF,#E0E7FF)">
+              <th class="px-6 py-4 text-left font-bold text-slate-700">科目</th>
+              <th class="px-6 py-4 text-center font-bold text-violet-700">👤 一對一</th>
+              <th class="px-6 py-4 text-center font-bold text-indigo-700">👥 小班（2–4人）</th>
+              <th class="px-6 py-4 text-center font-bold text-teal-700">🏫 大班（5人+）</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-50">
+            <tr class="hover:bg-slate-50"><td class="px-6 py-4 font-semibold text-slate-800">數學</td><td class="px-6 py-4 text-center"><span class="font-num font-black text-violet-600">$700</span></td><td class="px-6 py-4 text-center"><span class="font-num font-black text-indigo-600">$400</span></td><td class="px-6 py-4 text-center"><span class="font-num font-black text-teal-600">$300</span></td></tr>
+            <tr class="hover:bg-slate-50"><td class="px-6 py-4 font-semibold text-slate-800">英語</td><td class="px-6 py-4 text-center"><span class="font-num font-black text-violet-600">$700</span></td><td class="px-6 py-4 text-center"><span class="font-num font-black text-indigo-600">$400</span></td><td class="px-6 py-4 text-center"><span class="font-num font-black text-teal-600">$300</span></td></tr>
+            <tr class="hover:bg-slate-50"><td class="px-6 py-4 font-semibold text-slate-800">國文</td><td class="px-6 py-4 text-center"><span class="font-num font-black text-violet-600">$650</span></td><td class="px-6 py-4 text-center"><span class="font-num font-black text-indigo-600">$380</span></td><td class="px-6 py-4 text-center"><span class="font-num font-black text-teal-600">$280</span></td></tr>
+            <tr class="hover:bg-slate-50"><td class="px-6 py-4 font-semibold text-slate-800">理化</td><td class="px-6 py-4 text-center"><span class="font-num font-black text-violet-600">$750</span></td><td class="px-6 py-4 text-center"><span class="font-num font-black text-indigo-600">$420</span></td><td class="px-6 py-4 text-center"><span class="font-num font-black text-teal-600">$320</span></td></tr>
+            <tr class="hover:bg-slate-50"><td class="px-6 py-4 font-semibold text-slate-800">生物</td><td class="px-6 py-4 text-center"><span class="font-num font-black text-violet-600">$700</span></td><td class="px-6 py-4 text-center"><span class="font-num font-black text-indigo-600">$400</span></td><td class="px-6 py-4 text-center"><span class="font-num font-black text-teal-600">$300</span></td></tr>
+            <tr class="hover:bg-slate-50"><td class="px-6 py-4 font-semibold text-slate-800">社會</td><td class="px-6 py-4 text-center"><span class="font-num font-black text-violet-600">$650</span></td><td class="px-6 py-4 text-center"><span class="font-num font-black text-indigo-600">$370</span></td><td class="px-6 py-4 text-center"><span class="font-num font-black text-teal-600">$270</span></td></tr>
+          </tbody>
+        </table>
       </div>
     </div>
-  </footer>
 
-  <script src="js/main.js"></script>
-  <script>
-    function toggleFaq(btn) {
-      const content = btn.nextElementSibling;
-      const icon = btn.querySelector('svg');
-      const isHidden = content.classList.toggle('hidden');
-      icon.style.transform = isHidden ? '' : 'rotate(180deg)';
-    }
-  </script>
+    <!-- 高中 -->
+    <div>
+      <div class="flex items-center gap-3 mb-6">
+        <div class="w-12 h-12 rounded-2xl flex items-center justify-center text-2xl" style="background:linear-gradient(135deg,#FFFBEB,#FEF3C7)">🎓</div>
+        <div>
+          <h3 class="text-2xl font-black text-slate-900">高中課程</h3>
+          <div class="text-sm text-slate-400">10 ~ 12 年級</div>
+        </div>
+      </div>
+      <div class="overflow-x-auto rounded-2xl border border-slate-100 shadow-sm">
+        <table class="w-full text-sm">
+          <thead>
+            <tr style="background:linear-gradient(90deg,#FFFBEB,#FEF3C7)">
+              <th class="px-6 py-4 text-left font-bold text-slate-700">科目</th>
+              <th class="px-6 py-4 text-center font-bold text-violet-700">👤 一對一</th>
+              <th class="px-6 py-4 text-center font-bold text-indigo-700">👥 小班（2–4人）</th>
+              <th class="px-6 py-4 text-center font-bold text-teal-700">🏫 大班（5人+）</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-50">
+            <tr class="hover:bg-slate-50"><td class="px-6 py-4 font-semibold text-slate-800">數學</td><td class="px-6 py-4 text-center"><span class="font-num font-black text-violet-600">$800</span></td><td class="px-6 py-4 text-center"><span class="font-num font-black text-indigo-600">$480</span></td><td class="px-6 py-4 text-center"><span class="font-num font-black text-teal-600">$350</span></td></tr>
+            <tr class="hover:bg-slate-50"><td class="px-6 py-4 font-semibold text-slate-800">英語</td><td class="px-6 py-4 text-center"><span class="font-num font-black text-violet-600">$800</span></td><td class="px-6 py-4 text-center"><span class="font-num font-black text-indigo-600">$480</span></td><td class="px-6 py-4 text-center"><span class="font-num font-black text-teal-600">$350</span></td></tr>
+            <tr class="hover:bg-slate-50"><td class="px-6 py-4 font-semibold text-slate-800">國文</td><td class="px-6 py-4 text-center"><span class="font-num font-black text-violet-600">$750</span></td><td class="px-6 py-4 text-center"><span class="font-num font-black text-indigo-600">$440</span></td><td class="px-6 py-4 text-center"><span class="font-num font-black text-teal-600">$330</span></td></tr>
+            <tr class="hover:bg-slate-50"><td class="px-6 py-4 font-semibold text-slate-800">物理</td><td class="px-6 py-4 text-center"><span class="font-num font-black text-violet-600">$850</span></td><td class="px-6 py-4 text-center"><span class="font-num font-black text-indigo-600">$500</span></td><td class="px-6 py-4 text-center"><span class="font-num font-black text-teal-600">$380</span></td></tr>
+            <tr class="hover:bg-slate-50"><td class="px-6 py-4 font-semibold text-slate-800">化學</td><td class="px-6 py-4 text-center"><span class="font-num font-black text-violet-600">$850</span></td><td class="px-6 py-4 text-center"><span class="font-num font-black text-indigo-600">$500</span></td><td class="px-6 py-4 text-center"><span class="font-num font-black text-teal-600">$380</span></td></tr>
+            <tr class="hover:bg-slate-50"><td class="px-6 py-4 font-semibold text-slate-800">歷史 / 地理</td><td class="px-6 py-4 text-center"><span class="font-num font-black text-violet-600">$780</span></td><td class="px-6 py-4 text-center"><span class="font-num font-black text-indigo-600">$450</span></td><td class="px-6 py-4 text-center"><span class="font-num font-black text-teal-600">$340</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Packages -->
+<section class="py-24 section-dots bg-slate-50">
+  <div class="max-w-7xl mx-auto px-5 sm:px-8">
+    <div class="text-center mb-16">
+      <div class="inline-flex items-center bg-indigo-50 text-indigo-600 px-4 py-2 rounded-full text-sm font-semibold mb-4">🎁 優惠方案</div>
+      <h2 class="text-4xl font-black text-slate-900 mb-4">長期繳費更優惠，<span class="gradient-text">多科同報享折扣</span></h2>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+      <div class="card-lift bg-white rounded-3xl p-8 shadow-sm border border-slate-100">
+        <div class="text-4xl mb-4">📅</div>
+        <h3 class="text-xl font-black text-slate-900 mb-2">月繳方案</h3>
+        <div class="font-num text-3xl font-black text-slate-400 mb-4">原價</div>
+        <p class="text-slate-500 text-sm mb-6">彈性方便，無長期綁約</p>
+        <ul class="space-y-2 text-sm text-slate-600">
+          <li class="flex items-center gap-2"><span class="text-slate-300">─</span> 每月結算費用</li>
+          <li class="flex items-center gap-2"><span class="text-slate-300">─</span> 隨時調整課程</li>
+          <li class="flex items-center gap-2"><span class="text-slate-300">─</span> 適合短期加強</li>
+        </ul>
+      </div>
+      <div class="card-lift bg-white rounded-3xl p-8 shadow-sm ring-2 ring-indigo-300 relative">
+        <div class="absolute -top-3 right-6"><span class="badge-hot">最受歡迎</span></div>
+        <div class="text-4xl mb-4">🎯</div>
+        <h3 class="text-xl font-black text-slate-900 mb-2">季繳（3個月）</h3>
+        <div class="font-num text-3xl font-black text-indigo-600 mb-4">95折</div>
+        <p class="text-slate-500 text-sm mb-6">繳 3 個月享 9.5 折優惠</p>
+        <ul class="space-y-2 text-sm text-slate-600">
+          <li class="flex items-center gap-2"><span class="text-indigo-500">✓</span> 較月繳省約 5%</li>
+          <li class="flex items-center gap-2"><span class="text-indigo-500">✓</span> 保留席次</li>
+          <li class="flex items-center gap-2"><span class="text-indigo-500">✓</span> 適合學期制</li>
+        </ul>
+      </div>
+      <div class="card-lift bg-white rounded-3xl p-8 shadow-sm border border-slate-100">
+        <div class="text-4xl mb-4">🏆</div>
+        <h3 class="text-xl font-black text-slate-900 mb-2">學期繳（6個月）</h3>
+        <div class="font-num text-3xl font-black text-emerald-600 mb-4">9折</div>
+        <p class="text-slate-500 text-sm mb-6">繳 6 個月享 9 折優惠</p>
+        <ul class="space-y-2 text-sm text-slate-600">
+          <li class="flex items-center gap-2"><span class="text-emerald-500">✓</span> 最大化節省費用</li>
+          <li class="flex items-center gap-2"><span class="text-emerald-500">✓</span> 完整學習計畫</li>
+          <li class="flex items-center gap-2"><span class="text-emerald-500">✓</span> 加贈衝刺課</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="rounded-3xl p-8" style="background:linear-gradient(135deg,#FFFBEB,#FEF3C7)">
+      <h3 class="font-black text-xl text-slate-900 mb-6">🎁 多科同報優惠</h3>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="bg-white rounded-2xl p-5 text-center shadow-sm">
+          <div class="font-num text-2xl font-black text-amber-600 mb-1">同報 2 科</div>
+          <div class="text-slate-600 text-sm">第 2 科享 <strong>95折</strong></div>
+        </div>
+        <div class="bg-white rounded-2xl p-5 text-center shadow-sm">
+          <div class="font-num text-2xl font-black text-amber-600 mb-1">同報 3 科</div>
+          <div class="text-slate-600 text-sm">第 3 科享 <strong>9折</strong></div>
+        </div>
+        <div class="bg-white rounded-2xl p-5 text-center shadow-sm">
+          <div class="font-num text-2xl font-black text-amber-600 mb-1">同報 4 科以上</div>
+          <div class="text-slate-600 text-sm">第 4 科起享 <strong>85折</strong></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="py-24 bg-white">
+  <div class="max-w-3xl mx-auto px-5 sm:px-8">
+    <div class="text-center mb-12">
+      <div class="inline-flex items-center bg-indigo-50 text-indigo-600 px-4 py-2 rounded-full text-sm font-semibold mb-4">❓ 常見問題</div>
+      <h2 class="text-4xl font-black text-slate-900">家長最常問的問題</h2>
+    </div>
+    <div class="space-y-3">
+      <div class="border border-slate-100 rounded-2xl overflow-hidden shadow-sm">
+        <button onclick="toggleFaq(this)" class="w-full flex justify-between items-center px-6 py-5 text-left font-bold text-slate-900 hover:bg-slate-50 transition-all">
+          <span>費用是否包含教材？</span>
+          <svg class="w-5 h-5 text-slate-400 transition-transform flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+        </button>
+        <div class="hidden px-6 pb-5 text-slate-600 text-sm leading-relaxed">課程費用不含教材。本班提供自製精選講義，費用另計（每份 $100–$200）。若使用坊間教科書，請自行購買。</div>
+      </div>
+      <div class="border border-slate-100 rounded-2xl overflow-hidden shadow-sm">
+        <button onclick="toggleFaq(this)" class="w-full flex justify-between items-center px-6 py-5 text-left font-bold text-slate-900 hover:bg-slate-50 transition-all">
+          <span>可以試聽嗎？</span>
+          <svg class="w-5 h-5 text-slate-400 transition-transform flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+        </button>
+        <div class="hidden px-6 pb-5 text-slate-600 text-sm leading-relaxed">第一堂課提供免費試聽，讓學生和家長確認是否適合後再正式報名，完全無壓力。</div>
+      </div>
+      <div class="border border-slate-100 rounded-2xl overflow-hidden shadow-sm">
+        <button onclick="toggleFaq(this)" class="w-full flex justify-between items-center px-6 py-5 text-left font-bold text-slate-900 hover:bg-slate-50 transition-all">
+          <span>如何付款？</span>
+          <svg class="w-5 h-5 text-slate-400 transition-transform flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+        </button>
+        <div class="hidden px-6 pb-5 text-slate-600 text-sm leading-relaxed">接受現金、轉帳、Line Pay 等方式。月繳請於每月 5 日前繳清；季繳及學期繳請於報名時一次繳清。</div>
+      </div>
+      <div class="border border-slate-100 rounded-2xl overflow-hidden shadow-sm">
+        <button onclick="toggleFaq(this)" class="w-full flex justify-between items-center px-6 py-5 text-left font-bold text-slate-900 hover:bg-slate-50 transition-all">
+          <span>請假或取消課程如何處理？</span>
+          <svg class="w-5 h-5 text-slate-400 transition-transform flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+        </button>
+        <div class="hidden px-6 pb-5 text-slate-600 text-sm leading-relaxed">請假須於上課前 24 小時告知。每月可補課一次，依雙方時間安排。連續請假超過一個月者，席次無法保留。</div>
+      </div>
+      <div class="border border-slate-100 rounded-2xl overflow-hidden shadow-sm">
+        <button onclick="toggleFaq(this)" class="w-full flex justify-between items-center px-6 py-5 text-left font-bold text-slate-900 hover:bg-slate-50 transition-all">
+          <span>退費政策為何？</span>
+          <svg class="w-5 h-5 text-slate-400 transition-transform flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+        </button>
+        <div class="hidden px-6 pb-5 text-slate-600 text-sm leading-relaxed">季繳或學期繳若中途退出，依實際上課堂數以月繳費率計算，退還剩餘費用。行政費用 $500 不退還。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="py-20" style="background:linear-gradient(135deg,#4F46E5,#7C3AED,#A855F7)">
+  <div class="max-w-3xl mx-auto px-5 text-center">
+    <h2 class="text-4xl font-black text-white mb-4">需要精確報價？</h2>
+    <p class="text-indigo-200 mb-8 text-lg">使用報價單工具，輸入需求即可立即生成專屬報價</p>
+    <a href="quote.html" class="inline-flex items-center justify-center gap-2 bg-white text-indigo-600 font-black px-10 py-5 rounded-2xl text-lg hover:bg-indigo-50 transition-all shadow-2xl">📋 立即開立報價單</a>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="bg-slate-950 text-white">
+  <div class="max-w-7xl mx-auto px-5 sm:px-8 py-10">
+    <div class="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-slate-500 border-t border-white/10 pt-8">
+      <div class="flex items-center gap-2">
+        <div class="w-7 h-7 rounded-lg flex items-center justify-center text-white font-black text-xs" style="background:linear-gradient(135deg,#4F46E5,#7C3AED)">優</div>
+        <span class="text-white font-bold">優學補習班</span>
+      </div>
+      <div class="flex gap-5 text-slate-400">
+        <a href="index.html"      class="hover:text-white">首頁</a>
+        <a href="about.html"      class="hover:text-white">關於我們</a>
+        <a href="pricing.html"    class="hover:text-white">課程費用</a>
+        <a href="promotions.html" class="hover:text-white">文宣資料</a>
+        <a href="quote.html"      class="hover:text-white">報價單</a>
+      </div>
+      <p>© 2025 優學補習班</p>
+    </div>
+  </div>
+</footer>
+
+<script src="js/main.js"></script>
+<script>
+function toggleFaq(btn) {
+  const c = btn.nextElementSibling;
+  const i = btn.querySelector('svg');
+  const h = c.classList.toggle('hidden');
+  i.style.transform = h ? '' : 'rotate(180deg)';
+}
+</script>
 </body>
 </html>

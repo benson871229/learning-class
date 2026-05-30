@@ -1,37 +1,142 @@
-html { scroll-behavior: smooth; }
+/* ── Fonts ── */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700;900&family=Inter:wght@400;500;600;700;800;900&display=swap');
 
-@keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(30px); }
-  to   { opacity: 1; transform: translateY(0); }
+:root {
+  --font-zh: 'Noto Sans TC', sans-serif;
+  --primary: #4F46E5;
+  --primary-dark: #4338CA;
+  --accent: #8B5CF6;
+  --gold: #F59E0B;
 }
-.animate-fade-in-up { animation: fadeInUp 0.6s ease-out; }
 
+html { scroll-behavior: smooth; }
+body { font-family: var(--font-zh); }
+
+/* ── Gradient text ── */
 .gradient-text {
-  background: linear-gradient(135deg, #4F46E5, #0EA5E9);
+  background: linear-gradient(90deg, #818CF8, #C084FC, #FB923C);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.gradient-text-blue {
+  background: linear-gradient(90deg, #38BDF8, #818CF8);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
-.card-hover { transition: transform 0.2s ease, box-shadow 0.2s ease; }
-.card-hover:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+/* ── Buttons ── */
+.btn-primary {
+  background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%);
+  color: white;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(79,70,229,0.3);
+}
+.btn-primary:hover {
+  background: linear-gradient(135deg, #4338CA 0%, #6D28D9 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(79,70,229,0.45);
+}
+.btn-outline-white {
+  border: 2px solid rgba(255,255,255,0.4);
+  color: white;
+  backdrop-filter: blur(8px);
+  background: rgba(255,255,255,0.08);
+  transition: all 0.3s ease;
+}
+.btn-outline-white:hover {
+  background: rgba(255,255,255,0.18);
+  border-color: rgba(255,255,255,0.7);
+}
 
-/* ── Quote Generator ── */
-.course-row:hover { background-color: #f9fafb; }
+/* ── Glass card ── */
+.glass {
+  background: rgba(255,255,255,0.08);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.15);
+}
 
-/* ── Print Styles ── */
+/* ── Card hover lift ── */
+.card-lift {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.card-lift:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 24px 48px rgba(0,0,0,0.12);
+}
+
+/* ── Hero blobs ── */
+.blob {
+  border-radius: 50%;
+  filter: blur(80px);
+  position: absolute;
+  animation: drift 12s ease-in-out infinite;
+}
+.blob-1 { background: rgba(99,102,241,0.35);  width: 520px; height: 520px; top: -120px; left: -100px; animation-delay: 0s; }
+.blob-2 { background: rgba(139,92,246,0.28);  width: 420px; height: 420px; bottom: -80px; right: -80px; animation-delay: 4s; }
+.blob-3 { background: rgba(59,130,246,0.18);  width: 300px; height: 300px; top: 50%; left: 50%; transform: translate(-50%,-50%); animation-delay: 8s; }
+
+@keyframes drift {
+  0%,100% { transform: translate(0,0) scale(1); }
+  33%      { transform: translate(30px,-20px) scale(1.05); }
+  66%      { transform: translate(-20px,25px) scale(0.95); }
+}
+.blob-3 {
+  animation: drift3 14s ease-in-out infinite;
+}
+@keyframes drift3 {
+  0%,100% { transform: translate(-50%,-50%) scale(1); }
+  33%      { transform: translate(calc(-50% + 30px),calc(-50% - 25px)) scale(1.1); }
+  66%      { transform: translate(calc(-50% - 20px),calc(-50% + 15px)) scale(0.9); }
+}
+
+/* ── Reveal animation ── */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(40px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.fade-in-up { animation: fadeInUp 0.7s ease-out both; }
+.delay-100  { animation-delay: 0.1s; }
+.delay-200  { animation-delay: 0.2s; }
+.delay-300  { animation-delay: 0.3s; }
+.delay-400  { animation-delay: 0.4s; }
+.delay-500  { animation-delay: 0.5s; }
+
+/* ── Icon badge ── */
+.icon-badge {
+  width: 64px; height: 64px;
+  border-radius: 20px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 28px;
+  transition: transform 0.3s ease;
+}
+.card-lift:hover .icon-badge { transform: scale(1.1) rotate(-5deg); }
+
+/* ── Section patterns ── */
+.section-dots {
+  background-image: radial-gradient(#e0e7ff 1.5px, transparent 0);
+  background-size: 28px 28px;
+}
+
+/* ── Highlight badge ── */
+.badge-hot {
+  background: linear-gradient(135deg, #F59E0B, #EF4444);
+  color: white; font-size: 11px; font-weight: 700;
+  padding: 2px 8px; border-radius: 999px;
+}
+
+/* ── Number font ── */
+.font-num { font-family: 'Inter', var(--font-zh); font-weight: 900; }
+
+/* ── Sticky nav scrolled ── */
+.nav-scrolled { box-shadow: 0 4px 24px rgba(0,0,0,0.08); }
+
+/* ── Print ── */
 @media print {
   .no-print { display: none !important; }
-  body { margin: 0; background: white; }
-  #quote-modal-content {
-    position: static !important;
-    width: 100% !important;
-    max-width: none !important;
-    margin: 0 !important;
-    padding: 24px !important;
-    box-shadow: none !important;
-    border-radius: 0 !important;
-  }
+  body { background: white; }
+  #quote-modal-content { position: static !important; width: 100% !important; max-width: none !important; margin: 0 !important; padding: 24px !important; box-shadow: none !important; border-radius: 0 !important; }
   #quote-modal-backdrop { position: static !important; background: none !important; }
   #quote-modal-actions { display: none !important; }
 }
