@@ -1,0 +1,37 @@
+html { scroll-behavior: smooth; }
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-in-up { animation: fadeInUp 0.6s ease-out; }
+
+.gradient-text {
+  background: linear-gradient(135deg, #4F46E5, #0EA5E9);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.card-hover { transition: transform 0.2s ease, box-shadow 0.2s ease; }
+.card-hover:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+
+/* ── Quote Generator ── */
+.course-row:hover { background-color: #f9fafb; }
+
+/* ── Print Styles ── */
+@media print {
+  .no-print { display: none !important; }
+  body { margin: 0; background: white; }
+  #quote-modal-content {
+    position: static !important;
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 24px !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+  }
+  #quote-modal-backdrop { position: static !important; background: none !important; }
+  #quote-modal-actions { display: none !important; }
+}
