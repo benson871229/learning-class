@@ -107,6 +107,28 @@ body { font-family: 'Noto Sans TC', system-ui, sans-serif; }
 /* ── Print ── */
 @media print {
   .no-print { display:none !important; }
-  body { background:white; }
-  #quoteModal .modal-dialog { max-width:none!important; }
+  body { background:white !important; overflow:visible !important; }
+
+  /* Bootstrap Modal 列印修正 */
+  #quoteModal {
+    position: static !important;
+    display: block !important;
+    overflow: visible !important;
+    background: none !important;
+    padding: 0 !important;
+  }
+  #quoteModal .modal-dialog {
+    max-width: 100% !important;
+    width: 100% !important;
+    margin: 0 !important;
+    transform: none !important;
+  }
+  #quoteModal .modal-content {
+    box-shadow: none !important;
+    border: none !important;
+    border-radius: 0 !important;
+  }
+  #quoteModal .modal-header,
+  #quoteModal .modal-footer { display:none !important; }
+  .modal-backdrop { display:none !important; }
 }
