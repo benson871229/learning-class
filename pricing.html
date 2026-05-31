@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>課程費用 ─ 優學補習班</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- Navbar -->
+<nav id="mainNav" class="navbar navbar-expand-lg fixed-top bg-white border-bottom py-0" style="backdrop-filter:blur(12px)">
+  <div class="container-xl">
+    <a class="navbar-brand d-flex align-items-center gap-2 fw-bold py-2" href="index.html">
+      <div class="d-flex align-items-center justify-content-center text-white rounded-3" style="width:36px;height:36px;background:linear-gradient(135deg,#4f46e5,#7c3aed);font-weight:900;font-size:.9rem">優</div>
+      <span class="fs-5 fw-black">優學補習班</span>
+    </a>
+    <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu" aria-controls="navMenu" aria-expanded="false">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navMenu">
+      <ul class="navbar-nav ms-auto align-items-lg-center gap-1 py-2 py-lg-0">
+        <li class="nav-item"><a class="nav-link px-3 rounded-3" href="index.html">首頁</a></li>
+        <li class="nav-item"><a class="nav-link px-3 rounded-3" href="about.html">關於我們</a></li>
+        <li class="nav-item"><a class="nav-link px-3 rounded-3 fw-semibold text-primary active" href="pricing.html">課程費用</a></li>
+        <li class="nav-item"><a class="nav-link px-3 rounded-3" href="promotions.html">文宣資料</a></li>
+        <li class="nav-item ms-lg-2 mt-2 mt-lg-0">
+          <a class="btn btn-primary rounded-3 px-4 py-2 d-flex align-items-center gap-2" href="quote.html">
+            <i class="bi bi-file-text"></i> 開立報價單
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero Banner -->
+<section class="position-relative overflow-hidden" style="padding-top:80px;background:linear-gradient(135deg,#064e3b,#065f46,#047857)">
+  <div class="blob blob-1" style="background:rgba(52,211,153,.2)"></div>
+  <div class="blob blob-2" style="background:rgba(16,185,129,.15)"></div>
+  <div class="position-relative container-xl px-4 py-5 text-center" style="z-index:2">
+    <span class="badge rounded-pill border border-white border-opacity-25 text-white text-opacity-75 fw-semibold px-3 py-2 mb-4 d-inline-block">💰 課程費用</span>
+    <h1 class="display-4 fw-black text-white mb-4">透明收費，<span class="gradient-text">量身打造</span>方案</h1>
+    <p class="fs-5 mb-5" style="color:rgba(167,243,208,.9);max-width:36rem;margin:0 auto">多種方案可選，長期繳費享額外折扣</p>
+  </div>
+  <div class="wave-bottom"><svg viewBox="0 0 1440 60" preserveAspectRatio="none"><path d="M0,30 C360,60 1080,0 1440,30 L1440,60 L0,60 Z" fill="white"/></svg></div>
+</section>
+
+<!-- Note Banner -->
+<div class="bg-warning bg-opacity-10 border-bottom border-warning border-opacity-25 py-3">
+  <div class="container-xl px-4 d-flex align-items-center gap-3">
+    <div class="d-flex align-items-center justify-content-center rounded-3 bg-warning bg-opacity-25 flex-shrink-0" style="width:40px;height:40px;font-size:1.2rem">💡</div>
+    <p class="mb-0 small" style="color:#92400e"><strong>計費說明：</strong>以下費率為每小時單價（NT$/hr）。月費 = 單價 × 每堂時數 × 每週堂數 × 4 週。如需精確報價，請使用「<a href="quote.html" class="fw-semibold" style="color:#92400e">開立報價單</a>」功能。</p>
+  </div>
+</div>
+
+<!-- Price Tables -->
+<section class="py-5 bg-white">
+  <div class="container-xl px-4 py-3">
+
+    <!-- 國小 -->
+    <div class="mb-5">
+      <div class="d-flex align-items-center gap-3 mb-4">
+        <div class="d-flex align-items-center justify-content-center rounded-3 flex-shrink-0" style="width:52px;height:52px;background:linear-gradient(135deg,#ecfdf5,#d1fae5);font-size:1.6rem">🌱</div>
+        <div>
+          <h3 class="fw-black mb-0">國小課程</h3>
+          <div class="small text-secondary">1 ~ 6 年級</div>
+        </div>
+      </div>
+      <div class="table-responsive rounded-4 border shadow-sm">
+        <table class="table table-hover mb-0 pricing-thead">
+          <thead style="background:linear-gradient(90deg,#ecfdf5,#d1fae5)">
+            <tr>
+              <th class="px-4 py-3">科目</th>
+              <th class="px-4 py-3 text-center" style="color:#7c3aed">👤 一對一</th>
+              <th class="px-4 py-3 text-center" style="color:#4f46e5">👥 小班（2–4人）</th>
+              <th class="px-4 py-3 text-center" style="color:#0d9488">🏫 大班（5人+）</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td class="px-4 py-3 fw-semibold">數學</td><td class="px-4 py-3 text-center fw-black" style="color:#7c3aed">NT$600</td><td class="px-4 py-3 text-center fw-black text-primary">NT$350</td><td class="px-4 py-3 text-center fw-black" style="color:#0d9488">NT$250</td></tr>
+            <tr><td class="px-4 py-3 fw-semibold">英語</td><td class="px-4 py-3 text-center fw-black" style="color:#7c3aed">NT$600</td><td class="px-4 py-3 text-center fw-black text-primary">NT$350</td><td class="px-4 py-3 text-center fw-black" style="color:#0d9488">NT$250</td></tr>
+            <tr><td class="px-4 py-3 fw-semibold">國語文</td><td class="px-4 py-3 text-center fw-black" style="color:#7c3aed">NT$550</td><td class="px-4 py-3 text-center fw-black text-primary">NT$320</td><td class="px-4 py-3 text-center fw-black" style="color:#0d9488">NT$220</td></tr>
+            <tr><td class="px-4 py-3 fw-semibold">自然科學</td><td class="px-4 py-3 text-center fw-black" style="color:#7c3aed">NT$550</td><td class="px-4 py-3 text-center fw-black text-primary">NT$320</td><td class="px-4 py-3 text-center fw-black" style="color:#0d9488">NT$220</td></tr>
+            <tr><td class="px-4 py-3 fw-semibold">社會</td><td class="px-4 py-3 text-center fw-black" style="color:#7c3aed">NT$550</td><td class="px-4 py-3 text-center fw-black text-primary">NT$300</td><td class="px-4 py-3 text-center fw-black" style="color:#0d9488">NT$220</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 國中 -->
+    <div class="mb-5">
+      <div class="d-flex align-items-center gap-3 mb-4">
+        <div class="d-flex align-items-center justify-content-center rounded-3 flex-shrink-0" style="width:52px;height:52px;background:linear-gradient(135deg,#eef2ff,#e0e7ff);font-size:1.6rem">🚀</div>
+        <div>
+          <h3 class="fw-black mb-0">國中課程</h3>
+          <div class="small text-secondary">7 ~ 9 年級</div>
+        </div>
+      </div>
+      <div class="table-responsive rounded-4 border shadow-sm">
+        <table class="table table-hover mb-0 pricing-thead">
+          <thead style="background:linear-gradient(90deg,#eef2ff,#e0e7ff)">
+            <tr>
+              <th class="px-4 py-3">科目</th>
+              <th class="px-4 py-3 text-center" style="color:#7c3aed">👤 一對一</th>
+              <th class="px-4 py-3 text-center" style="color:#4f46e5">👥 小班（2–4人）</th>
+              <th class="px-4 py-3 text-center" style="color:#0d9488">🏫 大班（5人+）</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td class="px-4 py-3 fw-semibold">數學</td><td class="px-4 py-3 text-center fw-black" style="color:#7c3aed">NT$700</td><td class="px-4 py-3 text-center fw-black text-primary">NT$400</td><td class="px-4 py-3 text-center fw-black" style="color:#0d9488">NT$300</td></tr>
+            <tr><td class="px-4 py-3 fw-semibold">英語</td><td class="px-4 py-3 text-center fw-black" style="color:#7c3aed">NT$700</td><td class="px-4 py-3 text-center fw-black text-primary">NT$400</td><td class="px-4 py-3 text-center fw-black" style="color:#0d9488">NT$300</td></tr>
+            <tr><td class="px-4 py-3 fw-semibold">國文</td><td class="px-4 py-3 text-center fw-black" style="color:#7c3aed">NT$650</td><td class="px-4 py-3 text-center fw-black text-primary">NT$380</td><td class="px-4 py-3 text-center fw-black" style="color:#0d9488">NT$280</td></tr>
+            <tr><td class="px-4 py-3 fw-semibold">理化</td><td class="px-4 py-3 text-center fw-black" style="color:#7c3aed">NT$750</td><td class="px-4 py-3 text-center fw-black text-primary">NT$420</td><td class="px-4 py-3 text-center fw-black" style="color:#0d9488">NT$320</td></tr>
+            <tr><td class="px-4 py-3 fw-semibold">生物</td><td class="px-4 py-3 text-center fw-black" style="color:#7c3aed">NT$700</td><td class="px-4 py-3 text-center fw-black text-primary">NT$400</td><td class="px-4 py-3 text-center fw-black" style="color:#0d9488">NT$300</td></tr>
+            <tr><td class="px-4 py-3 fw-semibold">社會</td><td class="px-4 py-3 text-center fw-black" style="color:#7c3aed">NT$650</td><td class="px-4 py-3 text-center fw-black text-primary">NT$370</td><td class="px-4 py-3 text-center fw-black" style="color:#0d9488">NT$270</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 高中 -->
+    <div class="mb-2">
+      <div class="d-flex align-items-center gap-3 mb-4">
+        <div class="d-flex align-items-center justify-content-center rounded-3 flex-shrink-0" style="width:52px;height:52px;background:linear-gradient(135deg,#fffbeb,#fef3c7);font-size:1.6rem">🎓</div>
+        <div>
+          <h3 class="fw-black mb-0">高中課程</h3>
+          <div class="small text-secondary">10 ~ 12 年級</div>
+        </div>
+      </div>
+      <div class="table-responsive rounded-4 border shadow-sm">
+        <table class="table table-hover mb-0 pricing-thead">
+          <thead style="background:linear-gradient(90deg,#fffbeb,#fef3c7)">
+            <tr>
+              <th class="px-4 py-3">科目</th>
+              <th class="px-4 py-3 text-center" style="color:#7c3aed">👤 一對一</th>
+              <th class="px-4 py-3 text-center" style="color:#4f46e5">👥 小班（2–4人）</th>
+              <th class="px-4 py-3 text-center" style="color:#0d9488">🏫 大班（5人+）</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td class="px-4 py-3 fw-semibold">數學</td><td class="px-4 py-3 text-center fw-black" style="color:#7c3aed">NT$800</td><td class="px-4 py-3 text-center fw-black text-primary">NT$480</td><td class="px-4 py-3 text-center fw-black" style="color:#0d9488">NT$350</td></tr>
+            <tr><td class="px-4 py-3 fw-semibold">英語</td><td class="px-4 py-3 text-center fw-black" style="color:#7c3aed">NT$800</td><td class="px-4 py-3 text-center fw-black text-primary">NT$480</td><td class="px-4 py-3 text-center fw-black" style="color:#0d9488">NT$350</td></tr>
+            <tr><td class="px-4 py-3 fw-semibold">國文</td><td class="px-4 py-3 text-center fw-black" style="color:#7c3aed">NT$750</td><td class="px-4 py-3 text-center fw-black text-primary">NT$440</td><td class="px-4 py-3 text-center fw-black" style="color:#0d9488">NT$330</td></tr>
+            <tr><td class="px-4 py-3 fw-semibold">物理</td><td class="px-4 py-3 text-center fw-black" style="color:#7c3aed">NT$850</td><td class="px-4 py-3 text-center fw-black text-primary">NT$500</td><td class="px-4 py-3 text-center fw-black" style="color:#0d9488">NT$380</td></tr>
+            <tr><td class="px-4 py-3 fw-semibold">化學</td><td class="px-4 py-3 text-center fw-black" style="color:#7c3aed">NT$850</td><td class="px-4 py-3 text-center fw-black text-primary">NT$500</td><td class="px-4 py-3 text-center fw-black" style="color:#0d9488">NT$380</td></tr>
+            <tr><td class="px-4 py-3 fw-semibold">歷史 / 地理</td><td class="px-4 py-3 text-center fw-black" style="color:#7c3aed">NT$780</td><td class="px-4 py-3 text-center fw-black text-primary">NT$450</td><td class="px-4 py-3 text-center fw-black" style="color:#0d9488">NT$340</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Packages / Discounts -->
+<section class="py-5 bg-light">
+  <div class="container-xl px-4 py-3">
+    <div class="text-center mb-5">
+      <span class="badge bg-primary bg-opacity-10 text-primary fw-semibold px-3 py-2 rounded-pill mb-3 d-inline-block">🎁 優惠方案</span>
+      <h2 class="fw-black" style="font-size:2.1rem">長期繳費更優惠，<span class="gradient-text">多科同報享折扣</span></h2>
+    </div>
+    <div class="row g-4 mb-5">
+      <div class="col-md-4">
+        <div class="card border-0 shadow-sm rounded-4 h-100 feature-card">
+          <div class="card-body p-4">
+            <div class="mb-3" style="font-size:2.5rem">📅</div>
+            <h4 class="fw-black mb-2">月繳方案</h4>
+            <div class="fw-black mb-3 text-secondary" style="font-size:2rem">原價</div>
+            <p class="text-secondary small mb-4">彈性方便，無長期綁約</p>
+            <ul class="list-unstyled small text-secondary">
+              <li class="mb-2"><span class="text-secondary me-2">─</span> 每月結算費用</li>
+              <li class="mb-2"><span class="text-secondary me-2">─</span> 隨時調整課程</li>
+              <li class="mb-2"><span class="text-secondary me-2">─</span> 適合短期加強</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card border-primary shadow rounded-4 h-100 feature-card position-relative">
+          <span class="badge bg-danger position-absolute top-0 end-0 translate-middle-y me-4 px-3 py-2">最受歡迎</span>
+          <div class="card-body p-4">
+            <div class="mb-3" style="font-size:2.5rem">🎯</div>
+            <h4 class="fw-black mb-2">季繳（3個月）</h4>
+            <div class="fw-black text-primary mb-3" style="font-size:2rem">95折</div>
+            <p class="text-secondary small mb-4">繳 3 個月享 9.5 折優惠</p>
+            <ul class="list-unstyled small text-secondary">
+              <li class="mb-2"><span class="text-primary me-2">✓</span> 較月繳省約 5%</li>
+              <li class="mb-2"><span class="text-primary me-2">✓</span> 保留席次</li>
+              <li class="mb-2"><span class="text-primary me-2">✓</span> 適合學期制</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card border-0 shadow-sm rounded-4 h-100 feature-card">
+          <div class="card-body p-4">
+            <div class="mb-3" style="font-size:2.5rem">🏆</div>
+            <h4 class="fw-black mb-2">學期繳（6個月）</h4>
+            <div class="fw-black mb-3" style="font-size:2rem;color:#16a34a">9折</div>
+            <p class="text-secondary small mb-4">繳 6 個月享 9 折優惠</p>
+            <ul class="list-unstyled small text-secondary">
+              <li class="mb-2"><span class="me-2" style="color:#16a34a">✓</span> 最大化節省費用</li>
+              <li class="mb-2"><span class="me-2" style="color:#16a34a">✓</span> 完整學習計畫</li>
+              <li class="mb-2"><span class="me-2" style="color:#16a34a">✓</span> 加贈衝刺課</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Multi-subject discount -->
+    <div class="rounded-4 p-4 p-md-5" style="background:linear-gradient(135deg,#fffbeb,#fef3c7)">
+      <h4 class="fw-black mb-4">🎁 多科同報優惠</h4>
+      <div class="row g-3">
+        <div class="col-md-4">
+          <div class="card border-0 shadow-sm rounded-4 text-center p-4">
+            <div class="fw-black mb-1" style="font-size:1.5rem;color:#d97706">同報 2 科</div>
+            <div class="small text-secondary">第 2 科享 <strong>95折</strong></div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card border-0 shadow-sm rounded-4 text-center p-4">
+            <div class="fw-black mb-1" style="font-size:1.5rem;color:#d97706">同報 3 科</div>
+            <div class="small text-secondary">第 3 科享 <strong>9折</strong></div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card border-0 shadow-sm rounded-4 text-center p-4">
+            <div class="fw-black mb-1" style="font-size:1.5rem;color:#d97706">同報 4 科以上</div>
+            <div class="small text-secondary">第 4 科起享 <strong>85折</strong></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="py-5 bg-white">
+  <div class="container px-4 py-3" style="max-width:768px">
+    <div class="text-center mb-5">
+      <span class="badge bg-primary bg-opacity-10 text-primary fw-semibold px-3 py-2 rounded-pill mb-3 d-inline-block">❓ 常見問題</span>
+      <h2 class="fw-black" style="font-size:2.1rem">家長最常問的問題</h2>
+    </div>
+    <div class="accordion" id="faqAccordion">
+      <div class="accordion-item border shadow-sm rounded-4 mb-3">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed fw-bold rounded-4" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+            費用是否包含教材？
+          </button>
+        </h2>
+        <div id="faq1" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+          <div class="accordion-body text-secondary small lh-lg">課程費用不含教材。本班提供自製精選講義，費用另計（每份 NT$100–$200）。若使用坊間教科書，請自行購買。</div>
+        </div>
+      </div>
+      <div class="accordion-item border shadow-sm rounded-4 mb-3">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed fw-bold rounded-4" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+            可以試聽嗎？
+          </button>
+        </h2>
+        <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+          <div class="accordion-body text-secondary small lh-lg">第一堂課提供免費試聽，讓學生和家長確認是否適合後再正式報名，完全無壓力。</div>
+        </div>
+      </div>
+      <div class="accordion-item border shadow-sm rounded-4 mb-3">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed fw-bold rounded-4" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+            如何付款？
+          </button>
+        </h2>
+        <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+          <div class="accordion-body text-secondary small lh-lg">接受現金、轉帳、Line Pay 等方式。月繳請於每月 5 日前繳清；季繳及學期繳請於報名時一次繳清。</div>
+        </div>
+      </div>
+      <div class="accordion-item border shadow-sm rounded-4 mb-3">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed fw-bold rounded-4" type="button" data-bs-toggle="collapse" data-bs-target="#faq4">
+            請假或取消課程如何處理？
+          </button>
+        </h2>
+        <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+          <div class="accordion-body text-secondary small lh-lg">請假須於上課前 24 小時告知。每月可補課一次，依雙方時間安排。連續請假超過一個月者，席次無法保留。</div>
+        </div>
+      </div>
+      <div class="accordion-item border shadow-sm rounded-4">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed fw-bold rounded-4" type="button" data-bs-toggle="collapse" data-bs-target="#faq5">
+            退費政策為何？
+          </button>
+        </h2>
+        <div id="faq5" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+          <div class="accordion-body text-secondary small lh-lg">季繳或學期繳若中途退出，依實際上課堂數以月繳費率計算，退還剩餘費用。行政費用 NT$500 不退還。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="py-5" style="background:linear-gradient(135deg,#4f46e5,#7c3aed,#a855f7)">
+  <div class="container px-4 py-3 text-center" style="max-width:700px">
+    <h2 class="fw-black text-white mb-3 display-6">需要精確報價？</h2>
+    <p class="fs-5 mb-4" style="color:rgba(199,210,254,.85)">使用報價單工具，輸入需求即可立即生成專屬報價</p>
+    <a href="quote.html" class="btn btn-light btn-lg rounded-4 fw-black px-5 text-primary shadow-lg">📋 立即開立報價單</a>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="bg-dark text-white py-4">
+  <div class="container-xl px-4">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-3 py-2 border-top border-secondary border-opacity-25">
+      <div class="d-flex align-items-center gap-2">
+        <div class="d-flex align-items-center justify-content-center text-white rounded-2 fw-black" style="width:28px;height:28px;background:linear-gradient(135deg,#4f46e5,#7c3aed);font-size:.75rem">優</div>
+        <span class="fw-bold">優學補習班</span>
+      </div>
+      <div class="d-flex gap-4 flex-wrap justify-content-center">
+        <a href="index.html" class="text-secondary text-decoration-none">首頁</a>
+        <a href="about.html" class="text-secondary text-decoration-none">關於我們</a>
+        <a href="pricing.html" class="text-secondary text-decoration-none">課程費用</a>
+        <a href="promotions.html" class="text-secondary text-decoration-none">文宣資料</a>
+        <a href="quote.html" class="text-secondary text-decoration-none">報價單</a>
+      </div>
+      <p class="mb-0 text-secondary small">© 2026 優學補習班</p>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
