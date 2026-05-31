@@ -4,94 +4,98 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>關於我們 ─ 優學補習班</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700;900&family=Inter:wght@700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
 </head>
-<body class="bg-white">
+<body>
 
 <!-- Navbar -->
-<nav class="fixed w-full top-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-100/60">
-  <div class="max-w-7xl mx-auto px-5 sm:px-8 flex justify-between h-16 items-center">
-    <a href="index.html" class="flex items-center gap-2.5">
-      <div class="w-9 h-9 rounded-xl flex items-center justify-center text-white font-black text-base" style="background:linear-gradient(135deg,#4F46E5,#7C3AED)">優</div>
-      <span class="text-xl font-black text-slate-900">優學補習班</span>
+<nav id="mainNav" class="navbar navbar-expand-lg fixed-top bg-white border-bottom py-0" style="backdrop-filter:blur(12px)">
+  <div class="container-xl">
+    <a class="navbar-brand d-flex align-items-center gap-2 fw-bold py-2" href="index.html">
+      <div class="d-flex align-items-center justify-content-center text-white rounded-3" style="width:36px;height:36px;background:linear-gradient(135deg,#4f46e5,#7c3aed);font-weight:900;font-size:.9rem">優</div>
+      <span class="fs-5 fw-black">優學補習班</span>
     </a>
-    <div class="hidden md:flex items-center gap-1">
-      <a href="index.html"      class="px-4 py-2 text-slate-700 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg font-medium text-sm transition-all">首頁</a>
-      <a href="about.html"      class="px-4 py-2 text-indigo-600 bg-indigo-50 rounded-lg font-semibold text-sm">關於我們</a>
-      <a href="pricing.html"    class="px-4 py-2 text-slate-700 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg font-medium text-sm transition-all">課程費用</a>
-      <a href="promotions.html" class="px-4 py-2 text-slate-700 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg font-medium text-sm transition-all">文宣資料</a>
-      <a href="quote.html"      class="ml-3 btn-primary inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-sm">📋 開立報價單</a>
-    </div>
-    <button id="mobile-menu-btn" class="md:hidden p-2 rounded-lg text-slate-700 hover:bg-indigo-50">
-      <svg id="menu-open-icon"  class="h-6 w-6"        fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
-      <svg id="menu-close-icon" class="h-6 w-6 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+    <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu" aria-controls="navMenu" aria-expanded="false">
+      <span class="navbar-toggler-icon"></span>
     </button>
-  </div>
-  <div id="mobile-menu" class="hidden md:hidden bg-white border-t px-5 py-3 space-y-1">
-    <a href="index.html"      class="block px-3 py-2.5 rounded-xl text-slate-700 hover:bg-indigo-50 font-medium">首頁</a>
-    <a href="about.html"      class="block px-3 py-2.5 rounded-xl text-indigo-600 font-semibold bg-indigo-50">關於我們</a>
-    <a href="pricing.html"    class="block px-3 py-2.5 rounded-xl text-slate-700 hover:bg-indigo-50 font-medium">課程費用</a>
-    <a href="promotions.html" class="block px-3 py-2.5 rounded-xl text-slate-700 hover:bg-indigo-50 font-medium">文宣資料</a>
-    <a href="quote.html"      class="block px-3 py-2.5 rounded-xl text-indigo-600 font-semibold">📋 開立報價單</a>
+    <div class="collapse navbar-collapse" id="navMenu">
+      <ul class="navbar-nav ms-auto align-items-lg-center gap-1 py-2 py-lg-0">
+        <li class="nav-item"><a class="nav-link px-3 rounded-3" href="index.html">首頁</a></li>
+        <li class="nav-item"><a class="nav-link px-3 rounded-3 fw-semibold text-primary active" href="about.html">關於我們</a></li>
+        <li class="nav-item"><a class="nav-link px-3 rounded-3" href="pricing.html">課程費用</a></li>
+        <li class="nav-item"><a class="nav-link px-3 rounded-3" href="promotions.html">文宣資料</a></li>
+        <li class="nav-item ms-lg-2 mt-2 mt-lg-0">
+          <a class="btn btn-primary rounded-3 px-4 py-2 d-flex align-items-center gap-2" href="quote.html">
+            <i class="bi bi-file-text"></i> 開立報價單
+          </a>
+        </li>
+      </ul>
+    </div>
   </div>
 </nav>
 
-<!-- Banner -->
-<section class="pt-16 relative overflow-hidden" style="background:linear-gradient(135deg,#0f0c29 0%,#312e81 50%,#4c1d95 100%)">
-  <div class="blob blob-1" style="opacity:0.4"></div>
-  <div class="blob blob-2" style="opacity:0.3"></div>
-  <div class="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 py-24 text-center">
-    <div class="inline-flex items-center border border-white/20 text-white/80 px-4 py-2 rounded-full text-sm font-semibold mb-5">🏫 關於我們</div>
-    <h1 class="text-5xl lg:text-6xl font-black text-white mb-5">以愛心、耐心、<span class="gradient-text">專業心</span><br>陪伴每位學生成長</h1>
-    <p class="text-indigo-200 text-xl max-w-2xl mx-auto">優學補習班 15 年深耕教育，用心成就每位孩子的學業夢想</p>
+<!-- Hero Banner -->
+<section class="hero-bg position-relative overflow-hidden" style="padding-top:80px">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="position-relative container-xl px-4 py-5 text-center" style="z-index:2">
+    <span class="badge rounded-pill border border-white border-opacity-25 text-white text-opacity-75 fw-semibold px-3 py-2 mb-4 d-inline-block">🏫 關於我們</span>
+    <h1 class="display-4 fw-black text-white mb-4">以愛心、耐心、<span class="gradient-text">專業心</span><br>陪伴每位學生成長</h1>
+    <p class="fs-5 mb-5" style="color:rgba(199,210,254,.85);max-width:36rem;margin:0 auto">優學補習班 15 年深耕教育，用心成就每位孩子的學業夢想</p>
   </div>
-  <div class="absolute bottom-0 left-0 w-full overflow-hidden" style="height:60px">
-    <svg viewBox="0 0 1440 60" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" class="w-full h-full">
-      <path d="M0,30 C360,60 1080,0 1440,30 L1440,60 L0,60 Z" fill="white"/>
-    </svg>
-  </div>
+  <div class="wave-bottom"><svg viewBox="0 0 1440 60" preserveAspectRatio="none"><path d="M0,30 C360,60 1080,0 1440,30 L1440,60 L0,60 Z" fill="white"/></svg></div>
 </section>
 
 <!-- Philosophy -->
-<section class="py-24 bg-white">
-  <div class="max-w-7xl mx-auto px-5 sm:px-8">
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-      <div>
-        <div class="inline-flex items-center bg-indigo-50 text-indigo-600 px-4 py-2 rounded-full text-sm font-semibold mb-6">🎯 教學理念</div>
-        <h2 class="text-4xl font-black text-slate-900 mb-6">以學生為中心，<br><span class="gradient-text">激發內在學習動力</span></h2>
-        <p class="text-slate-600 text-lg leading-relaxed mb-6">我們相信每一位學生都有無限潛能，只要找對方法、給予適當引導，都能在學業上展現亮眼成績。</p>
-        <p class="text-slate-600 leading-relaxed mb-8">優學補習班成立至今超過 15 年，始終秉持「以學生為本」的教學理念，不以成績論英雄，而是協助每位孩子建立紮實的學習基礎與良好的學習習慣。</p>
-        <div class="grid grid-cols-2 gap-4">
-          <div class="rounded-2xl p-5" style="background:linear-gradient(135deg,#EEF2FF,#E0E7FF)">
-            <div class="font-num text-3xl font-black text-indigo-600 mb-1">500+</div>
-            <div class="text-sm text-slate-600">在籍學生人數</div>
+<section class="py-5 bg-white">
+  <div class="container-xl px-4 py-3">
+    <div class="row g-5 align-items-center">
+      <div class="col-lg-6">
+        <span class="badge bg-primary bg-opacity-10 text-primary fw-semibold px-3 py-2 rounded-pill mb-4 d-inline-block">🎯 教學理念</span>
+        <h2 class="fw-black mb-4" style="font-size:2.1rem">以學生為中心，<br><span class="gradient-text">激發內在學習動力</span></h2>
+        <p class="text-secondary fs-5 mb-3">我們相信每一位學生都有無限潛能，只要找對方法、給予適當引導，都能在學業上展現亮眼成績。</p>
+        <p class="text-secondary mb-4">優學補習班成立至今超過 15 年，始終秉持「以學生為本」的教學理念，不以成績論英雄，而是協助每位孩子建立紮實的學習基礎與良好的學習習慣。</p>
+        <div class="row g-3">
+          <div class="col-6">
+            <div class="rounded-4 p-4" style="background:linear-gradient(135deg,#eef2ff,#e0e7ff)">
+              <div class="fw-black text-primary mb-1" style="font-size:2rem">500+</div>
+              <div class="small text-secondary">在籍學生人數</div>
+            </div>
           </div>
-          <div class="rounded-2xl p-5" style="background:linear-gradient(135deg,#F0FDF4,#DCFCE7)">
-            <div class="font-num text-3xl font-black text-emerald-600 mb-1">98%</div>
-            <div class="text-sm text-slate-600">家長滿意度</div>
+          <div class="col-6">
+            <div class="rounded-4 p-4" style="background:linear-gradient(135deg,#f0fdf4,#dcfce7)">
+              <div class="fw-black mb-1" style="font-size:2rem;color:#16a34a">98%</div>
+              <div class="small text-secondary">家長滿意度</div>
+            </div>
           </div>
-          <div class="rounded-2xl p-5" style="background:linear-gradient(135deg,#FFFBEB,#FEF3C7)">
-            <div class="font-num text-3xl font-black text-amber-600 mb-1">15年</div>
-            <div class="text-sm text-slate-600">豐富教學經驗</div>
+          <div class="col-6">
+            <div class="rounded-4 p-4" style="background:linear-gradient(135deg,#fffbeb,#fef3c7)">
+              <div class="fw-black mb-1" style="font-size:2rem;color:#d97706">15年</div>
+              <div class="small text-secondary">豐富教學經驗</div>
+            </div>
           </div>
-          <div class="rounded-2xl p-5" style="background:linear-gradient(135deg,#FFF1F2,#FFE4E6)">
-            <div class="font-num text-3xl font-black text-rose-500 mb-1">20+</div>
-            <div class="text-sm text-slate-600">專業師資人數</div>
+          <div class="col-6">
+            <div class="rounded-4 p-4" style="background:linear-gradient(135deg,#fff1f2,#ffe4e6)">
+              <div class="fw-black mb-1" style="font-size:2rem;color:#e11d48">20+</div>
+              <div class="small text-secondary">專業師資人數</div>
+            </div>
           </div>
         </div>
       </div>
-      <div class="relative rounded-3xl p-10 text-center" style="background:linear-gradient(135deg,#1e1b4b,#312e81)">
-        <div class="blob blob-3" style="width:200px;height:200px;background:rgba(139,92,246,0.3)"></div>
-        <div class="relative z-10">
-          <div class="text-8xl mb-6">🏫</div>
-          <blockquote class="text-xl text-white font-medium leading-relaxed italic mb-6">
-            「讓孩子不只是學會知識，<br>更要學會如何學習。」
-          </blockquote>
-          <div class="text-indigo-300 font-semibold">─ 優學補習班 創辦人</div>
+      <div class="col-lg-6">
+        <div class="rounded-4 p-5 text-center position-relative overflow-hidden" style="background:linear-gradient(135deg,#1e1b4b,#312e81)">
+          <div class="position-relative" style="z-index:1">
+            <div style="font-size:5rem" class="mb-4">🏫</div>
+            <blockquote class="fs-5 fw-semibold fst-italic lh-lg mb-4" style="color:rgba(255,255,255,.9)">
+              「讓孩子不只是學會知識，<br>更要學會如何學習。」
+            </blockquote>
+            <div style="color:#a5b4fc">─ 優學補習班 創辦人</div>
+          </div>
         </div>
       </div>
     </div>
@@ -99,156 +103,182 @@
 </section>
 
 <!-- Teaching Methods -->
-<section class="py-24 section-dots bg-slate-50">
-  <div class="max-w-7xl mx-auto px-5 sm:px-8">
-    <div class="text-center mb-16">
-      <div class="inline-flex items-center bg-indigo-50 text-indigo-600 px-4 py-2 rounded-full text-sm font-semibold mb-4">📖 授課方式</div>
-      <h2 class="text-4xl font-black text-slate-900 mb-4">多元彈性，<span class="gradient-text">滿足每種需求</span></h2>
+<section class="py-5 bg-light">
+  <div class="container-xl px-4 py-3">
+    <div class="text-center mb-5">
+      <span class="badge bg-primary bg-opacity-10 text-primary fw-semibold px-3 py-2 rounded-pill mb-3 d-inline-block">📖 授課方式</span>
+      <h2 class="fw-black" style="font-size:2.1rem">多元彈性，<span class="gradient-text">滿足每種需求</span></h2>
     </div>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-      <div class="card-lift bg-white rounded-3xl p-8 shadow-sm">
-        <div class="w-16 h-16 rounded-2xl flex items-center justify-center text-3xl mb-6" style="background:linear-gradient(135deg,#EDE9FE,#DDD6FE)">👤</div>
-        <h3 class="text-xl font-black text-slate-900 mb-3">一對一個人教學</h3>
-        <p class="text-slate-500 text-sm leading-relaxed mb-5">完全依照學生進度，即時修正錯誤，效率最高</p>
-        <ul class="space-y-2 text-sm">
-          <li class="flex items-center gap-2 text-slate-600"><span class="text-violet-500">✓</span> 完全個人化計畫</li>
-          <li class="flex items-center gap-2 text-slate-600"><span class="text-violet-500">✓</span> 彈性上課時間</li>
-          <li class="flex items-center gap-2 text-slate-600"><span class="text-violet-500">✓</span> 即時學習追蹤</li>
-          <li class="flex items-center gap-2 text-slate-600"><span class="text-violet-500">✓</span> 弱點強化最有效</li>
-        </ul>
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="card border-0 shadow-sm rounded-4 h-100 feature-card">
+          <div class="card-body p-4">
+            <div class="icon-wrap mb-4" style="background:linear-gradient(135deg,#ede9fe,#ddd6fe)">👤</div>
+            <h4 class="fw-black mb-3">一對一個人教學</h4>
+            <p class="text-secondary small mb-4">完全依照學生進度，即時修正錯誤，效率最高</p>
+            <ul class="list-unstyled small text-secondary">
+              <li class="mb-2"><span class="text-primary me-2">✓</span> 完全個人化計畫</li>
+              <li class="mb-2"><span class="text-primary me-2">✓</span> 彈性上課時間</li>
+              <li class="mb-2"><span class="text-primary me-2">✓</span> 即時學習追蹤</li>
+              <li class="mb-2"><span class="text-primary me-2">✓</span> 弱點強化最有效</li>
+            </ul>
+          </div>
+        </div>
       </div>
-      <div class="card-lift bg-white rounded-3xl p-8 shadow-sm ring-2 ring-indigo-200 relative">
-        <div class="absolute -top-3 right-6"><span class="badge-hot text-sm px-3 py-1">推薦</span></div>
-        <div class="w-16 h-16 rounded-2xl flex items-center justify-center text-3xl mb-6" style="background:linear-gradient(135deg,#EEF2FF,#E0E7FF)">👥</div>
-        <h3 class="text-xl font-black text-slate-900 mb-3">小班制（2–4人）</h3>
-        <p class="text-slate-500 text-sm leading-relaxed mb-5">兼顧個別差異，同儕互動促進學習，費用實惠</p>
-        <ul class="space-y-2 text-sm">
-          <li class="flex items-center gap-2 text-slate-600"><span class="text-indigo-500">✓</span> 同儕競爭激發積極性</li>
-          <li class="flex items-center gap-2 text-slate-600"><span class="text-indigo-500">✓</span> 老師仍可關注每位學生</li>
-          <li class="flex items-center gap-2 text-slate-600"><span class="text-indigo-500">✓</span> 費用合理，CP 值高</li>
-          <li class="flex items-center gap-2 text-slate-600"><span class="text-indigo-500">✓</span> 討論氛圍活躍</li>
-        </ul>
+      <div class="col-md-4">
+        <div class="card border-primary shadow-sm rounded-4 h-100 feature-card position-relative">
+          <span class="badge bg-primary position-absolute top-0 end-0 translate-middle-y me-4 px-3 py-2">推薦</span>
+          <div class="card-body p-4">
+            <div class="icon-wrap mb-4" style="background:linear-gradient(135deg,#eef2ff,#e0e7ff)">👥</div>
+            <h4 class="fw-black mb-3">小班制（2–4人）</h4>
+            <p class="text-secondary small mb-4">兼顧個別差異，同儕互動促進學習，費用實惠</p>
+            <ul class="list-unstyled small text-secondary">
+              <li class="mb-2"><span class="text-primary me-2">✓</span> 同儕競爭激發積極性</li>
+              <li class="mb-2"><span class="text-primary me-2">✓</span> 老師仍可關注每位學生</li>
+              <li class="mb-2"><span class="text-primary me-2">✓</span> 費用合理，CP 值高</li>
+              <li class="mb-2"><span class="text-primary me-2">✓</span> 討論氛圍活躍</li>
+            </ul>
+          </div>
+        </div>
       </div>
-      <div class="card-lift bg-white rounded-3xl p-8 shadow-sm">
-        <div class="w-16 h-16 rounded-2xl flex items-center justify-center text-3xl mb-6" style="background:linear-gradient(135deg,#ECFDF5,#D1FAE5)">🏫</div>
-        <h3 class="text-xl font-black text-slate-900 mb-3">大班制（5人以上）</h3>
-        <p class="text-slate-500 text-sm leading-relaxed mb-5">系統化課程設計，豐富講義資源，最經濟實惠</p>
-        <ul class="space-y-2 text-sm">
-          <li class="flex items-center gap-2 text-slate-600"><span class="text-emerald-500">✓</span> 課費最經濟實惠</li>
-          <li class="flex items-center gap-2 text-slate-600"><span class="text-emerald-500">✓</span> 系統化課程架構</li>
-          <li class="flex items-center gap-2 text-slate-600"><span class="text-emerald-500">✓</span> 豐富精選講義</li>
-          <li class="flex items-center gap-2 text-slate-600"><span class="text-emerald-500">✓</span> 定期模擬測驗</li>
-        </ul>
+      <div class="col-md-4">
+        <div class="card border-0 shadow-sm rounded-4 h-100 feature-card">
+          <div class="card-body p-4">
+            <div class="icon-wrap mb-4" style="background:linear-gradient(135deg,#ecfdf5,#d1fae5)">🏫</div>
+            <h4 class="fw-black mb-3">大班制（5人以上）</h4>
+            <p class="text-secondary small mb-4">系統化課程設計，豐富講義資源，最經濟實惠</p>
+            <ul class="list-unstyled small text-secondary">
+              <li class="mb-2"><span class="me-2" style="color:#16a34a">✓</span> 課費最經濟實惠</li>
+              <li class="mb-2"><span class="me-2" style="color:#16a34a">✓</span> 系統化課程架構</li>
+              <li class="mb-2"><span class="me-2" style="color:#16a34a">✓</span> 豐富精選講義</li>
+              <li class="mb-2"><span class="me-2" style="color:#16a34a">✓</span> 定期模擬測驗</li>
+            </ul>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
 <!-- Process -->
-<section class="py-24 bg-white">
-  <div class="max-w-5xl mx-auto px-5 sm:px-8">
-    <div class="text-center mb-16">
-      <div class="inline-flex items-center bg-indigo-50 text-indigo-600 px-4 py-2 rounded-full text-sm font-semibold mb-4">🗺️ 學習流程</div>
-      <h2 class="text-4xl font-black text-slate-900 mb-4">從報名到成績進步，<span class="gradient-text">全程陪伴</span></h2>
+<section class="py-5 bg-white">
+  <div class="container px-4 py-3" style="max-width:900px">
+    <div class="text-center mb-5">
+      <span class="badge bg-primary bg-opacity-10 text-primary fw-semibold px-3 py-2 rounded-pill mb-3 d-inline-block">🗺️ 學習流程</span>
+      <h2 class="fw-black" style="font-size:2.1rem">從報名到成績進步，<span class="gradient-text">全程陪伴</span></h2>
     </div>
-    <div class="relative">
-      <div class="hidden md:block absolute top-8 left-0 right-0 h-0.5 bg-indigo-100" style="margin:0 60px"></div>
-      <div class="grid grid-cols-1 md:grid-cols-5 gap-8 relative z-10">
-        <div class="text-center">
-          <div class="w-16 h-16 rounded-full flex items-center justify-center font-black text-white text-xl mx-auto mb-4 shadow-lg" style="background:linear-gradient(135deg,#4F46E5,#7C3AED)">1</div>
-          <h4 class="font-black text-slate-900 mb-2">免費諮詢</h4>
-          <p class="text-slate-500 text-xs">了解需求<br>解答疑問</p>
-        </div>
-        <div class="text-center">
-          <div class="w-16 h-16 rounded-full flex items-center justify-center font-black text-white text-xl mx-auto mb-4 shadow-lg" style="background:linear-gradient(135deg,#4F46E5,#7C3AED)">2</div>
-          <h4 class="font-black text-slate-900 mb-2">程度評測</h4>
-          <p class="text-slate-500 text-xs">了解學生<br>學習程度</p>
-        </div>
-        <div class="text-center">
-          <div class="w-16 h-16 rounded-full flex items-center justify-center font-black text-white text-xl mx-auto mb-4 shadow-lg" style="background:linear-gradient(135deg,#4F46E5,#7C3AED)">3</div>
-          <h4 class="font-black text-slate-900 mb-2">制定計畫</h4>
-          <p class="text-slate-500 text-xs">量身打造<br>個人計畫</p>
-        </div>
-        <div class="text-center">
-          <div class="w-16 h-16 rounded-full flex items-center justify-center font-black text-white text-xl mx-auto mb-4 shadow-lg" style="background:linear-gradient(135deg,#4F46E5,#7C3AED)">4</div>
-          <h4 class="font-black text-slate-900 mb-2">正式上課</h4>
-          <p class="text-slate-500 text-xs">系統化<br>學習執行</p>
-        </div>
-        <div class="text-center">
-          <div class="w-16 h-16 rounded-full flex items-center justify-center font-black text-white text-xl mx-auto mb-4 shadow-lg" style="background:linear-gradient(135deg,#F59E0B,#EF4444)">5</div>
-          <h4 class="font-black text-slate-900 mb-2">定期追蹤</h4>
-          <p class="text-slate-500 text-xs">月報告<br>持續優化</p>
-        </div>
+    <div class="row g-4 text-center justify-content-center">
+      <div class="col-6 col-sm-4 col-md">
+        <div class="d-flex align-items-center justify-content-center text-white fw-black rounded-circle mx-auto mb-3 shadow" style="width:64px;height:64px;background:linear-gradient(135deg,#4f46e5,#7c3aed);font-size:1.4rem">1</div>
+        <h6 class="fw-black mb-1">免費諮詢</h6>
+        <p class="small text-secondary mb-0">了解需求<br>解答疑問</p>
+      </div>
+      <div class="col-6 col-sm-4 col-md">
+        <div class="d-flex align-items-center justify-content-center text-white fw-black rounded-circle mx-auto mb-3 shadow" style="width:64px;height:64px;background:linear-gradient(135deg,#4f46e5,#7c3aed);font-size:1.4rem">2</div>
+        <h6 class="fw-black mb-1">程度評測</h6>
+        <p class="small text-secondary mb-0">了解學生<br>學習程度</p>
+      </div>
+      <div class="col-6 col-sm-4 col-md">
+        <div class="d-flex align-items-center justify-content-center text-white fw-black rounded-circle mx-auto mb-3 shadow" style="width:64px;height:64px;background:linear-gradient(135deg,#4f46e5,#7c3aed);font-size:1.4rem">3</div>
+        <h6 class="fw-black mb-1">制定計畫</h6>
+        <p class="small text-secondary mb-0">量身打造<br>個人計畫</p>
+      </div>
+      <div class="col-6 col-sm-4 col-md">
+        <div class="d-flex align-items-center justify-content-center text-white fw-black rounded-circle mx-auto mb-3 shadow" style="width:64px;height:64px;background:linear-gradient(135deg,#4f46e5,#7c3aed);font-size:1.4rem">4</div>
+        <h6 class="fw-black mb-1">正式上課</h6>
+        <p class="small text-secondary mb-0">系統化<br>學習執行</p>
+      </div>
+      <div class="col-6 col-sm-4 col-md">
+        <div class="d-flex align-items-center justify-content-center text-white fw-black rounded-circle mx-auto mb-3 shadow" style="width:64px;height:64px;background:linear-gradient(135deg,#f59e0b,#ef4444);font-size:1.4rem">5</div>
+        <h6 class="fw-black mb-1">定期追蹤</h6>
+        <p class="small text-secondary mb-0">月報告<br>持續優化</p>
       </div>
     </div>
   </div>
 </section>
 
 <!-- Teachers -->
-<section class="py-24" style="background:linear-gradient(135deg,#0f0c29,#312e81)">
-  <div class="max-w-7xl mx-auto px-5 sm:px-8">
-    <div class="text-center mb-16">
-      <div class="inline-flex items-center border border-white/20 text-white/80 px-4 py-2 rounded-full text-sm font-semibold mb-4">👩‍🏫 師資陣容</div>
-      <h2 class="text-4xl font-black text-white mb-4">每位老師都是<span class="gradient-text">各科目的專家</span></h2>
+<section class="py-5 hero-bg">
+  <div class="container-xl px-4 py-3">
+    <div class="text-center mb-5">
+      <span class="badge border border-white border-opacity-25 text-white text-opacity-75 fw-semibold px-3 py-2 rounded-pill mb-3 d-inline-block">👩‍🏫 師資陣容</span>
+      <h2 class="fw-black text-white" style="font-size:2.1rem">每位老師都是<span class="gradient-text">各科目的專家</span></h2>
     </div>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-      <div class="card-lift glass rounded-3xl p-6 text-center">
-        <div class="w-20 h-20 rounded-2xl flex items-center justify-center text-4xl mx-auto mb-4" style="background:rgba(255,255,255,0.1)">👩‍🏫</div>
-        <h4 class="text-lg font-black text-white mb-1">張老師</h4>
-        <div class="text-indigo-300 text-sm font-medium mb-3">數學主任教師</div>
-        <p class="text-white/50 text-xs leading-relaxed">師範大學數學系，教學資歷 12 年，擅長以生活化例子解釋抽象概念</p>
+    <div class="row g-4">
+      <div class="col-sm-6 col-lg-3">
+        <div class="card glass-card border-0 rounded-4 text-center h-100 feature-card">
+          <div class="card-body p-4">
+            <div class="mx-auto mb-3 d-flex align-items-center justify-content-center rounded-3" style="width:80px;height:80px;background:rgba(255,255,255,.1);font-size:2.5rem">👩‍🏫</div>
+            <h5 class="fw-black text-white mb-1">張老師</h5>
+            <div class="small mb-3" style="color:#a5b4fc">數學主任教師</div>
+            <p class="small mb-0" style="color:rgba(255,255,255,.5)">師範大學數學系，教學資歷 12 年，擅長以生活化例子解釋抽象概念</p>
+          </div>
+        </div>
       </div>
-      <div class="card-lift glass rounded-3xl p-6 text-center">
-        <div class="w-20 h-20 rounded-2xl flex items-center justify-center text-4xl mx-auto mb-4" style="background:rgba(255,255,255,0.1)">👨‍🏫</div>
-        <h4 class="text-lg font-black text-white mb-1">李老師</h4>
-        <div class="text-sky-300 text-sm font-medium mb-3">英語主任教師</div>
-        <p class="text-white/50 text-xs leading-relaxed">留美碩士，多益 990 滿分，課堂活潑，讓學生愛上英語</p>
+      <div class="col-sm-6 col-lg-3">
+        <div class="card glass-card border-0 rounded-4 text-center h-100 feature-card">
+          <div class="card-body p-4">
+            <div class="mx-auto mb-3 d-flex align-items-center justify-content-center rounded-3" style="width:80px;height:80px;background:rgba(255,255,255,.1);font-size:2.5rem">👨‍🏫</div>
+            <h5 class="fw-black text-white mb-1">李老師</h5>
+            <div class="small mb-3" style="color:#7dd3fc">英語主任教師</div>
+            <p class="small mb-0" style="color:rgba(255,255,255,.5)">留美碩士，多益 990 滿分，課堂活潑，讓學生愛上英語</p>
+          </div>
+        </div>
       </div>
-      <div class="card-lift glass rounded-3xl p-6 text-center">
-        <div class="w-20 h-20 rounded-2xl flex items-center justify-center text-4xl mx-auto mb-4" style="background:rgba(255,255,255,0.1)">👩‍🔬</div>
-        <h4 class="text-lg font-black text-white mb-1">陳老師</h4>
-        <div class="text-emerald-300 text-sm font-medium mb-3">自然科學教師</div>
-        <p class="text-white/50 text-xs leading-relaxed">台灣大學化學系，豐富實驗教學經驗，讓理化不再難懂</p>
+      <div class="col-sm-6 col-lg-3">
+        <div class="card glass-card border-0 rounded-4 text-center h-100 feature-card">
+          <div class="card-body p-4">
+            <div class="mx-auto mb-3 d-flex align-items-center justify-content-center rounded-3" style="width:80px;height:80px;background:rgba(255,255,255,.1);font-size:2.5rem">👩‍🔬</div>
+            <h5 class="fw-black text-white mb-1">陳老師</h5>
+            <div class="small mb-3" style="color:#6ee7b7">自然科學教師</div>
+            <p class="small mb-0" style="color:rgba(255,255,255,.5)">台灣大學化學系，豐富實驗教學經驗，讓理化不再難懂</p>
+          </div>
+        </div>
       </div>
-      <div class="card-lift glass rounded-3xl p-6 text-center">
-        <div class="w-20 h-20 rounded-2xl flex items-center justify-center text-4xl mx-auto mb-4" style="background:rgba(255,255,255,0.1)">👨‍💼</div>
-        <h4 class="text-lg font-black text-white mb-1">林老師</h4>
-        <div class="text-amber-300 text-sm font-medium mb-3">國文教師</div>
-        <p class="text-white/50 text-xs leading-relaxed">中文系碩士，擅長作文與閱讀理解，語文能力全面提升</p>
+      <div class="col-sm-6 col-lg-3">
+        <div class="card glass-card border-0 rounded-4 text-center h-100 feature-card">
+          <div class="card-body p-4">
+            <div class="mx-auto mb-3 d-flex align-items-center justify-content-center rounded-3" style="width:80px;height:80px;background:rgba(255,255,255,.1);font-size:2.5rem">👨‍💼</div>
+            <h5 class="fw-black text-white mb-1">林老師</h5>
+            <div class="small mb-3" style="color:#fcd34d">國文教師</div>
+            <p class="small mb-0" style="color:rgba(255,255,255,.5)">中文系碩士，擅長作文與閱讀理解，語文能力全面提升</p>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
 <!-- CTA -->
-<section class="py-20" style="background:linear-gradient(135deg,#4F46E5,#7C3AED,#A855F7)">
-  <div class="max-w-3xl mx-auto px-5 text-center">
-    <h2 class="text-4xl font-black text-white mb-4">想進一步了解？</h2>
-    <p class="text-indigo-200 mb-8 text-lg">歡迎來電洽詢或直接開立報價單，我們將盡快與您聯繫</p>
-    <a href="quote.html" class="inline-flex items-center justify-center gap-2 bg-white text-indigo-600 font-black px-10 py-5 rounded-2xl text-lg hover:bg-indigo-50 transition-all shadow-2xl">📋 立即開立報價單</a>
+<section class="py-5" style="background:linear-gradient(135deg,#4f46e5,#7c3aed,#a855f7)">
+  <div class="container px-4 py-3 text-center" style="max-width:700px">
+    <h2 class="fw-black text-white mb-3 display-6">想進一步了解？</h2>
+    <p class="fs-5 mb-4" style="color:rgba(199,210,254,.85)">歡迎來電洽詢或直接開立報價單，我們將盡快與您聯繫</p>
+    <a href="quote.html" class="btn btn-light btn-lg rounded-4 fw-black px-5 text-primary shadow-lg">📋 立即開立報價單</a>
   </div>
 </section>
 
 <!-- Footer -->
-<footer class="bg-slate-950 text-white">
-  <div class="max-w-7xl mx-auto px-5 sm:px-8 py-10">
-    <div class="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-slate-500 border-t border-white/10 pt-8">
-      <div class="flex items-center gap-2">
-        <div class="w-7 h-7 rounded-lg flex items-center justify-center text-white font-black text-xs" style="background:linear-gradient(135deg,#4F46E5,#7C3AED)">優</div>
-        <span class="text-white font-bold">優學補習班</span>
+<footer class="bg-dark text-white py-4">
+  <div class="container-xl px-4">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-3 py-2 border-top border-secondary border-opacity-25">
+      <div class="d-flex align-items-center gap-2">
+        <div class="d-flex align-items-center justify-content-center text-white rounded-2 fw-black" style="width:28px;height:28px;background:linear-gradient(135deg,#4f46e5,#7c3aed);font-size:.75rem">優</div>
+        <span class="fw-bold">優學補習班</span>
       </div>
-      <div class="flex gap-5 text-slate-400">
-        <a href="index.html"      class="hover:text-white">首頁</a>
-        <a href="about.html"      class="hover:text-white">關於我們</a>
-        <a href="pricing.html"    class="hover:text-white">課程費用</a>
-        <a href="promotions.html" class="hover:text-white">文宣資料</a>
-        <a href="quote.html"      class="hover:text-white">報價單</a>
+      <div class="d-flex gap-4 flex-wrap justify-content-center">
+        <a href="index.html" class="text-secondary text-decoration-none">首頁</a>
+        <a href="about.html" class="text-secondary text-decoration-none">關於我們</a>
+        <a href="pricing.html" class="text-secondary text-decoration-none">課程費用</a>
+        <a href="promotions.html" class="text-secondary text-decoration-none">文宣資料</a>
+        <a href="quote.html" class="text-secondary text-decoration-none">報價單</a>
       </div>
-      <p>© 2025 優學補習班</p>
+      <p class="mb-0 text-secondary small">© 2026 優學補習班</p>
     </div>
   </div>
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="js/main.js"></script>
 </body>
 </html>

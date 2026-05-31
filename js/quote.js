@@ -14,6 +14,7 @@ const SUBJECTS = {
 const DISCOUNT_MAP = { 1: 1, 3: 0.95, 6: 0.90 };
 
 let rowCounter = 0;
+let quoteModalInstance = null;
 
 /* ── Helpers ── */
 function today() {
@@ -46,48 +47,50 @@ function addCourseRow() {
   tr.id = `row-${id}`;
   tr.className = 'course-row';
   tr.innerHTML = `
-    <td class="px-3 py-3">
-      <select onchange="updateSubjects(${id})" id="level-${id}" class="w-full border border-gray-200 rounded-lg px-2 py-2 text-sm focus:ring-2 focus:ring-indigo-300 outline-none">
+    <td>
+      <select onchange="updateSubjects(${id})" id="level-${id}" class="form-select form-select-sm rounded-2">
         <option value="">選擇年級</option>
         <option value="國小">國小</option>
         <option value="國中">國中</option>
         <option value="高中">高中</option>
       </select>
     </td>
-    <td class="px-3 py-3">
-      <select id="subject-${id}" class="w-full border border-gray-200 rounded-lg px-2 py-2 text-sm focus:ring-2 focus:ring-indigo-300 outline-none" onchange="updatePrice(${id})">
+    <td>
+      <select id="subject-${id}" class="form-select form-select-sm rounded-2" onchange="updatePrice(${id})">
         <option value="">先選年級</option>
       </select>
     </td>
-    <td class="px-3 py-3">
-      <select id="format-${id}" class="w-full border border-gray-200 rounded-lg px-2 py-2 text-sm focus:ring-2 focus:ring-indigo-300 outline-none" onchange="updatePrice(${id})">
+    <td>
+      <select id="format-${id}" class="form-select form-select-sm rounded-2" onchange="updatePrice(${id})">
         <option value="">授課形式</option>
         <option value="個人教學">個人教學</option>
         <option value="小班教學">小班教學</option>
         <option value="大班教學">大班教學</option>
       </select>
     </td>
-    <td class="px-3 py-3">
-      <select id="hrs-${id}" class="w-full border border-gray-200 rounded-lg px-2 py-2 text-sm focus:ring-2 focus:ring-indigo-300 outline-none" onchange="calcRow(${id})">
+    <td>
+      <select id="hrs-${id}" class="form-select form-select-sm rounded-2" onchange="calcRow(${id})">
         <option value="1">1 小時</option>
         <option value="1.5">1.5 小時</option>
         <option value="2">2 小時</option>
       </select>
     </td>
-    <td class="px-3 py-3">
+    <td>
       <input type="number" id="perweek-${id}" value="2" min="1" max="7"
-        class="w-full border border-gray-200 rounded-lg px-2 py-2 text-sm text-center focus:ring-2 focus:ring-indigo-300 outline-none"
+        class="form-control form-control-sm text-center rounded-2"
         onchange="calcRow(${id})">
     </td>
-    <td class="px-3 py-3">
+    <td>
       <input type="number" id="months-${id}" value="1" min="1" max="24"
-        class="w-full border border-gray-200 rounded-lg px-2 py-2 text-sm text-center focus:ring-2 focus:ring-indigo-300 outline-none"
+        class="form-control form-control-sm text-center rounded-2"
         onchange="calcRow(${id})">
     </td>
-    <td class="px-3 py-3 text-sm text-gray-700 text-center" id="unitprice-${id}">─</td>
-    <td class="px-3 py-3 text-sm font-semibold text-indigo-600 text-right" id="subtotal-${id}">─</td>
-    <td class="px-3 py-3 text-center">
-      <button onclick="removeRow(${id})" class="text-red-400 hover:text-red-600 transition-colors text-lg font-bold">✕</button>
+    <td class="small text-center" id="unitprice-${id}" style="color:#64748b">─</td>
+    <td class="small fw-semibold text-end text-primary" id="subtotal-${id}">─</td>
+    <td class="text-center">
+      <button onclick="removeRow(${id})" class="btn btn-sm btn-outline-danger rounded-circle px-2 py-1 lh-1" title="刪除">
+        <i class="bi bi-x"></i>
+      </button>
     </td>`;
   tbody.appendChild(tr);
   updateTotal();
@@ -176,7 +179,6 @@ function getMaxMonths() {
 
 /* ── Generate Preview ── */
 function generateQuote() {
-  // Validate
   const studentName = document.getElementById('student-name').value.trim();
   if (!studentName) { alert('請填寫學生姓名'); return; }
 
@@ -191,8 +193,11 @@ function generateQuote() {
   if (!hasValid) { alert('請完整填寫課程資訊（年級、科目、授課形式）'); return; }
 
   buildPreview();
-  document.getElementById('quote-modal').classList.remove('hidden');
-  document.body.style.overflow = 'hidden';
+
+  if (!quoteModalInstance) {
+    quoteModalInstance = new bootstrap.Modal(document.getElementById('quoteModal'));
+  }
+  quoteModalInstance.show();
 }
 
 function buildPreview() {
@@ -205,7 +210,6 @@ function buildPreview() {
   const note        = document.getElementById('note').value.trim();
   const quoteNo     = generateQuoteNo();
 
-  // Build course rows HTML
   let courseRows = '';
   let subtotalSum = 0;
   document.querySelectorAll('[id^="row-"]').forEach(row => {
@@ -249,7 +253,6 @@ function buildPreview() {
 
   document.getElementById('quote-preview').innerHTML = `
     <div style="font-family:'Microsoft JhengHei','Noto Sans TC',sans-serif;font-size:14px;color:#1f2937;line-height:1.6">
-      <!-- Header -->
       <div style="display:flex;justify-content:space-between;align-items:flex-start;padding-bottom:16px;border-bottom:3px solid #4f46e5;margin-bottom:20px">
         <div>
           <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
@@ -271,7 +274,6 @@ function buildPreview() {
         </div>
       </div>
 
-      <!-- Customer Info -->
       <div style="background:#f8fafc;border-radius:10px;padding:14px 18px;margin-bottom:20px">
         <div style="font-weight:700;color:#374151;margin-bottom:10px;font-size:15px">學生 / 客戶資料</div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:13px">
@@ -284,7 +286,6 @@ function buildPreview() {
         </div>
       </div>
 
-      <!-- Course Table -->
       <div style="margin-bottom:20px">
         <div style="font-weight:700;color:#374151;margin-bottom:10px;font-size:15px">課程明細</div>
         <div style="overflow-x:auto">
@@ -317,7 +318,6 @@ function buildPreview() {
         </div>
       </div>
 
-      <!-- Payment & Terms -->
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;font-size:12px">
         <div style="background:#f8fafc;border-radius:8px;padding:12px">
           <div style="font-weight:700;margin-bottom:6px;color:#374151">付款方式</div>
@@ -337,7 +337,6 @@ function buildPreview() {
         </div>
       </div>
 
-      <!-- Signature -->
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:24px;padding-top:16px;border-top:1px solid #e5e7eb;font-size:12px">
         <div>
           <div style="color:#6b7280;margin-bottom:24px">客戶確認簽名</div>
@@ -355,11 +354,6 @@ function buildPreview() {
         優學補習班 ─ 台北市中山區學習路100號 ─ (02) 2345-6789 ─ info@youxue.edu.tw
       </div>
     </div>`;
-}
-
-function closeModal() {
-  document.getElementById('quote-modal').classList.add('hidden');
-  document.body.style.overflow = '';
 }
 
 function printQuote() {
