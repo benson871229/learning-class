@@ -3,33 +3,97 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>優學補習班 — 專業、高效、用心教學</title>
+  <title>優學補習班 ─ 讓每個孩子都能發光</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* ── Ticker ── */
+    .ticker-wrap{background:linear-gradient(90deg,#4f46e5,#7c3aed);padding:.45rem 0;overflow:hidden}
+    .ticker-inner{display:flex;width:max-content;animation:ticker 28s linear infinite}
+    .ticker-inner:hover{animation-play-state:paused}
+    .ticker-item{white-space:nowrap;padding:0 2.5rem;color:rgba(255,255,255,.92);font-size:.82rem;font-weight:600;display:flex;align-items:center;gap:.6rem}
+    .ticker-dot{width:6px;height:6px;background:#fbbf24;border-radius:50%;flex-shrink:0}
+    @keyframes ticker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+    /* ── Hero badges ── */
+    .hero-float{position:absolute;animation:floatY 3s ease-in-out infinite}
+    .hero-float-2{animation-delay:1.5s}
+    .hero-float-3{animation-delay:.8s}
+    @keyframes floatY{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+    .badge-popup{background:white;border-radius:1rem;padding:.65rem 1rem;box-shadow:0 8px 32px rgba(0,0,0,.2);display:flex;align-items:center;gap:.7rem;min-width:160px}
+    .badge-popup .num{font-weight:900;font-size:1.1rem;color:#4f46e5;line-height:1}
+    .badge-popup .lbl{font-size:.72rem;color:#64748b;font-weight:600}
+
+    /* ── Stats counter ── */
+    .stat-num{font-size:3rem;font-weight:900;line-height:1;background:linear-gradient(135deg,#a78bfa,#c084fc);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+
+    /* ── Subject card ── */
+    .subject-card{border-radius:1.25rem!important;transition:transform .25s,box-shadow .25s;cursor:pointer}
+    .subject-card:hover{transform:translateY(-8px);box-shadow:0 16px 40px rgba(79,70,229,.2)!important}
+    .subject-icon{width:56px;height:56px;border-radius:1rem;display:flex;align-items:center;justify-content:center;font-size:1.6rem;flex-shrink:0}
+
+    /* ── Course pills ── */
+    .nav-pills .nav-link{border-radius:2rem;padding:.55rem 1.4rem;font-weight:700;color:#6b7280;transition:.2s}
+    .nav-pills .nav-link.active,.nav-pills .nav-link:hover{background:linear-gradient(135deg,#4f46e5,#7c3aed)!important;color:white}
+    .price-card{border-radius:1.25rem!important;transition:transform .25s,box-shadow .25s}
+    .price-card:hover{transform:translateY(-6px);box-shadow:0 16px 40px rgba(0,0,0,.12)!important}
+
+    /* ── Progress bars (interactive chart) ── */
+    .prog-track{height:12px;border-radius:6px;background:#e5e7eb;overflow:hidden}
+    .prog-fill{height:100%;border-radius:6px;width:0;transition:width 1.4s cubic-bezier(.4,0,.2,1)}
+
+    /* ── Donut chart ── */
+    .donut{width:110px;height:110px;border-radius:50%;display:flex;align-items:center;justify-content:center;position:relative}
+    .donut-inner{width:72px;height:72px;border-radius:50%;background:white;display:flex;align-items:center;justify-content:center;flex-direction:column}
+
+    /* ── Teaching mode cards ── */
+    .mode-card{border-radius:1.5rem!important;transition:transform .3s,box-shadow .3s}
+    .mode-card:hover{transform:translateY(-8px);box-shadow:0 20px 50px rgba(0,0,0,.15)!important}
+
+    /* ── Floating LINE button ── */
+    .float-line{position:fixed;bottom:28px;right:28px;z-index:9999;width:58px;height:58px;border-radius:50%;background:#06c755;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 24px rgba(6,199,85,.55);text-decoration:none;animation:linepulse 2.2s ease-in-out infinite;font-size:1.7rem}
+    @keyframes linepulse{0%,100%{box-shadow:0 4px 24px rgba(6,199,85,.55)}50%{box-shadow:0 4px 36px rgba(6,199,85,.9),0 0 0 8px rgba(6,199,85,.15)}}
+
+    /* ── Testimonial carousel ── */
+    .carousel-indicators [data-bs-target]{width:10px;height:10px;border-radius:50%;background:#6366f1}
+    .testi-card{background:white;border-radius:1.5rem;padding:2rem;box-shadow:0 4px 24px rgba(0,0,0,.08)}
+    .testi-avatar{width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.8rem;flex-shrink:0}
+
+    /* ── Section label ── */
+    .sec-label{font-size:.8rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#6366f1;margin-bottom:.5rem}
+    .section-divider{width:48px;height:4px;border-radius:2px;background:linear-gradient(90deg,#4f46e5,#7c3aed);margin:0 auto .75rem}
+
+    /* ── Step line ── */
+    .step-circle{width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:1.1rem;color:white;flex-shrink:0}
+  </style>
 </head>
 <body>
 
-<!-- ═══ NAVBAR ═══ -->
-<nav id="mainNav" class="navbar navbar-expand-lg navbar-light bg-white fixed-top transition-shadow">
-  <div class="container">
-    <a class="navbar-brand fw-black fs-5 d-flex align-items-center gap-2" href="index.html">
-      <span class="d-flex align-items-center justify-content-center text-white fw-black rounded-3" style="width:36px;height:36px;background:linear-gradient(135deg,#6366f1,#8b5cf6);font-size:.9rem">優</span>
-      優學補習班
+<!-- ══ FLOATING LINE BUTTON ══ -->
+<a href="tel:0223456789" class="float-line" title="立即來電">📞</a>
+
+<!-- ══ NAVBAR ══ -->
+<nav id="mainNav" class="navbar navbar-expand-lg fixed-top bg-white border-bottom py-0" style="backdrop-filter:blur(12px)">
+  <div class="container-xl">
+    <a class="navbar-brand d-flex align-items-center gap-2 fw-bold py-2" href="index.html">
+      <div class="d-flex align-items-center justify-content-center text-white rounded-3" style="width:36px;height:36px;background:linear-gradient(135deg,#4f46e5,#7c3aed);font-weight:900;font-size:.9rem">優</div>
+      <span class="fs-5 fw-black">優學補習班</span>
     </a>
-    <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMain">
+    <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" id="navMain">
-      <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-1">
-        <li class="nav-item"><a class="nav-link px-3 fw-medium" href="index.html">首頁</a></li>
-        <li class="nav-item"><a class="nav-link px-3 fw-medium" href="about.html">關於我們</a></li>
-        <li class="nav-item"><a class="nav-link px-3 fw-medium" href="pricing.html">課程費用</a></li>
-        <li class="nav-item"><a class="nav-link px-3 fw-medium" href="promotions.html">文宣資料</a></li>
-        <li class="nav-item ms-lg-2">
-          <a class="btn btn-primary px-4 rounded-3" href="quote.html">
-            <i class="bi bi-file-text me-1"></i>開立報價單
+    <div class="collapse navbar-collapse" id="navMenu">
+      <ul class="navbar-nav ms-auto align-items-lg-center gap-1 py-2 py-lg-0">
+        <li class="nav-item"><a class="nav-link px-3 rounded-3 fw-semibold text-primary active" href="index.html">首頁</a></li>
+        <li class="nav-item"><a class="nav-link px-3 rounded-3" href="about.html">關於我們</a></li>
+        <li class="nav-item"><a class="nav-link px-3 rounded-3" href="pricing.html">課程費用</a></li>
+        <li class="nav-item"><a class="nav-link px-3 rounded-3" href="promotions.html">文宣資料</a></li>
+        <li class="nav-item ms-lg-2 mt-2 mt-lg-0">
+          <a class="btn btn-primary rounded-3 px-4 py-2 d-flex align-items-center gap-2" href="quote.html">
+            <i class="bi bi-file-text"></i>開立報價單
           </a>
         </li>
       </ul>
@@ -37,232 +101,447 @@
   </div>
 </nav>
 
-<!-- ═══ HERO ═══ -->
-<section class="hero-bg text-white position-relative overflow-hidden" style="padding-top:80px;min-height:100vh;display:flex;align-items:center">
+<!-- ══ ANNOUNCEMENT TICKER ══ -->
+<div class="ticker-wrap" style="margin-top:57px">
+  <div class="ticker-inner" id="ticker">
+    <span class="ticker-item"><span class="ticker-dot"></span>🎉 2025 暑假班熱烈招生中，前20名享免費講義</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>📢 新生首月8折優惠，免費試聽一堂</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>🏆 本班學生平均成績進步 27 分</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>👨‍👩‍👧 兄弟姐妹同報享第二位9折</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>📞 歡迎來電洽詢：(02) 2345-6789</span>
+    <!-- 複製一份以做無縫捲動 -->
+    <span class="ticker-item"><span class="ticker-dot"></span>🎉 2025 暑假班熱烈招生中，前20名享免費講義</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>📢 新生首月8折優惠，免費試聽一堂</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>🏆 本班學生平均成績進步 27 分</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>👨‍👩‍👧 兄弟姐妹同報享第二位9折</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>📞 歡迎來電洽詢：(02) 2345-6789</span>
+  </div>
+</div>
+
+<!-- ══ HERO ══ -->
+<section class="hero-bg text-white position-relative overflow-hidden" style="min-height:92vh;display:flex;align-items:center">
   <div class="blob blob-1"></div>
   <div class="blob blob-2"></div>
+  <div class="container-xl position-relative py-5" style="z-index:2">
+    <div class="row align-items-center g-4">
 
-  <div class="container position-relative z-1 py-5">
-    <div class="row align-items-center g-5">
-      <div class="col-lg-6">
-        <span class="badge rounded-pill px-3 py-2 mb-4 d-inline-flex align-items-center gap-2 fw-medium" style="background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);font-size:.85rem">
-          <span class="badge bg-success rounded-circle p-1"></span>
-          2025 年度招生熱烈進行中
-        </span>
-        <h1 class="display-4 fw-black lh-sm mb-4">
-          不只是補習，<br>
-          <span class="gradient-text">點亮每個孩子<br>的無限可能</span>
+      <!-- Left text -->
+      <div class="col-lg-6" data-aos="fade-right" data-aos-duration="700">
+        <div class="d-flex align-items-center gap-2 mb-3">
+          <span class="badge rounded-pill px-3 py-2 fw-semibold" style="background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22);font-size:.8rem">
+            <span class="text-success me-1">●</span> 2025 招生中
+          </span>
+          <span class="badge rounded-pill px-3 py-2 fw-semibold" style="background:rgba(251,191,36,.15);border:1px solid rgba(251,191,36,.35);color:#fbbf24;font-size:.8rem">
+            🏅 金牌補習班
+          </span>
+        </div>
+        <h1 class="fw-black lh-sm mb-3" style="font-size:clamp(2.2rem,5vw,3.5rem)">
+          讓每個孩子<br>都能<span class="gradient-text">發光發熱</span>
         </h1>
-        <p class="lead mb-5" style="color:rgba(255,255,255,.65)">
-          優學補習班 15 年深耕教育，500+ 學員親身見證。<br>
-          從國小到高中，全科目專業師資全程陪伴。
+        <p class="mb-4" style="font-size:1.1rem;color:rgba(199,210,254,.9);max-width:480px;line-height:1.8">
+          優學補習班 15 年深耕教育，國小、國中、高中全科輔導。<br>
+          小班精緻教學，每位學生都是焦點。
         </p>
-        <div class="d-flex flex-wrap gap-3 mb-5">
-          <a href="quote.html" class="btn btn-primary btn-lg rounded-3 px-5 shadow-lg">
-            立即取得報價單 <i class="bi bi-arrow-right ms-1"></i>
+        <div class="d-flex gap-3 flex-wrap mb-4">
+          <a href="quote.html" class="btn btn-light btn-lg rounded-3 fw-black px-4 text-primary shadow">
+            <i class="bi bi-file-earmark-text me-2"></i>免費取得報價
           </a>
-          <a href="about.html" class="btn btn-outline-light btn-lg rounded-3 px-5">
-            了解更多
+          <a href="about.html" class="btn btn-outline-light btn-lg rounded-3 fw-semibold px-4">
+            了解更多 <i class="bi bi-arrow-right ms-1"></i>
           </a>
         </div>
-        <div class="row g-0 text-center pt-4" style="border-top:1px solid rgba(255,255,255,.15)">
-          <div class="col-4">
-            <div class="display-5 fw-black">500+</div>
-            <small style="color:rgba(255,255,255,.5)">在籍學生</small>
+        <!-- mini stats -->
+        <div class="d-flex gap-4 flex-wrap">
+          <div>
+            <div class="fw-black" style="font-size:1.6rem;color:#fbbf24">15<span class="fs-5">年</span></div>
+            <div class="small" style="color:rgba(199,210,254,.8)">教學經驗</div>
           </div>
-          <div class="col-4" style="border-left:1px solid rgba(255,255,255,.15);border-right:1px solid rgba(255,255,255,.15)">
-            <div class="display-5 fw-black">98%</div>
-            <small style="color:rgba(255,255,255,.5)">家長滿意度</small>
+          <div style="border-left:1px solid rgba(255,255,255,.2);padding-left:1rem">
+            <div class="fw-black" style="font-size:1.6rem;color:#34d399">500+</div>
+            <div class="small" style="color:rgba(199,210,254,.8)">在籍學生</div>
           </div>
-          <div class="col-4">
-            <div class="display-5 fw-black">15年</div>
-            <small style="color:rgba(255,255,255,.5)">教學經驗</small>
+          <div style="border-left:1px solid rgba(255,255,255,.2);padding-left:1rem">
+            <div class="fw-black" style="font-size:1.6rem;color:#f472b6">98%</div>
+            <div class="small" style="color:rgba(199,210,254,.8)">家長滿意</div>
           </div>
         </div>
       </div>
 
-      <div class="col-lg-6 d-none d-lg-block">
-        <div class="row g-4">
-          <div class="col-6">
-            <div class="glass-card p-4 rounded-4 text-white">
-              <div class="fs-2 mb-2">🔢</div>
-              <h5 class="fw-bold mb-1">數學</h5>
-              <p class="small mb-3" style="color:rgba(255,255,255,.55)">奠基 · 進階 · 衝刺</p>
-              <div class="d-flex gap-1">
-                <span class="badge rounded-pill" style="background:rgba(255,255,255,.15)">國小</span>
-                <span class="badge rounded-pill" style="background:rgba(255,255,255,.15)">國中</span>
-                <span class="badge rounded-pill" style="background:rgba(255,255,255,.15)">高中</span>
-              </div>
-            </div>
-          </div>
-          <div class="col-6" style="margin-top:24px">
-            <div class="glass-card p-4 rounded-4 text-white">
-              <div class="fs-2 mb-2">🌍</div>
-              <h5 class="fw-bold mb-1">英語</h5>
-              <p class="small mb-3" style="color:rgba(255,255,255,.55)">口說 · 閱讀 · 寫作</p>
-              <div class="d-flex gap-1">
-                <span class="badge rounded-pill" style="background:rgba(255,255,255,.15)">國小</span>
-                <span class="badge rounded-pill" style="background:rgba(255,255,255,.15)">國中</span>
-                <span class="badge rounded-pill" style="background:rgba(255,255,255,.15)">高中</span>
-              </div>
-            </div>
-          </div>
-          <div class="col-6">
-            <div class="glass-card p-4 rounded-4 text-white">
-              <div class="fs-2 mb-2">🧪</div>
-              <h5 class="fw-bold mb-1">自然科學</h5>
-              <p class="small mb-3" style="color:rgba(255,255,255,.55)">理化 · 生物 · 地科</p>
-              <div class="d-flex gap-1">
-                <span class="badge rounded-pill" style="background:rgba(255,255,255,.15)">國中</span>
-                <span class="badge rounded-pill" style="background:rgba(255,255,255,.15)">高中</span>
-              </div>
-            </div>
-          </div>
-          <div class="col-6" style="margin-top:24px">
-            <div class="glass-card p-4 rounded-4 text-white d-flex align-items-center gap-3">
-              <div class="rounded-3 d-flex align-items-center justify-content-center flex-shrink-0" style="width:44px;height:44px;background:linear-gradient(135deg,#f59e0b,#ef4444);font-size:1.2rem">⭐</div>
-              <div>
-                <div class="fw-bold small">成績平均提升 25 分</div>
-                <div class="small" style="color:rgba(255,255,255,.5)">Google 評分 4.9</div>
-              </div>
-            </div>
-          </div>
+      <!-- Right floating badges -->
+      <div class="col-lg-6 d-none d-lg-flex align-items-center justify-content-center" style="min-height:380px;position:relative">
+        <!-- Center illustration -->
+        <div class="d-flex align-items-center justify-content-center rounded-circle" style="width:220px;height:220px;background:rgba(255,255,255,.07);border:2px solid rgba(255,255,255,.15);position:absolute;left:50%;transform:translateX(-50%)">
+          <div style="font-size:7rem">🎓</div>
+        </div>
+        <!-- Floating badge 1 -->
+        <div class="hero-float badge-popup" style="position:absolute;top:10%;left:5%">
+          <span style="font-size:1.6rem">📈</span>
+          <div><div class="num">+27分</div><div class="lbl">平均成績進步</div></div>
+        </div>
+        <!-- Floating badge 2 -->
+        <div class="hero-float hero-float-2 badge-popup" style="position:absolute;top:12%;right:0%">
+          <span style="font-size:1.6rem">⭐</span>
+          <div><div class="num">98%</div><div class="lbl">家長滿意度</div></div>
+        </div>
+        <!-- Floating badge 3 -->
+        <div class="hero-float hero-float-3 badge-popup" style="position:absolute;bottom:18%;left:0%">
+          <span style="font-size:1.6rem">👩‍🏫</span>
+          <div><div class="num">20+</div><div class="lbl">專業師資</div></div>
+        </div>
+        <!-- Floating badge 4 -->
+        <div class="hero-float badge-popup" style="position:absolute;bottom:10%;right:2%;animation-delay:2s">
+          <span style="font-size:1.6rem">🏆</span>
+          <div><div class="num">15年</div><div class="lbl">金牌補習班</div></div>
         </div>
       </div>
     </div>
   </div>
-
-  <div class="wave-bottom">
-    <svg viewBox="0 0 1440 60" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
-      <path d="M0,30 C360,60 1080,0 1440,30 L1440,60 L0,60 Z" fill="white"/>
-    </svg>
+  <!-- scroll hint -->
+  <div class="position-absolute bottom-0 start-50 translate-middle-x pb-3 text-white text-opacity-50" style="z-index:2;animation:floatY 1.5s ease-in-out infinite">
+    <i class="bi bi-chevron-double-down fs-5"></i>
   </div>
+  <div class="wave-bottom"><svg viewBox="0 0 1440 60" preserveAspectRatio="none"><path d="M0,30 C360,60 1080,0 1440,30 L1440,60 L0,60 Z" fill="white"/></svg></div>
 </section>
 
-<!-- ═══ FEATURES ═══ -->
-<section class="py-6 bg-white" style="padding-top:5rem;padding-bottom:5rem">
-  <div class="container">
-    <div class="text-center mb-5">
-      <span class="badge bg-primary bg-opacity-10 text-primary rounded-pill px-3 py-2 mb-3">✦ 我們的優勢</span>
-      <h2 class="fw-black fs-1 mb-2">為什麼選擇 <span class="gradient-text">優學補習班</span>？</h2>
-      <p class="text-muted fs-5">四大核心優勢，讓每位學生找到最適合的學習方式</p>
-    </div>
-    <div class="row g-4">
-      <div class="col-md-6 col-xl-3">
-        <div class="card border-0 shadow-sm rounded-4 h-100 feature-card p-4">
-          <div class="icon-wrap mb-4" style="background:linear-gradient(135deg,#eef2ff,#e0e7ff)">
-            <i class="bi bi-person-check-fill" style="color:#6366f1;font-size:1.8rem"></i>
-          </div>
-          <h5 class="fw-black">專業師資</h5>
-          <p class="text-muted small mb-0">師範大學畢業，持有合格教師證，平均教學年資 8 年以上，專業有保障</p>
-        </div>
+<!-- ══ STATS COUNTER ══ -->
+<section class="py-4" style="background:linear-gradient(135deg,#1e1b4b,#312e81)">
+  <div class="container-xl px-4">
+    <div class="row g-3 text-center">
+      <div class="col-6 col-md-3" data-aos="zoom-in" data-aos-delay="0">
+        <div class="stat-num" data-count="500">0</div>
+        <div class="text-white text-opacity-75 fw-semibold small mt-1">在籍學生人數</div>
       </div>
-      <div class="col-md-6 col-xl-3">
-        <div class="card border-0 shadow-sm rounded-4 h-100 feature-card p-4">
-          <div class="icon-wrap mb-4" style="background:linear-gradient(135deg,#f0fdf4,#dcfce7)">
-            <i class="bi bi-bullseye" style="color:#16a34a;font-size:1.8rem"></i>
-          </div>
-          <h5 class="fw-black">個人化教學</h5>
-          <p class="text-muted small mb-0">依學生學習狀況量身制定計畫，弱點強化、優點深化，效率倍增</p>
-        </div>
+      <div class="col-6 col-md-3" data-aos="zoom-in" data-aos-delay="100">
+        <div class="stat-num" data-count="15">0</div>
+        <div class="text-white text-opacity-75 fw-semibold small mt-1">年教學資歷</div>
       </div>
-      <div class="col-md-6 col-xl-3">
-        <div class="card border-0 shadow-sm rounded-4 h-100 feature-card p-4">
-          <div class="icon-wrap mb-4" style="background:linear-gradient(135deg,#fff7ed,#ffedd5)">
-            <i class="bi bi-bar-chart-fill" style="color:#ea580c;font-size:1.8rem"></i>
-          </div>
-          <h5 class="fw-black">月度學習報告</h5>
-          <p class="text-muted small mb-0">每月出具詳細學習報告，家長即時掌握孩子的每一步成長進度</p>
-        </div>
+      <div class="col-6 col-md-3" data-aos="zoom-in" data-aos-delay="200">
+        <div class="stat-num" data-count="98">0</div>
+        <div class="text-white text-opacity-75 fw-semibold small mt-1">% 家長滿意度</div>
       </div>
-      <div class="col-md-6 col-xl-3">
-        <div class="card border-0 shadow-sm rounded-4 h-100 feature-card p-4">
-          <div class="icon-wrap mb-4" style="background:linear-gradient(135deg,#fff1f2,#ffe4e6)">
-            <i class="bi bi-shield-check-fill" style="color:#e11d48;font-size:1.8rem"></i>
-          </div>
-          <h5 class="fw-black">透明合理收費</h5>
-          <p class="text-muted small mb-0">費用公開透明，多種方案靈活搭配，無隱藏費用，安心就讀</p>
-        </div>
+      <div class="col-6 col-md-3" data-aos="zoom-in" data-aos-delay="300">
+        <div class="stat-num" data-count="20">0</div>
+        <div class="text-white text-opacity-75 fw-semibold small mt-1">位專業教師</div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ═══ COURSES ═══ -->
-<section class="py-5" style="padding-top:5rem;padding-bottom:5rem;background:#f8f9ff">
-  <div class="container">
-    <div class="text-center mb-5">
-      <span class="badge bg-primary bg-opacity-10 text-primary rounded-pill px-3 py-2 mb-3">📚 開設課程</span>
-      <h2 class="fw-black fs-1 mb-2">涵蓋<span class="gradient-text">全學段</span>，科科都有專師</h2>
-      <p class="text-muted fs-5">國小 · 國中 · 高中，從打基礎到升學衝刺</p>
+<!-- ══ SUBJECTS ══ -->
+<section class="py-4 bg-light">
+  <div class="container-xl px-4 py-2">
+    <div class="text-center mb-4" data-aos="fade-up">
+      <div class="sec-label">開課科目</div>
+      <h2 class="fw-black" style="font-size:1.9rem">全科輔導，<span class="gradient-text">一站搞定</span></h2>
     </div>
+    <div class="row g-3">
+      <div class="col-6 col-md-4 col-lg-3" data-aos="fade-up" data-aos-delay="0">
+        <div class="card border-0 shadow-sm subject-card p-3 h-100">
+          <div class="d-flex align-items-center gap-3">
+            <div class="subject-icon" style="background:linear-gradient(135deg,#eef2ff,#c7d2fe)">➕</div>
+            <div>
+              <div class="fw-black">數學</div>
+              <div class="text-secondary" style="font-size:.75rem">國小 ‧ 國中 ‧ 高中</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-6 col-md-4 col-lg-3" data-aos="fade-up" data-aos-delay="60">
+        <div class="card border-0 shadow-sm subject-card p-3 h-100">
+          <div class="d-flex align-items-center gap-3">
+            <div class="subject-icon" style="background:linear-gradient(135deg,#eff6ff,#bfdbfe)">🔤</div>
+            <div>
+              <div class="fw-black">英語</div>
+              <div class="text-secondary" style="font-size:.75rem">國小 ‧ 國中 ‧ 高中</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-6 col-md-4 col-lg-3" data-aos="fade-up" data-aos-delay="120">
+        <div class="card border-0 shadow-sm subject-card p-3 h-100">
+          <div class="d-flex align-items-center gap-3">
+            <div class="subject-icon" style="background:linear-gradient(135deg,#fdf4ff,#e9d5ff)">📖</div>
+            <div>
+              <div class="fw-black">國文</div>
+              <div class="text-secondary" style="font-size:.75rem">國小 ‧ 國中 ‧ 高中</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-6 col-md-4 col-lg-3" data-aos="fade-up" data-aos-delay="180">
+        <div class="card border-0 shadow-sm subject-card p-3 h-100">
+          <div class="d-flex align-items-center gap-3">
+            <div class="subject-icon" style="background:linear-gradient(135deg,#fffbeb,#fef3c7)">⚗️</div>
+            <div>
+              <div class="fw-black">理化</div>
+              <div class="text-secondary" style="font-size:.75rem">國中 ‧ 高中</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-6 col-md-4 col-lg-3" data-aos="fade-up" data-aos-delay="240">
+        <div class="card border-0 shadow-sm subject-card p-3 h-100">
+          <div class="d-flex align-items-center gap-3">
+            <div class="subject-icon" style="background:linear-gradient(135deg,#ecfdf5,#a7f3d0)">🌿</div>
+            <div>
+              <div class="fw-black">生物</div>
+              <div class="text-secondary" style="font-size:.75rem">國中 ‧ 高中</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-6 col-md-4 col-lg-3" data-aos="fade-up" data-aos-delay="300">
+        <div class="card border-0 shadow-sm subject-card p-3 h-100">
+          <div class="d-flex align-items-center gap-3">
+            <div class="subject-icon" style="background:linear-gradient(135deg,#fff1f2,#fecdd3)">📜</div>
+            <div>
+              <div class="fw-black">歷史</div>
+              <div class="text-secondary" style="font-size:.75rem">國中 ‧ 高中</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-6 col-md-4 col-lg-3" data-aos="fade-up" data-aos-delay="360">
+        <div class="card border-0 shadow-sm subject-card p-3 h-100">
+          <div class="d-flex align-items-center gap-3">
+            <div class="subject-icon" style="background:linear-gradient(135deg,#f0fdf4,#bbf7d0)">🌏</div>
+            <div>
+              <div class="fw-black">地理</div>
+              <div class="text-secondary" style="font-size:.75rem">國中 ‧ 高中</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-6 col-md-4 col-lg-3" data-aos="fade-up" data-aos-delay="420">
+        <div class="card border-0 shadow-sm subject-card p-3 h-100">
+          <div class="d-flex align-items-center gap-3">
+            <div class="subject-icon" style="background:linear-gradient(135deg,#f0f9ff,#bae6fd)">⚡</div>
+            <div>
+              <div class="fw-black">物理</div>
+              <div class="text-secondary" style="font-size:.75rem">高中</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-    <div class="row g-4">
+<!-- ══ COURSE TABS ══ -->
+<section class="py-4 bg-white">
+  <div class="container-xl px-4 py-2">
+    <div class="text-center mb-4" data-aos="fade-up">
+      <div class="sec-label">費用一覽</div>
+      <h2 class="fw-black" style="font-size:1.9rem">透明收費，<span class="gradient-text">選擇最適方案</span></h2>
+    </div>
+    <!-- Grade tabs -->
+    <div class="d-flex justify-content-center mb-4" data-aos="fade-up">
+      <ul class="nav nav-pills gap-2 bg-light p-1 rounded-pill" id="gradeTabs">
+        <li class="nav-item">
+          <button class="nav-link active" data-bs-toggle="pill" data-bs-target="#tab-es">🌱 國小</button>
+        </li>
+        <li class="nav-item">
+          <button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-jh">🚀 國中</button>
+        </li>
+        <li class="nav-item">
+          <button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-hs">🎓 高中</button>
+        </li>
+      </ul>
+    </div>
+    <div class="tab-content">
       <!-- 國小 -->
-      <div class="col-md-4">
-        <div class="card border-0 shadow-sm course-card h-100">
-          <div class="course-bar rounded-top" style="background:linear-gradient(90deg,#34d399,#10b981)"></div>
-          <div class="card-body p-4">
-            <div class="d-flex align-items-center gap-3 mb-4">
-              <div class="rounded-3 d-flex align-items-center justify-content-center" style="width:52px;height:52px;background:linear-gradient(135deg,#ecfdf5,#d1fae5);font-size:1.5rem">🌱</div>
-              <div>
-                <h4 class="fw-black mb-0">國小課程</h4>
-                <small class="text-muted">1 ~ 6 年級</small>
-              </div>
+      <div class="tab-pane fade show active" id="tab-es">
+        <div class="row g-3">
+          <div class="col-md-4" data-aos="fade-up" data-aos-delay="0">
+            <div class="card border-0 shadow-sm price-card text-center p-4">
+              <div class="mb-2" style="font-size:2rem">👤</div>
+              <h5 class="fw-black mb-1">個人教學</h5>
+              <p class="text-secondary small mb-3">一對一，效率最高</p>
+              <div class="fw-black text-primary" style="font-size:2rem">NT$600<span class="fs-6 text-secondary fw-normal">/hr</span></div>
+              <a href="quote.html" class="btn btn-primary rounded-3 mt-3 fw-semibold">立即報名</a>
             </div>
-            <ul class="list-unstyled mb-4">
-              <li class="py-2 border-bottom d-flex align-items-center gap-2"><i class="bi bi-check-circle-fill text-success small"></i> 數學奠基</li>
-              <li class="py-2 border-bottom d-flex align-items-center gap-2"><i class="bi bi-check-circle-fill text-success small"></i> 英語啟蒙</li>
-              <li class="py-2 border-bottom d-flex align-items-center gap-2"><i class="bi bi-check-circle-fill text-success small"></i> 國語文</li>
-              <li class="py-2 d-flex align-items-center gap-2"><i class="bi bi-check-circle-fill text-success small"></i> 自然科學 · 社會</li>
-            </ul>
-            <a href="pricing.html" class="btn btn-outline-success w-100 rounded-3">查看費用 <i class="bi bi-arrow-right ms-1"></i></a>
+          </div>
+          <div class="col-md-4" data-aos="fade-up" data-aos-delay="80">
+            <div class="card border-primary shadow price-card text-center p-4 position-relative">
+              <span class="badge bg-danger position-absolute top-0 end-0 translate-middle-y me-4 px-3 py-2">最熱門</span>
+              <div class="mb-2" style="font-size:2rem">👥</div>
+              <h5 class="fw-black mb-1">小班教學</h5>
+              <p class="text-secondary small mb-3">2–4人，CP值高</p>
+              <div class="fw-black text-primary" style="font-size:2rem">NT$350<span class="fs-6 text-secondary fw-normal">/hr</span></div>
+              <a href="quote.html" class="btn btn-primary rounded-3 mt-3 fw-semibold">立即報名</a>
+            </div>
+          </div>
+          <div class="col-md-4" data-aos="fade-up" data-aos-delay="160">
+            <div class="card border-0 shadow-sm price-card text-center p-4">
+              <div class="mb-2" style="font-size:2rem">🏫</div>
+              <h5 class="fw-black mb-1">大班教學</h5>
+              <p class="text-secondary small mb-3">5人以上，最經濟</p>
+              <div class="fw-black text-primary" style="font-size:2rem">NT$250<span class="fs-6 text-secondary fw-normal">/hr</span></div>
+              <a href="quote.html" class="btn btn-outline-primary rounded-3 mt-3 fw-semibold">立即報名</a>
+            </div>
           </div>
         </div>
       </div>
       <!-- 國中 -->
-      <div class="col-md-4">
-        <div class="card border-0 shadow course-card h-100" style="border:2px solid #a5b4fc !important;border-top:none !important">
-          <div class="course-bar rounded-top position-relative" style="background:linear-gradient(90deg,#818cf8,#6366f1)">
-            <span class="badge position-absolute top-0 end-0 mt-2 me-2" style="background:linear-gradient(135deg,#f59e0b,#ef4444)">最熱門</span>
-          </div>
-          <div class="card-body p-4">
-            <div class="d-flex align-items-center gap-3 mb-4">
-              <div class="rounded-3 d-flex align-items-center justify-content-center" style="width:52px;height:52px;background:linear-gradient(135deg,#eef2ff,#e0e7ff);font-size:1.5rem">🚀</div>
-              <div>
-                <h4 class="fw-black mb-0">國中課程</h4>
-                <small class="text-muted">7 ~ 9 年級</small>
-              </div>
+      <div class="tab-pane fade" id="tab-jh">
+        <div class="row g-3">
+          <div class="col-md-4" data-aos="fade-up" data-aos-delay="0">
+            <div class="card border-0 shadow-sm price-card text-center p-4">
+              <div class="mb-2" style="font-size:2rem">👤</div>
+              <h5 class="fw-black mb-1">個人教學</h5>
+              <p class="text-secondary small mb-3">一對一，效率最高</p>
+              <div class="fw-black text-primary" style="font-size:2rem">NT$700<span class="fs-6 text-secondary fw-normal">/hr</span></div>
+              <a href="quote.html" class="btn btn-primary rounded-3 mt-3 fw-semibold">立即報名</a>
             </div>
-            <ul class="list-unstyled mb-4">
-              <li class="py-2 border-bottom d-flex align-items-center gap-2"><i class="bi bi-check-circle-fill text-primary small"></i> 數學 · 英語</li>
-              <li class="py-2 border-bottom d-flex align-items-center gap-2"><i class="bi bi-check-circle-fill text-primary small"></i> 國文</li>
-              <li class="py-2 border-bottom d-flex align-items-center gap-2"><i class="bi bi-check-circle-fill text-primary small"></i> 理化 · 生物</li>
-              <li class="py-2 d-flex align-items-center gap-2"><i class="bi bi-check-circle-fill text-primary small"></i> 社會 · 歷史 · 地理</li>
-            </ul>
-            <a href="pricing.html" class="btn btn-primary w-100 rounded-3">查看費用 <i class="bi bi-arrow-right ms-1"></i></a>
+          </div>
+          <div class="col-md-4" data-aos="fade-up" data-aos-delay="80">
+            <div class="card border-primary shadow price-card text-center p-4 position-relative">
+              <span class="badge bg-danger position-absolute top-0 end-0 translate-middle-y me-4 px-3 py-2">最熱門</span>
+              <div class="mb-2" style="font-size:2rem">👥</div>
+              <h5 class="fw-black mb-1">小班教學</h5>
+              <p class="text-secondary small mb-3">2–4人，CP值高</p>
+              <div class="fw-black text-primary" style="font-size:2rem">NT$400<span class="fs-6 text-secondary fw-normal">/hr</span></div>
+              <a href="quote.html" class="btn btn-primary rounded-3 mt-3 fw-semibold">立即報名</a>
+            </div>
+          </div>
+          <div class="col-md-4" data-aos="fade-up" data-aos-delay="160">
+            <div class="card border-0 shadow-sm price-card text-center p-4">
+              <div class="mb-2" style="font-size:2rem">🏫</div>
+              <h5 class="fw-black mb-1">大班教學</h5>
+              <p class="text-secondary small mb-3">5人以上，最經濟</p>
+              <div class="fw-black text-primary" style="font-size:2rem">NT$300<span class="fs-6 text-secondary fw-normal">/hr</span></div>
+              <a href="quote.html" class="btn btn-outline-primary rounded-3 mt-3 fw-semibold">立即報名</a>
+            </div>
           </div>
         </div>
       </div>
       <!-- 高中 -->
-      <div class="col-md-4">
-        <div class="card border-0 shadow-sm course-card h-100">
-          <div class="course-bar rounded-top" style="background:linear-gradient(90deg,#fcd34d,#f59e0b)"></div>
-          <div class="card-body p-4">
-            <div class="d-flex align-items-center gap-3 mb-4">
-              <div class="rounded-3 d-flex align-items-center justify-content-center" style="width:52px;height:52px;background:linear-gradient(135deg,#fffbeb,#fef3c7);font-size:1.5rem">🎓</div>
-              <div>
-                <h4 class="fw-black mb-0">高中課程</h4>
-                <small class="text-muted">10 ~ 12 年級</small>
+      <div class="tab-pane fade" id="tab-hs">
+        <div class="row g-3">
+          <div class="col-md-4" data-aos="fade-up" data-aos-delay="0">
+            <div class="card border-0 shadow-sm price-card text-center p-4">
+              <div class="mb-2" style="font-size:2rem">👤</div>
+              <h5 class="fw-black mb-1">個人教學</h5>
+              <p class="text-secondary small mb-3">一對一，效率最高</p>
+              <div class="fw-black text-primary" style="font-size:2rem">NT$800<span class="fs-6 text-secondary fw-normal">/hr</span></div>
+              <a href="quote.html" class="btn btn-primary rounded-3 mt-3 fw-semibold">立即報名</a>
+            </div>
+          </div>
+          <div class="col-md-4" data-aos="fade-up" data-aos-delay="80">
+            <div class="card border-primary shadow price-card text-center p-4 position-relative">
+              <span class="badge bg-danger position-absolute top-0 end-0 translate-middle-y me-4 px-3 py-2">最熱門</span>
+              <div class="mb-2" style="font-size:2rem">👥</div>
+              <h5 class="fw-black mb-1">小班教學</h5>
+              <p class="text-secondary small mb-3">2–4人，CP值高</p>
+              <div class="fw-black text-primary" style="font-size:2rem">NT$480<span class="fs-6 text-secondary fw-normal">/hr</span></div>
+              <a href="quote.html" class="btn btn-primary rounded-3 mt-3 fw-semibold">立即報名</a>
+            </div>
+          </div>
+          <div class="col-md-4" data-aos="fade-up" data-aos-delay="160">
+            <div class="card border-0 shadow-sm price-card text-center p-4">
+              <div class="mb-2" style="font-size:2rem">🏫</div>
+              <h5 class="fw-black mb-1">大班教學</h5>
+              <p class="text-secondary small mb-3">5人以上，最經濟</p>
+              <div class="fw-black text-primary" style="font-size:2rem">NT$350<span class="fs-6 text-secondary fw-normal">/hr</span></div>
+              <a href="quote.html" class="btn btn-outline-primary rounded-3 mt-3 fw-semibold">立即報名</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="text-center mt-3">
+      <a href="pricing.html" class="btn btn-link text-primary fw-semibold">查看完整費率表 <i class="bi bi-arrow-right"></i></a>
+    </div>
+  </div>
+</section>
+
+<!-- ══ ACHIEVEMENT CHART (互動圖) ══ -->
+<section class="py-4" style="background:linear-gradient(135deg,#1e1b4b,#312e81)">
+  <div class="container-xl px-4 py-2">
+    <div class="text-center mb-4" data-aos="fade-up">
+      <div class="sec-label" style="color:#a78bfa">教學成效</div>
+      <h2 class="fw-black text-white" style="font-size:1.9rem">數據說話，<span class="gradient-text">成績看得見</span></h2>
+    </div>
+    <div class="row g-4 align-items-center">
+      <!-- Progress bars -->
+      <div class="col-md-6" data-aos="fade-right">
+        <div class="d-flex flex-column gap-3">
+          <div>
+            <div class="d-flex justify-content-between mb-2">
+              <span class="text-white fw-semibold small">成績進步比例</span>
+              <span class="text-primary fw-black">87%</span>
+            </div>
+            <div class="prog-track">
+              <div class="prog-fill" data-width="87" style="background:linear-gradient(90deg,#6366f1,#8b5cf6)"></div>
+            </div>
+          </div>
+          <div>
+            <div class="d-flex justify-content-between mb-2">
+              <span class="text-white fw-semibold small">家長推薦意願</span>
+              <span class="fw-black" style="color:#34d399">95%</span>
+            </div>
+            <div class="prog-track">
+              <div class="prog-fill" data-width="95" style="background:linear-gradient(90deg,#10b981,#34d399)"></div>
+            </div>
+          </div>
+          <div>
+            <div class="d-flex justify-content-between mb-2">
+              <span class="text-white fw-semibold small">目標達成率</span>
+              <span class="fw-black" style="color:#fbbf24">92%</span>
+            </div>
+            <div class="prog-track">
+              <div class="prog-fill" data-width="92" style="background:linear-gradient(90deg,#f59e0b,#fbbf24)"></div>
+            </div>
+          </div>
+          <div>
+            <div class="d-flex justify-content-between mb-2">
+              <span class="text-white fw-semibold small">續讀率</span>
+              <span class="fw-black" style="color:#f472b6">89%</span>
+            </div>
+            <div class="prog-track">
+              <div class="prog-fill" data-width="89" style="background:linear-gradient(90deg,#ec4899,#f472b6)"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Donut charts -->
+      <div class="col-md-6" data-aos="fade-left">
+        <div class="row g-3 text-center">
+          <div class="col-6">
+            <div class="donut mx-auto mb-2" style="background:conic-gradient(#6366f1 0% 87%,rgba(255,255,255,.1) 87% 100%)">
+              <div class="donut-inner" style="background:#1e1b4b">
+                <div class="fw-black text-primary">87%</div>
+                <div class="small" style="font-size:.65rem;color:rgba(255,255,255,.6)">進步</div>
               </div>
             </div>
-            <ul class="list-unstyled mb-4">
-              <li class="py-2 border-bottom d-flex align-items-center gap-2"><i class="bi bi-check-circle-fill text-warning small"></i> 數學 · 英語</li>
-              <li class="py-2 border-bottom d-flex align-items-center gap-2"><i class="bi bi-check-circle-fill text-warning small"></i> 國文</li>
-              <li class="py-2 border-bottom d-flex align-items-center gap-2"><i class="bi bi-check-circle-fill text-warning small"></i> 物理 · 化學 · 生物</li>
-              <li class="py-2 d-flex align-items-center gap-2"><i class="bi bi-check-circle-fill text-warning small"></i> 歷史 · 地理 · 公民</li>
-            </ul>
-            <a href="pricing.html" class="btn btn-outline-warning w-100 rounded-3">查看費用 <i class="bi bi-arrow-right ms-1"></i></a>
+            <div class="small fw-semibold" style="color:rgba(255,255,255,.8)">成績進步</div>
+          </div>
+          <div class="col-6">
+            <div class="donut mx-auto mb-2" style="background:conic-gradient(#10b981 0% 98%,rgba(255,255,255,.1) 98% 100%)">
+              <div class="donut-inner" style="background:#1e1b4b">
+                <div class="fw-black" style="color:#34d399">98%</div>
+                <div class="small" style="font-size:.65rem;color:rgba(255,255,255,.6)">滿意</div>
+              </div>
+            </div>
+            <div class="small fw-semibold" style="color:rgba(255,255,255,.8)">家長滿意</div>
+          </div>
+          <div class="col-6">
+            <div class="donut mx-auto mb-2" style="background:conic-gradient(#f59e0b 0% 92%,rgba(255,255,255,.1) 92% 100%)">
+              <div class="donut-inner" style="background:#1e1b4b">
+                <div class="fw-black" style="color:#fbbf24">92%</div>
+                <div class="small" style="font-size:.65rem;color:rgba(255,255,255,.6)">達成</div>
+              </div>
+            </div>
+            <div class="small fw-semibold" style="color:rgba(255,255,255,.8)">目標達成</div>
+          </div>
+          <div class="col-6">
+            <div class="donut mx-auto mb-2" style="background:conic-gradient(#ec4899 0% 89%,rgba(255,255,255,.1) 89% 100%)">
+              <div class="donut-inner" style="background:#1e1b4b">
+                <div class="fw-black" style="color:#f472b6">89%</div>
+                <div class="small" style="font-size:.65rem;color:rgba(255,255,255,.6)">續讀</div>
+              </div>
+            </div>
+            <div class="small fw-semibold" style="color:rgba(255,255,255,.8)">學生續讀</div>
           </div>
         </div>
       </div>
@@ -270,181 +549,295 @@
   </div>
 </section>
 
-<!-- ═══ TEACHING MODES ═══ -->
-<section class="position-relative overflow-hidden py-5" style="padding-top:5rem;padding-bottom:5rem;background:linear-gradient(135deg,#1e1b4b,#312e81,#4c1d95)">
-  <div class="blob blob-1"></div>
-  <div class="blob blob-2"></div>
-  <div class="container position-relative z-1">
-    <div class="text-center text-white mb-5">
-      <span class="badge rounded-pill px-3 py-2 mb-3 fw-medium" style="background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2)">🏫 授課方式</span>
-      <h2 class="fw-black fs-1 mb-2">彈性多元，<span class="gradient-text">滿足不同需求</span></h2>
-      <p style="color:rgba(255,255,255,.6)" class="fs-5">一對一 · 小班 · 大班，選擇最適合孩子的方式</p>
+<!-- ══ FEATURES ══ -->
+<section class="py-4 bg-light">
+  <div class="container-xl px-4 py-2">
+    <div class="text-center mb-4" data-aos="fade-up">
+      <div class="sec-label">為什麼選擇我們</div>
+      <h2 class="fw-black" style="font-size:1.9rem">我們的<span class="gradient-text">獨特優勢</span></h2>
     </div>
-    <div class="row g-4">
-      <div class="col-md-4">
-        <div class="glass-card rounded-4 p-4 text-white h-100">
-          <div class="fs-1 mb-3">👤</div>
-          <h4 class="fw-black mb-2">一對一個人教學</h4>
-          <p class="mb-4" style="color:rgba(255,255,255,.6);font-size:.95rem">完全個人化，依學生節奏推進，最高效率的學習方式，即時修正錯誤觀念</p>
-          <div style="border-top:1px solid rgba(255,255,255,.15)" class="pt-4">
-            <small style="color:rgba(255,255,255,.5)">每小時起始費率</small>
-            <div class="fs-2 fw-black mt-1">$550<span class="fs-5 fw-normal" style="color:rgba(255,255,255,.6)"> /hr 起</span></div>
+    <div class="row g-3">
+      <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="0">
+        <div class="card border-0 shadow-sm rounded-4 p-4 h-100 feature-card">
+          <div class="icon-wrap mb-3" style="background:linear-gradient(135deg,#eef2ff,#e0e7ff)">
+            <i class="bi bi-person-check fs-4 text-primary"></i>
           </div>
+          <h5 class="fw-black mb-2">精緻小班</h5>
+          <p class="text-secondary small mb-0">每班上限 4 人，老師能確實關注每位學生的學習狀況</p>
         </div>
       </div>
-      <div class="col-md-4">
-        <div class="rounded-4 p-4 text-white h-100 position-relative" style="background:rgba(99,102,241,.35);border:1px solid rgba(255,255,255,.25)">
-          <span class="badge position-absolute top-0 end-0 mt-3 me-3" style="background:linear-gradient(135deg,#f59e0b,#ef4444)">推薦</span>
-          <div class="fs-1 mb-3">👥</div>
-          <h4 class="fw-black mb-2">小班制（2–4 人）</h4>
-          <p class="mb-4" style="color:rgba(255,255,255,.6);font-size:.95rem">兼顧個別差異，互動討論促進學習，費用比個人教學更實惠</p>
-          <div style="border-top:1px solid rgba(255,255,255,.15)" class="pt-4">
-            <small style="color:rgba(255,255,255,.5)">每小時起始費率</small>
-            <div class="fs-2 fw-black mt-1">$300<span class="fs-5 fw-normal" style="color:rgba(255,255,255,.6)"> /hr 起</span></div>
+      <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="80">
+        <div class="card border-0 shadow-sm rounded-4 p-4 h-100 feature-card">
+          <div class="icon-wrap mb-3" style="background:linear-gradient(135deg,#ecfdf5,#d1fae5)">
+            <i class="bi bi-graph-up-arrow fs-4" style="color:#10b981"></i>
           </div>
+          <h5 class="fw-black mb-2">即時追蹤</h5>
+          <p class="text-secondary small mb-0">每月提供學習報告，家長即時掌握孩子進度與弱點</p>
         </div>
       </div>
-      <div class="col-md-4">
-        <div class="glass-card rounded-4 p-4 text-white h-100">
-          <div class="fs-1 mb-3">🏫</div>
-          <h4 class="fw-black mb-2">大班制（5 人以上）</h4>
-          <p class="mb-4" style="color:rgba(255,255,255,.6);font-size:.95rem">系統化課程設計，豐富講義資源，最經濟實惠的學習選擇</p>
-          <div style="border-top:1px solid rgba(255,255,255,.15)" class="pt-4">
-            <small style="color:rgba(255,255,255,.5)">每小時起始費率</small>
-            <div class="fs-2 fw-black mt-1">$220<span class="fs-5 fw-normal" style="color:rgba(255,255,255,.6)"> /hr 起</span></div>
+      <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="160">
+        <div class="card border-0 shadow-sm rounded-4 p-4 h-100 feature-card">
+          <div class="icon-wrap mb-3" style="background:linear-gradient(135deg,#fffbeb,#fef3c7)">
+            <i class="bi bi-award fs-4" style="color:#d97706"></i>
           </div>
+          <h5 class="fw-black mb-2">名師授課</h5>
+          <p class="text-secondary small mb-0">20+ 位師大、台大等知名大學背景師資，嚴格篩選</p>
         </div>
       </div>
-    </div>
-  </div>
-  <div class="wave-bottom">
-    <svg viewBox="0 0 1440 60" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
-      <path d="M0,30 C360,60 1080,0 1440,30 L1440,60 L0,60 Z" fill="white"/>
-    </svg>
-  </div>
-</section>
-
-<!-- ═══ TESTIMONIALS ═══ -->
-<section class="bg-white" style="padding-top:5rem;padding-bottom:5rem">
-  <div class="container">
-    <div class="text-center mb-5">
-      <span class="badge rounded-pill px-3 py-2 mb-3 fw-medium" style="background:#fffbeb;color:#b45309;border:1px solid #fcd34d">⭐ 真實評價</span>
-      <h2 class="fw-black fs-1 mb-2">家長 &amp; 學生<span class="gradient-text">心得分享</span></h2>
-      <p class="text-muted fs-5">他們的成功，是我們最大的動力</p>
-    </div>
-    <div class="row g-4">
-      <div class="col-md-4">
-        <div class="card border-0 rounded-4 shadow-sm h-100 p-4 testimonial-card position-relative">
-          <div class="quote-icon">"</div>
-          <div class="text-warning mb-3">★★★★★</div>
-          <p class="text-muted mb-4">「孩子原本數學不及格，補習三個月後進步到 85 分！老師有極大的耐心，教學方式很適合小朋友理解，真的很推薦！」</p>
-          <div class="d-flex align-items-center gap-3 mt-auto">
-            <div class="rounded-circle d-flex align-items-center justify-content-center text-white fw-black" style="width:44px;height:44px;background:linear-gradient(135deg,#6366f1,#8b5cf6);flex-shrink:0">王</div>
-            <div>
-              <div class="fw-bold">王媽媽</div>
-              <small class="text-muted">國中二年級家長</small>
-            </div>
+      <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="240">
+        <div class="card border-0 shadow-sm rounded-4 p-4 h-100 feature-card">
+          <div class="icon-wrap mb-3" style="background:linear-gradient(135deg,#fff1f2,#ffe4e6)">
+            <i class="bi bi-clock-history fs-4" style="color:#e11d48"></i>
           </div>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="card border-0 rounded-4 shadow-sm h-100 p-4 testimonial-card position-relative">
-          <div class="quote-icon">"</div>
-          <div class="text-warning mb-3">★★★★★</div>
-          <p class="text-muted mb-4">「孩子超喜歡來上課！老師不只教課本，還培養解題思維。英語從不敢開口，現在會主動說，進步超明顯！」</p>
-          <div class="d-flex align-items-center gap-3 mt-auto">
-            <div class="rounded-circle d-flex align-items-center justify-content-center text-white fw-black" style="width:44px;height:44px;background:linear-gradient(135deg,#10b981,#059669);flex-shrink:0">林</div>
-            <div>
-              <div class="fw-bold">林爸爸</div>
-              <small class="text-muted">國小五年級家長</small>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="card border-0 rounded-4 shadow-sm h-100 p-4 testimonial-card position-relative">
-          <div class="quote-icon">"</div>
-          <div class="text-warning mb-3">★★★★★</div>
-          <p class="text-muted mb-4">「學測衝刺班非常有用，老師精準抓出重點，整體成績大幅提升，最後順利考上理想學校，真的很感謝！」</p>
-          <div class="d-flex align-items-center gap-3 mt-auto">
-            <div class="rounded-circle d-flex align-items-center justify-content-center text-white fw-black" style="width:44px;height:44px;background:linear-gradient(135deg,#f59e0b,#d97706);flex-shrink:0">陳</div>
-            <div>
-              <div class="fw-bold">陳同學</div>
-              <small class="text-muted">高三畢業生</small>
-            </div>
-          </div>
+          <h5 class="fw-black mb-2">彈性時段</h5>
+          <p class="text-secondary small mb-0">平日下午、晚上及週末均有課程，配合學生行程安排</p>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ═══ CTA ═══ -->
-<section class="position-relative overflow-hidden text-white text-center py-5" style="padding-top:5rem;padding-bottom:5rem;background:linear-gradient(135deg,#6366f1,#8b5cf6,#a855f7)">
-  <div class="blob blob-1" style="opacity:.4"></div>
-  <div class="container position-relative z-1">
-    <div class="fs-1 mb-3">🎓</div>
-    <h2 class="display-5 fw-black mb-3">立即開始，<br>讓孩子的未來更亮麗</h2>
-    <p class="mb-4 fs-5" style="color:rgba(255,255,255,.75)">填寫報價單，我們將在 24 小時內與您聯繫並安排免費試聽</p>
-    <div class="d-flex flex-wrap gap-3 justify-content-center">
-      <a href="quote.html" class="btn btn-light btn-lg rounded-3 px-5 fw-bold shadow-lg text-primary">
-        <i class="bi bi-file-text me-2"></i>立即開立報價單
+<!-- ══ TESTIMONIALS CAROUSEL ══ -->
+<section class="py-4 bg-white">
+  <div class="container-xl px-4 py-2">
+    <div class="text-center mb-4" data-aos="fade-up">
+      <div class="sec-label">學生心聲</div>
+      <h2 class="fw-black" style="font-size:1.9rem">他們的<span class="gradient-text">真實回饋</span></h2>
+    </div>
+    <div id="testiCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="4000" data-aos="fade-up">
+      <div class="carousel-inner pb-4">
+        <div class="carousel-item active">
+          <div class="row g-3 justify-content-center">
+            <div class="col-md-4">
+              <div class="testi-card">
+                <div class="d-flex align-items-start gap-3 mb-3">
+                  <div class="testi-avatar" style="background:linear-gradient(135deg,#eef2ff,#e0e7ff)">👦</div>
+                  <div>
+                    <div class="fw-black">小明的媽媽</div>
+                    <div class="small text-secondary">國三 ‧ 數學、理化</div>
+                    <div class="text-warning small">★★★★★</div>
+                  </div>
+                </div>
+                <p class="text-secondary small mb-0">「孩子在這裡不到一學期，數學從 58 分進步到 85 分！老師解說清楚，孩子也喜歡上課了。」</p>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="testi-card">
+                <div class="d-flex align-items-start gap-3 mb-3">
+                  <div class="testi-avatar" style="background:linear-gradient(135deg,#fdf4ff,#e9d5ff)">👧</div>
+                  <div>
+                    <div class="fw-black">小雅的爸爸</div>
+                    <div class="small text-secondary">高二 ‧ 英語</div>
+                    <div class="text-warning small">★★★★★</div>
+                  </div>
+                </div>
+                <p class="text-secondary small mb-0">「李老師非常有耐心，把女兒的英語基礎從零補起，現在學測模擬考都有 75 級分。」</p>
+              </div>
+            </div>
+            <div class="col-md-4 d-none d-md-block">
+              <div class="testi-card">
+                <div class="d-flex align-items-start gap-3 mb-3">
+                  <div class="testi-avatar" style="background:linear-gradient(135deg,#ecfdf5,#d1fae5)">👦</div>
+                  <div>
+                    <div class="fw-black">阿杰的媽媽</div>
+                    <div class="small text-secondary">國小五 ‧ 數學</div>
+                    <div class="text-warning small">★★★★★</div>
+                  </div>
+                </div>
+                <p class="text-secondary small mb-0">「小朋友以前很排斥數學，現在每次上課都很期待，說老師教得很有趣！強力推薦。」</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="carousel-item">
+          <div class="row g-3 justify-content-center">
+            <div class="col-md-4">
+              <div class="testi-card">
+                <div class="d-flex align-items-start gap-3 mb-3">
+                  <div class="testi-avatar" style="background:linear-gradient(135deg,#fffbeb,#fef3c7)">👧</div>
+                  <div>
+                    <div class="fw-black">小萱的家長</div>
+                    <div class="small text-secondary">高三 ‧ 國文</div>
+                    <div class="text-warning small">★★★★★</div>
+                  </div>
+                </div>
+                <p class="text-secondary small mb-0">「林老師的作文指導很有系統，孩子從15分進步到42分，整個人信心大增，謝謝優學！」</p>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="testi-card">
+                <div class="d-flex align-items-start gap-3 mb-3">
+                  <div class="testi-avatar" style="background:linear-gradient(135deg,#fff1f2,#fecdd3)">👦</div>
+                  <div>
+                    <div class="fw-black">建宏的爸爸</div>
+                    <div class="small text-secondary">國二 ‧ 理化、數學</div>
+                    <div class="text-warning small">★★★★★</div>
+                  </div>
+                </div>
+                <p class="text-secondary small mb-0">「同時報兩科，老師會協調進度，費用也有折扣。孩子每次段考都進步，真的很感謝。」</p>
+              </div>
+            </div>
+            <div class="col-md-4 d-none d-md-block">
+              <div class="testi-card">
+                <div class="d-flex align-items-start gap-3 mb-3">
+                  <div class="testi-avatar" style="background:linear-gradient(135deg,#f0f9ff,#bae6fd)">👧</div>
+                  <div>
+                    <div class="fw-black">小芸的媽媽</div>
+                    <div class="small text-secondary">高一 ‧ 物理、化學</div>
+                    <div class="text-warning small">★★★★★</div>
+                  </div>
+                </div>
+                <p class="text-secondary small mb-0">「陳老師用實際例子解說難懂的概念，女兒說這樣學記得比較牢！期中考直接進步20分。」</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="carousel-indicators position-relative mt-3" style="filter:invert(1)">
+        <button type="button" data-bs-target="#testiCarousel" data-bs-slide-to="0" class="active"></button>
+        <button type="button" data-bs-target="#testiCarousel" data-bs-slide-to="1"></button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ PROCESS ══ -->
+<section class="py-4" style="background:linear-gradient(135deg,#f8fafc,#eef2ff)">
+  <div class="container-xl px-4 py-2">
+    <div class="text-center mb-4" data-aos="fade-up">
+      <div class="sec-label">報名步驟</div>
+      <h2 class="fw-black" style="font-size:1.9rem">4步驟，<span class="gradient-text">開始學習之旅</span></h2>
+    </div>
+    <div class="row g-3 justify-content-center">
+      <div class="col-6 col-md-3 text-center" data-aos="zoom-in" data-aos-delay="0">
+        <div class="step-circle mx-auto mb-3" style="background:linear-gradient(135deg,#4f46e5,#7c3aed)">1</div>
+        <h6 class="fw-black mb-1">免費諮詢</h6>
+        <p class="text-secondary small mb-0">來電或線上填單，了解需求</p>
+      </div>
+      <div class="col-6 col-md-3 text-center" data-aos="zoom-in" data-aos-delay="100">
+        <div class="step-circle mx-auto mb-3" style="background:linear-gradient(135deg,#4f46e5,#7c3aed)">2</div>
+        <h6 class="fw-black mb-1">程度評測</h6>
+        <p class="text-secondary small mb-0">免費評估學生現有程度</p>
+      </div>
+      <div class="col-6 col-md-3 text-center" data-aos="zoom-in" data-aos-delay="200">
+        <div class="step-circle mx-auto mb-3" style="background:linear-gradient(135deg,#4f46e5,#7c3aed)">3</div>
+        <h6 class="fw-black mb-1">量身規劃</h6>
+        <p class="text-secondary small mb-0">依需求制定專屬學習計畫</p>
+      </div>
+      <div class="col-6 col-md-3 text-center" data-aos="zoom-in" data-aos-delay="300">
+        <div class="step-circle mx-auto mb-3" style="background:linear-gradient(135deg,#f59e0b,#ef4444)">4</div>
+        <h6 class="fw-black mb-1">開始上課</h6>
+        <p class="text-secondary small mb-0">進入正式課程，每月追蹤</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CTA ══ -->
+<section class="py-5 text-center" style="background:linear-gradient(135deg,#4f46e5,#7c3aed,#a855f7)">
+  <div class="container px-4" style="max-width:700px" data-aos="zoom-in">
+    <div class="mb-3" style="font-size:3rem">🎓</div>
+    <h2 class="fw-black text-white mb-3 display-6">立即預約免費試聽</h2>
+    <p class="mb-4 fs-5" style="color:rgba(199,210,254,.9)">第一堂課免費試聽，不滿意可全額退費，零風險開始！</p>
+    <div class="d-flex gap-3 justify-content-center flex-wrap">
+      <a href="quote.html" class="btn btn-light btn-lg rounded-4 fw-black px-5 text-primary shadow-lg">
+        📋 立即開立報價單
       </a>
-      <a href="tel:0223456789" class="btn btn-outline-light btn-lg rounded-3 px-5 fw-semibold">
-        <i class="bi bi-telephone me-2"></i>(02) 2345-6789
+      <a href="tel:0223456789" class="btn btn-outline-light btn-lg rounded-4 fw-semibold px-4">
+        📞 (02) 2345-6789
       </a>
     </div>
-    <p class="mt-4 small" style="color:rgba(255,255,255,.55)">新生首月享 8 折優惠 · 第一堂課免費試聽</p>
   </div>
 </section>
 
-<!-- ═══ FOOTER ═══ -->
-<footer class="bg-dark text-white">
-  <div class="container py-5">
-    <div class="row g-5 pb-4 border-bottom border-secondary">
-      <div class="col-lg-5">
-        <div class="d-flex align-items-center gap-2 mb-4">
-          <span class="d-flex align-items-center justify-content-center text-white fw-black rounded-3" style="width:36px;height:36px;background:linear-gradient(135deg,#6366f1,#8b5cf6);font-size:.9rem">優</span>
-          <span class="fs-5 fw-black">優學補習班</span>
+<!-- ══ FOOTER ══ -->
+<footer class="bg-dark text-white py-4">
+  <div class="container-xl px-4">
+    <div class="row g-4 pb-3">
+      <div class="col-md-4">
+        <div class="d-flex align-items-center gap-2 mb-3">
+          <div class="d-flex align-items-center justify-content-center text-white rounded-3" style="width:36px;height:36px;background:linear-gradient(135deg,#4f46e5,#7c3aed);font-weight:900;font-size:.9rem">優</div>
+          <span class="fw-black fs-5">優學補習班</span>
         </div>
-        <p class="text-secondary small lh-lg mb-4">專業、高效、用心教學。陪伴每位學生建立紮實基礎，實現學業目標，成就更好的自己。</p>
-        <ul class="list-unstyled text-secondary small">
-          <li class="mb-2"><i class="bi bi-geo-alt-fill text-primary me-2"></i>台北市中山區學習路100號</li>
-          <li class="mb-2"><i class="bi bi-telephone-fill text-primary me-2"></i>(02) 2345-6789</li>
-          <li><i class="bi bi-envelope-fill text-primary me-2"></i>info@youxue.edu.tw</li>
+        <p class="text-secondary small mb-2"><i class="bi bi-geo-alt me-2"></i>台北市中山區學習路100號</p>
+        <p class="text-secondary small mb-2"><i class="bi bi-telephone me-2"></i>(02) 2345-6789</p>
+        <p class="text-secondary small mb-0"><i class="bi bi-envelope me-2"></i>info@youxue.edu.tw</p>
+      </div>
+      <div class="col-6 col-md-2">
+        <div class="fw-bold mb-2 small">快速連結</div>
+        <ul class="list-unstyled">
+          <li class="mb-1"><a href="index.html" class="text-secondary text-decoration-none small">首頁</a></li>
+          <li class="mb-1"><a href="about.html" class="text-secondary text-decoration-none small">關於我們</a></li>
+          <li class="mb-1"><a href="pricing.html" class="text-secondary text-decoration-none small">課程費用</a></li>
+          <li class="mb-1"><a href="promotions.html" class="text-secondary text-decoration-none small">文宣資料</a></li>
+          <li><a href="quote.html" class="text-secondary text-decoration-none small">開立報價單</a></li>
         </ul>
       </div>
-      <div class="col-6 col-lg-2">
-        <h6 class="fw-bold mb-3">快速導覽</h6>
-        <ul class="list-unstyled text-secondary small">
-          <li class="mb-2"><a href="index.html"      class="text-secondary text-decoration-none hover-white">首頁</a></li>
-          <li class="mb-2"><a href="about.html"      class="text-secondary text-decoration-none">關於我們</a></li>
-          <li class="mb-2"><a href="pricing.html"    class="text-secondary text-decoration-none">課程費用</a></li>
-          <li class="mb-2"><a href="promotions.html" class="text-secondary text-decoration-none">文宣資料</a></li>
-          <li>         <a href="quote.html"      class="text-secondary text-decoration-none">開立報價單</a></li>
-        </ul>
+      <div class="col-6 col-md-3">
+        <div class="fw-bold mb-2 small">開課科目</div>
+        <div class="d-flex flex-wrap gap-2">
+          <span class="badge bg-secondary bg-opacity-50 small">數學</span>
+          <span class="badge bg-secondary bg-opacity-50 small">英語</span>
+          <span class="badge bg-secondary bg-opacity-50 small">國文</span>
+          <span class="badge bg-secondary bg-opacity-50 small">理化</span>
+          <span class="badge bg-secondary bg-opacity-50 small">物理</span>
+          <span class="badge bg-secondary bg-opacity-50 small">化學</span>
+          <span class="badge bg-secondary bg-opacity-50 small">生物</span>
+          <span class="badge bg-secondary bg-opacity-50 small">歷史</span>
+        </div>
       </div>
-      <div class="col-6 col-lg-3">
-        <h6 class="fw-bold mb-3">上課時間</h6>
-        <ul class="list-unstyled text-secondary small">
-          <li class="mb-2"><span class="text-white">週一至週五</span><br>14:00 – 22:00</li>
-          <li class="mb-2"><span class="text-white">週六</span><br>09:00 – 21:00</li>
-          <li><span class="text-white">週日</span><br>09:00 – 18:00</li>
-        </ul>
-      </div>
-      <div class="col-lg-2">
-        <h6 class="fw-bold mb-3">立即諮詢</h6>
-        <a href="quote.html" class="btn btn-primary rounded-3 w-100 mb-2 small">開立報價單</a>
-        <a href="tel:0223456789" class="btn btn-outline-secondary rounded-3 w-100 small">撥打電話</a>
+      <div class="col-md-3">
+        <div class="fw-bold mb-2 small">上課時段</div>
+        <p class="text-secondary small mb-1">週一至週五：14:00–22:00</p>
+        <p class="text-secondary small mb-0">週六日：09:00–18:00</p>
+        <div class="mt-3">
+          <a href="quote.html" class="btn btn-primary btn-sm rounded-3 fw-semibold">立即報名</a>
+        </div>
       </div>
     </div>
-    <div class="pt-4 text-center text-secondary small">
-      © 2025 優學補習班 版權所有 · 用心教學，成就每一個孩子
+    <div class="border-top border-secondary border-opacity-25 pt-3 d-flex flex-column flex-md-row justify-content-between align-items-center gap-2">
+      <p class="mb-0 text-secondary small">© 2026 優學補習班. All rights reserved.</p>
+      <p class="mb-0 text-secondary small">國小 ‧ 國中 ‧ 高中 全科輔導</p>
     </div>
   </div>
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
 <script src="js/main.js"></script>
+<script>
+  // AOS init
+  AOS.init({ duration: 650, once: true, offset: 60 });
+
+  // Counter animation
+  const counterObs = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      const el = entry.target;
+      const target = parseInt(el.dataset.count);
+      let current = 0;
+      const step = Math.max(1, Math.floor(target / 60));
+      const timer = setInterval(() => {
+        current = Math.min(current + step, target);
+        el.textContent = current.toLocaleString();
+        if (current >= target) clearInterval(timer);
+      }, 16);
+      counterObs.unobserve(el);
+    });
+  }, { threshold: 0.5 });
+  document.querySelectorAll('[data-count]').forEach(el => counterObs.observe(el));
+
+  // Progress bar animation
+  const progObs = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      const bars = entry.target.querySelectorAll('.prog-fill');
+      bars.forEach(bar => { bar.style.width = bar.dataset.width + '%'; });
+      progObs.unobserve(entry.target);
+    });
+  }, { threshold: 0.3 });
+  const progSection = document.querySelector('.prog-track');
+  if (progSection) progObs.observe(progSection.closest('section'));
+</script>
 </body>
 </html>
