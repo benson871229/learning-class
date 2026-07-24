@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block title %}報價單 {{ q.quote_no }}{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+  <div>
+    <h3 class="fw-black mb-0">{{ q.student_name }} 的報價單</h3>
+    <span class="text-secondary small">{{ q.quote_no }} · 開立於 {{ q.issue_date }}</span>
+  </div>
+  <div class="d-flex gap-2">
+    <a href="{{ url_for('quote_docx_download', qid=q.id) }}" class="btn btn-success fw-bold"><i class="bi bi-file-earmark-word me-1"></i>下載 Word</a>
+    <form method="post" action="{{ url_for('quote_delete', qid=q.id) }}" onsubmit="return confirm('確定刪除此報價單？')">
+      <button class="btn btn-outline-danger">刪除</button>
+    </form>
+  </div>
+</div>
+
+<div class="card shadow-sm rounded-4 mb-4">
+  <div class="card-body p-4">
+    <h6 class="fw-bold mb-3">課程明細</h6>
+    <div class="table-responsive">
+      <table class="table align-middle mb-0">
+        <thead class="table-light"><tr><th>課程名稱</th><th>日期起訖</th><th class="text-end">學費</th><th class="text-end">教材費</th><th class="text-end">扣除金額</th><th class="text-end">總計</th></tr></thead>
+        <tbody>
+          {% for it in q['items'] %}
+          <tr>
+            <td class="fw-semibold">{{ it.name }}</td>
+            <td class="small">{{ it.date_range }}</td>
+            <td class="text-end">{{ "{:,}".format(it.tuition) if it.tuition else '' }}</td>
+            <td class="text-end">{{ "{:,}".format(it.material) if it.material else '' }}</td>
+            <td class="text-end text-danger">{{ ('-'+"{:,}".format(it.deduction)) if it.deduction else '' }}</td>
+            <td class="text-end fw-semibold">{{ "{:,}".format(it.total) }}</td>
+          </tr>
+          {% endfor %}
+          <tr class="table-light fw-bold">
+            <td colspan="2" class="text-center">小　計</td>
+            <td class="text-end">{{ "{:,}".format(q.sum_tuition) if q.sum_tuition else '' }}</td>
+            <td class="text-end">{{ "{:,}".format(q.sum_material) if q.sum_material else '' }}</td>
+            <td class="text-end text-danger">{{ ('-'+"{:,}".format(q.sum_deduction)) if q.sum_deduction else '' }}</td>
+            <td class="text-end text-primary">{{ "{:,}".format(q.sum_total) }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    {% if q.note %}<div class="bg-light rounded-3 p-3 mt-3 small"><strong>備註：</strong>{{ q.note }}</div>{% endif %}
+  </div>
+</div>
+
+<div class="card shadow-sm rounded-4">
+  <div class="card-body p-4">
+    <h6 class="fw-bold mb-3">繳費狀態</h6>
+    <form method="post" action="{{ url_for('quote_payment', qid=q.id) }}">
+      <div class="row g-3 align-items-end">
+        <div class="col-md-3">
+          <label class="form-label fw-bold small">狀態</label>
+          <select name="payment_status" class="form-select rounded-3">
+            {% for st in statuses %}<option value="{{ st }}" {{ 'selected' if q.payment_status==st }}>{{ st }}</option>{% endfor %}
+          </select>
+        </div>
+        <div class="col-md-3">
+          <label class="form-label fw-bold small">繳費方式</label>
+          <select name="payment_method" class="form-select rounded-3">
+            {% for m in methods %}<option value="{{ m }}" {{ 'selected' if q.payment_method==m }}>{{ m or '─' }}</option>{% endfor %}
+          </select>
+        </div>
+        <div class="col-md-3">
+          <label class="form-label fw-bold small">收據編號</label>
+          <input name="receipt_no" class="form-control rounded-3" value="{{ q.receipt_no or '' }}">
+        </div>
+        <div class="col-md-3">
+          <button class="btn btn-primary fw-bold w-100">更新</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
