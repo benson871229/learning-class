@@ -3,3 +3,4 @@
 輸出/
 __pycache__/
 *.pyc
+.venv/
