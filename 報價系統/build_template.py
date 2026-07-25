@@ -18,9 +18,10 @@
 from pathlib import Path
 
 from docx import Document
-from docx.shared import Pt, Cm
+from docx.shared import Pt, Cm, Mm
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 from docx.enum.table import WD_TABLE_ALIGNMENT
+from docx.enum.section import WD_ORIENT
 from docx.oxml.ns import qn
 
 CN_FONT = "標楷體"  # 傳統楷書，貼近原稿；系統缺字時 Word 會自動替代
@@ -61,6 +62,16 @@ def cell_text(cell, text, *, bold=False, align=WD_ALIGN_PARAGRAPH.CENTER, size=1
 def build():
     doc = Document()
 
+    # ── 頁面大小：B5（JIS，182 × 257 mm）、直式 ──
+    section = doc.sections[0]
+    section.orientation = WD_ORIENT.PORTRAIT
+    section.page_width = Mm(182)
+    section.page_height = Mm(257)
+    section.top_margin = Cm(1.8)
+    section.bottom_margin = Cm(1.8)
+    section.left_margin = Cm(1.7)
+    section.right_margin = Cm(1.7)
+
     # 頁面預設字型
     style = doc.styles["Normal"]
     style.font.name = CN_FONT
@@ -85,8 +96,8 @@ def build():
     table.alignment = WD_TABLE_ALIGNMENT.CENTER
     table.style = "Table Grid"
 
-    # 欄寬（cm），總寬 ~16.5cm 貼近 A4 版心
-    widths = [3.0, 4.0, 2.0, 2.0, 2.5, 2.5]
+    # 欄寬（cm），總寬 ~14.4cm 貼近 B5 版心（頁寬18.2 − 左右邊界各1.7）
+    widths = [2.6, 3.6, 1.8, 1.8, 2.3, 2.3]
 
     # 表頭
     for j, h in enumerate(headers):
