@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}{{ '編輯' if student else '新增' }}學生{% endblock %}
+{% block content %}
+<h3 class="fw-black mb-4">{{ '編輯' if student else '新增' }}學生</h3>
+<div class="card shadow-sm rounded-4">
+  <div class="card-body p-4 p-md-5">
+    <form method="post">
+      <div class="row g-3">
+        <div class="col-md-6"><label class="form-label fw-bold small">學生姓名 <span class="text-danger">*</span></label>
+          <input name="name" class="form-control rounded-3" value="{{ student.name if student else '' }}" required></div>
+        <div class="col-md-6"><label class="form-label fw-bold small">就讀年級</label>
+          <input name="grade" class="form-control rounded-3" value="{{ student.grade if student else '' }}"></div>
+        <div class="col-md-6"><label class="form-label fw-bold small">家長姓名</label>
+          <input name="parent_name" class="form-control rounded-3" value="{{ student.parent_name if student else '' }}"></div>
+        <div class="col-md-6"><label class="form-label fw-bold small">聯絡電話</label>
+          <input name="phone" class="form-control rounded-3" value="{{ student.phone if student else '' }}"></div>
+        <div class="col-md-6"><label class="form-label fw-bold small">Email</label>
+          <input name="email" type="email" class="form-control rounded-3" value="{{ student.email if student else '' }}"></div>
+        <div class="col-md-6"><label class="form-label fw-bold small">聯絡地址</label>
+          <input name="address" class="form-control rounded-3" value="{{ student.address if student else '' }}"></div>
+        <div class="col-12"><label class="form-label fw-bold small">備註</label>
+          <textarea name="note" class="form-control rounded-3" rows="2">{{ student.note if student else '' }}</textarea></div>
+      </div>
+      <div class="mt-4 d-flex gap-2">
+        <button class="btn btn-primary fw-bold px-4">儲存</button>
+        <a href="{{ url_for('students') }}" class="btn btn-outline-secondary">取消</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

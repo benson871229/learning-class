@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}報價歷史{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h3 class="fw-black mb-0">報價歷史</h3>
+  <a href="{{ url_for('quote_new') }}" class="btn btn-primary fw-bold"><i class="bi bi-file-earmark-plus me-1"></i>開立報價單</a>
+</div>
+<div class="card shadow-sm rounded-4">
+  <div class="card-body p-4">
+    {% if quotes %}
+    <div class="table-responsive">
+      <table class="table align-middle">
+        <thead><tr><th>編號</th><th>學生</th><th>開立日期</th><th class="text-end">應付總計</th><th class="text-center">繳費狀態</th><th></th></tr></thead>
+        <tbody>
+          {% for q in quotes %}
+          <tr>
+            <td class="small text-secondary">{{ q.quote_no }}</td>
+            <td class="fw-semibold">{{ q.student_name }}</td>
+            <td class="small">{{ q.issue_date }}</td>
+            <td class="text-end fw-bold text-primary">NT${{ "{:,}".format(q.sum_total) }}</td>
+            <td class="text-center">
+              {% set c = {'未繳':'danger','部分繳':'warning','已繳':'success'}[q.payment_status] %}
+              <span class="badge bg-{{ c }}-subtle text-{{ c }}-emphasis">{{ q.payment_status }}</span>
+            </td>
+            <td class="text-end">
+              <a href="{{ url_for('quote_docx_download', qid=q.id) }}" class="btn btn-sm btn-success"><i class="bi bi-file-earmark-word"></i> Word</a>
+              <a href="{{ url_for('quote_view', qid=q.id) }}" class="btn btn-sm btn-outline-secondary">檢視</a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <p class="text-secondary text-center py-4 mb-0">尚無報價單</p>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

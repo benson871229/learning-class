@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}{{ '編輯' if course else '新增' }}課程{% endblock %}
+{% block content %}
+<h3 class="fw-black mb-4">{{ '編輯' if course else '新增' }}課程</h3>
+<div class="card shadow-sm rounded-4">
+  <div class="card-body p-4 p-md-5">
+    <form method="post">
+      <div class="row g-3">
+        <div class="col-md-6"><label class="form-label fw-bold small">課程名稱 <span class="text-danger">*</span></label>
+          <input name="name" class="form-control rounded-3" value="{{ course.name if course else '' }}" required></div>
+        <div class="col-md-3"><label class="form-label fw-bold small">預設學費</label>
+          <input name="default_tuition" type="number" class="form-control rounded-3" value="{{ course.default_tuition if course else 0 }}"></div>
+        <div class="col-md-3"><label class="form-label fw-bold small">預設教材費</label>
+          <input name="default_material" type="number" class="form-control rounded-3" value="{{ course.default_material if course else 0 }}"></div>
+        <div class="col-12"><label class="form-label fw-bold small">備註（會帶入報價單備註參考）</label>
+          <input name="note" class="form-control rounded-3" value="{{ course.note if course else '' }}"></div>
+        <div class="col-12"><div class="form-check">
+          <input class="form-check-input" type="checkbox" name="active" id="active" {{ 'checked' if (not course) or course.active }}>
+          <label class="form-check-label" for="active">啟用（顯示於開立報價單的課程清單）</label>
+        </div></div>
+      </div>
+      <div class="mt-4 d-flex gap-2">
+        <button class="btn btn-primary fw-bold px-4">儲存</button>
+        <a href="{{ url_for('courses') }}" class="btn btn-outline-secondary">取消</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

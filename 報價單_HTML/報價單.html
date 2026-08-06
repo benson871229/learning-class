@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!--
+  安全政策：
+    connect-src 'none'  → 頁面完全無法對外連線，你的學生資料不可能被送出
+    object-src / frame-src / form-action 'none' → 阻斷嵌入與表單外送
+    無 eval、無外部 CDN、無伺服器
+-->
+<meta http-equiv="Content-Security-Policy"
+      content="default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'unsafe-inline'; img-src data:; connect-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'">
+<title>報價單產生器 ─ FUN 學院文理補習班</title>
+<style>
+  :root{ --ink:#1f2937; --muted:#6b7280; --line:#e5e7eb; --brand:#4f46e5; --bg:#f6f7fb; }
+  *{ box-sizing:border-box; }
+  body{ margin:0; background:var(--bg); color:var(--ink);
+        font-family:"Noto Sans TC","Microsoft JhengHei","PingFang TC",sans-serif; font-size:15px; }
+  header{ background:linear-gradient(135deg,#4f46e5,#7c3aed); color:#fff; padding:18px 20px; }
+  header .wrap{ max-width:980px; margin:0 auto; display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+  .logo{ width:34px; height:34px; border-radius:8px; background:#fff; color:var(--brand);
+         font-weight:900; font-size:.8rem; display:flex; align-items:center; justify-content:center; }
+  h1{ font-size:1.15rem; margin:0; font-weight:800; }
+  .tagline{ margin-left:auto; font-size:.78rem; opacity:.85; }
+  main{ max-width:980px; margin:0 auto; padding:20px; }
+  .card{ background:#fff; border-radius:14px; padding:20px; margin-bottom:16px;
+         box-shadow:0 1px 3px rgba(0,0,0,.07); }
+  .card h2{ font-size:1rem; margin:0 0 14px; font-weight:800; display:flex; align-items:center; gap:8px; }
+  .step{ background:var(--brand); color:#fff; width:22px; height:22px; border-radius:50%;
+         font-size:.75rem; display:inline-flex; align-items:center; justify-content:center; }
+  label{ display:block; font-size:.8rem; font-weight:700; margin-bottom:5px; color:#374151; }
+  input,select,textarea,button{ font-family:inherit; font-size:.9rem; }
+  input,select,textarea{ width:100%; padding:8px 10px; border:1px solid #d1d5db;
+         border-radius:8px; background:#fff; color:var(--ink); }
+  input:focus,select:focus,textarea:focus{ outline:2px solid #c7d2fe; border-color:var(--brand); }
+  .grid{ display:grid; gap:12px; }
+  .g3{ grid-template-columns:repeat(3,1fr); }
+  .g2{ grid-template-columns:repeat(2,1fr); }
+  @media(max-width:720px){ .g3,.g2{ grid-template-columns:1fr; } }
+  button{ cursor:pointer; border:0; border-radius:8px; padding:9px 16px; font-weight:700; }
+  .btn{ background:var(--brand); color:#fff; }
+  .btn:hover{ filter:brightness(1.08); }
+  .btn-o{ background:#fff; color:var(--brand); border:1px solid var(--brand); }
+  .btn-g{ background:#16a34a; color:#fff; }
+  .btn-x{ background:#fff; color:#b91c1c; border:1px solid #fca5a5; padding:4px 9px; }
+  .btn-lg{ padding:12px 22px; font-size:1rem; }
+  .file-row{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin-bottom:8px; }
+  .pill{ font-size:.75rem; padding:3px 10px; border-radius:99px; background:#f3f4f6; color:var(--muted); }
+  .pill.ok{ background:#dcfce7; color:#166534; }
+  table{ width:100%; border-collapse:collapse; }
+  th{ font-size:.72rem; text-transform:uppercase; letter-spacing:.03em; color:var(--muted);
+      text-align:left; padding:8px 6px; border-bottom:1px solid var(--line); font-weight:700; }
+  td{ padding:6px; border-bottom:1px solid #f3f4f6; vertical-align:top; }
+  td.num,th.num{ text-align:right; }
+  .wrap-x{ overflow-x:auto; }
+  .totals{ margin-top:14px; margin-left:auto; width:min(300px,100%); background:#f8fafc;
+           border-radius:10px; padding:14px; }
+  .totals div{ display:flex; justify-content:space-between; margin-bottom:6px; font-size:.88rem; }
+  .totals .final{ border-top:1px solid var(--line); padding-top:9px; margin-top:9px;
+                  font-weight:900; font-size:1.05rem; }
+  .final b{ color:var(--brand); font-size:1.25rem; }
+  .msg{ padding:10px 14px; border-radius:8px; margin-bottom:12px; font-size:.85rem; display:none; }
+  .msg.err{ display:block; background:#fee2e2; color:#991b1b; }
+  .msg.ok{ display:block; background:#dcfce7; color:#166534; }
+  .hint{ font-size:.76rem; color:var(--muted); margin-top:6px; }
+  .actions{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+  footer{ text-align:center; color:var(--muted); font-size:.75rem; padding:22px; }
+  .safe{ background:#f0fdf4; border:1px solid #bbf7d0; border-radius:10px; padding:10px 14px;
+         font-size:.76rem; color:#166534; margin-top:10px; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="logo">FUN</div>
+    <h1>報價單產生器</h1>
+    <span class="tagline">純本機執行 · 不連網 · 不上傳</span>
+  </div>
+</header>
+
+<main>
+  <div id="msg" class="msg"></div>
+
+  <!-- 1. 資料來源 -->
+  <div class="card">
+    <h2><span class="step">1</span>資料來源（Excel）</h2>
+    <div class="file-row">
+      <button class="btn-o" id="btn-students">載入學生名冊</button>
+      <span class="pill" id="pill-students">尚未載入</span>
+      <button class="btn-o" id="btn-courses">載入課程價目</button>
+      <span class="pill" id="pill-courses">尚未載入</span>
+    </div>
+    <p class="hint">
+      學生名冊需有「<b>學生姓名</b>」欄；課程價目需有「<b>課程名稱</b>」「<b>學費</b>」欄，
+      可另有「教材費」「備註」。欄位順序不拘，多餘欄位會忽略。
+      不載入也能用，直接手動輸入即可。
+    </p>
+    <div class="file-row" style="margin-top:12px">
+      <button class="btn-o" id="btn-template">更換 Word 範本</button>
+      <span class="pill" id="pill-template">使用內建 B5 範本</span>
+    </div>
+    <p class="hint">想改版面就用 Word 編輯範本再載入，保留佔位符即可（見 README）。</p>
+    <div class="safe">
+      🔒 這個頁面沒有伺服器，也無法對外連線（CSP <code>connect-src 'none'</code>）。
+      Excel 只在你的瀏覽器內解析，資料不會離開這台電腦。
+    </div>
+  </div>
+
+  <!-- 2. 學生 -->
+  <div class="card">
+    <h2><span class="step">2</span>學生資料</h2>
+    <div class="grid g3">
+      <div>
+        <label for="sel-student">從名冊選擇</label>
+        <select id="sel-student"><option value="">─ 手動輸入 ─</option></select>
+      </div>
+      <div>
+        <label for="student-name">學生姓名 <span style="color:#dc2626">*</span></label>
+        <input id="student-name" type="text" placeholder="例：陳楷元" autocomplete="off">
+      </div>
+      <div>
+        <label for="issue-date">開立日期</label>
+        <input id="issue-date" type="text" placeholder="例：115/6/1" autocomplete="off">
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. 課程 -->
+  <div class="card">
+    <h2><span class="step">3</span>課程明細</h2>
+    <div class="wrap-x">
+      <table>
+        <thead>
+          <tr>
+            <th style="min-width:150px">課程名稱</th>
+            <th style="min-width:150px">日期起訖</th>
+            <th class="num" style="min-width:90px">學費</th>
+            <th class="num" style="min-width:90px">教材費</th>
+            <th class="num" style="min-width:90px">扣除金額</th>
+            <th class="num" style="min-width:90px">總計</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </div>
+    <button class="btn-o" id="btn-addrow" style="width:100%;margin-top:12px;border-style:dashed">
+      ＋ 新增課程列
+    </button>
+    <div class="totals">
+      <div><span>學費小計</span><span id="t-tuition">0</span></div>
+      <div><span>教材費小計</span><span id="t-material">0</span></div>
+      <div><span>扣除小計</span><span id="t-deduct" style="color:#dc2626">0</span></div>
+      <div class="final"><span>應付總計</span><b id="t-total">0</b></div>
+    </div>
+    <p class="hint">總計 = 學費 ＋ 教材費 − 扣除金額。金額為 0 的欄位在 Word 上會留白。</p>
+  </div>
+
+  <!-- 4. 備註 -->
+  <div class="card">
+    <h2><span class="step">4</span>備註</h2>
+    <input id="note" type="text" placeholder="例：英文班每月計8堂課" autocomplete="off">
+  </div>
+
+  <!-- 動作 -->
+  <div class="card">
+    <div class="actions">
+      <button class="btn btn-lg" id="btn-word">📄 下載 Word 報價單（B5）</button>
+      <button class="btn-g" id="btn-record">📊 匯出紀錄 Excel</button>
+      <button class="btn-o" id="btn-clear">清空重填</button>
+    </div>
+    <p class="hint">
+      Word 下載後可直接用 Word 編輯。「匯出紀錄」會把這張報價單存成一份 Excel，方便日後對帳。
+    </p>
+  </div>
+</main>
+
+<footer>FUN 學院文理補習班 · 輕量版報價單產生器 · 純前端執行，無伺服器、無資料庫</footer>
+
+<script src="lib/pizzip.min.js"></script>
+<script src="lib/docxtemplater.min.js"></script>
+<script src="lib/FileSaver.min.js"></script>
+<script src="lib/xlsx-lite.js"></script>
+<script src="lib/template-b5.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
