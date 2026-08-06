@@ -1,14 +1,17 @@
-/* ── Google Fonts ── */
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700;900&display=swap');
-
 /* ── Bootstrap variable overrides ── */
 :root {
   --bs-primary: #6366f1;
   --bs-primary-rgb: 99, 102, 241;
-  --bs-font-sans-serif: 'Noto Sans TC', system-ui, sans-serif;
+  --bs-font-sans-serif: 'Noto Sans TC', 'Microsoft JhengHei', 'PingFang TC', system-ui, sans-serif;
+
+  /* FUN 品牌色：靛紫為主調，佐以明亮的活潑色 */
+  --fun-coral: #ff6b6b;
+  --fun-amber: #ffb703;
+  --fun-teal:  #06d6a0;
+  --fun-sky:   #4cc9f0;
 }
 
-body { font-family: 'Noto Sans TC', system-ui, sans-serif; }
+body { font-family: var(--bs-font-sans-serif); }
 
 /* ── Primary color overrides ── */
 .btn-primary {
@@ -25,9 +28,11 @@ body { font-family: 'Noto Sans TC', system-ui, sans-serif; }
   --bs-btn-hover-bg: #6366f1;
   --bs-btn-hover-border-color: #6366f1;
 }
-.bg-primary  { background-color: #6366f1 !important; }
-.text-primary { color: #6366f1 !important; }
-.border-primary { border-color: #6366f1 !important; }
+/* 註：.bg-primary / .text-primary / .border-primary 不需要在這裡覆寫。
+   Bootstrap 原生規則已用 rgba(var(--bs-primary-rgb), …) 上色，
+   上方 :root 設定的 --bs-primary-rgb 會自動生效。
+   若在此寫死色碼並加 !important，反而會蓋掉 bg-opacity-* 等工具類別，
+   使 .bg-primary.bg-opacity-10 變成實心底色、同色文字消失。 */
 
 /* ── Hero ── */
 .hero-bg {
@@ -103,6 +108,64 @@ body { font-family: 'Noto Sans TC', system-ui, sans-serif; }
 /* ── Quote form ── */
 .course-row { border-bottom:1px solid #f1f5f9; }
 .step-badge { width:36px;height:36px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:.9rem;flex-shrink:0;background:linear-gradient(135deg,#6366f1,#8b5cf6);color:white; }
+
+/* ══════════════════════════════════════════
+   FUN 品牌元素
+   ══════════════════════════════════════════ */
+
+/* FUN logo：滑過時俏皮地歪一下 */
+.fun-logo {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6) !important;
+  letter-spacing: .02em;
+  transition: transform .28s cubic-bezier(.34, 1.56, .64, 1);
+}
+.navbar-brand:hover .fun-logo { transform: rotate(-8deg) scale(1.1); }
+
+/* 手寫感的螢光筆底線，用來強調關鍵字 */
+.fun-mark {
+  background: linear-gradient(transparent 58%, rgba(255, 183, 3, .45) 58%);
+  padding: 0 .12em;
+}
+
+/* 三個字母：F / U / N 的品牌卡 */
+.fun-letter {
+  width: 68px; height: 68px; border-radius: 22px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 2rem; font-weight: 900; color: #fff; flex-shrink: 0;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, .12);
+  transition: transform .3s cubic-bezier(.34, 1.56, .64, 1);
+}
+.fun-card:hover .fun-letter { transform: rotate(-8deg) scale(1.08); }
+.fun-letter-f { background: linear-gradient(135deg, #ff6b6b, #ff9f68); }
+.fun-letter-u { background: linear-gradient(135deg, #4cc9f0, #4361ee); }
+.fun-letter-n { background: linear-gradient(135deg, #06d6a0, #12b886); }
+
+.fun-card {
+  border-radius: 1.5rem !important;
+  transition: transform .3s ease, box-shadow .3s ease;
+}
+.fun-card:hover {
+  transform: translateY(-8px) rotate(-.6deg);
+  box-shadow: 0 24px 48px rgba(0, 0, 0, .12) !important;
+}
+
+/* Hero 裡漂浮的小裝飾（純視覺，不擋點擊） */
+.fun-float {
+  position: absolute;
+  pointer-events: none;
+  user-select: none;
+  animation: funFloat 7s ease-in-out infinite;
+}
+@keyframes funFloat {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50%      { transform: translateY(-16px) rotate(8deg); }
+}
+
+/* 尊重使用者的「減少動態效果」系統設定 */
+@media (prefers-reduced-motion: reduce) {
+  .blob, .fun-float { animation: none; }
+  .fun-logo, .fun-letter, .fun-card, .feature-card, .course-card { transition: none; }
+}
 
 /* ── Print ── */
 @media print {
