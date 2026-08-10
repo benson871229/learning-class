@@ -6,7 +6,7 @@
     Python 版 docxtpl        →  {{ student_name }} 、 {%tr for c in courses %}
     HTML 版 docxtemplater    →  {student_name}    、 {#courses} … {/courses}
 
-版面（B5 182×257mm）與內容完全一致。
+版面（B5 橫式 257×182mm）與內容完全一致。
 
 執行：python3 build_template_html.py
 輸出：範本/報價單範本.docx
@@ -58,15 +58,16 @@ def cell_text(cell, text, *, bold=False, align=WD_ALIGN_PARAGRAPH.CENTER, size=1
 def build():
     doc = Document()
 
-    # ── 頁面：B5（JIS 182 × 257 mm）直式 ──
+    # ── 頁面：B5（JIS）橫式 257 × 182 mm ──
+    # python-docx 的 orientation 只是標記，實際尺寸仍要自己指定（寬 > 高）
     s = doc.sections[0]
-    s.orientation = WD_ORIENT.PORTRAIT
-    s.page_width = Mm(182)
-    s.page_height = Mm(257)
-    s.top_margin = Cm(1.8)
-    s.bottom_margin = Cm(1.8)
-    s.left_margin = Cm(1.7)
-    s.right_margin = Cm(1.7)
+    s.orientation = WD_ORIENT.LANDSCAPE
+    s.page_width = Mm(257)
+    s.page_height = Mm(182)
+    s.top_margin = Cm(1.5)
+    s.bottom_margin = Cm(1.5)
+    s.left_margin = Cm(1.8)
+    s.right_margin = Cm(1.8)
 
     style = doc.styles["Normal"]
     style.font.name = CN_FONT
@@ -87,7 +88,8 @@ def build():
     table.alignment = WD_TABLE_ALIGNMENT.CENTER
     table.style = "Table Grid"
 
-    widths = [2.6, 3.6, 1.8, 1.8, 2.3, 2.3]
+    # 欄寬（cm）合計 22.1，正好填滿橫式 B5 版心（頁寬 25.7 − 左右邊界各 1.8）
+    widths = [4.5, 5.5, 2.8, 2.8, 3.2, 3.3]
 
     for j, h in enumerate(headers):
         cell_text(table.cell(0, j), h, bold=True)
@@ -121,6 +123,15 @@ def build():
         for j, w in enumerate(widths):
             if j < len(r.cells):
                 r.cells[j].width = Cm(w)
+
+    # 關閉自動調整，並讓 tblGrid 與實際欄寬一致。
+    # 只設 cell.width 的話 tblGrid 仍是平均分配，Word 可能照平均值畫成等寬六欄。
+    table.autofit = False
+    tblPr = table._tbl.tblPr
+    layout = tblPr.makeelement(qn("w:tblLayout"), {qn("w:type"): "fixed"})
+    tblPr.append(layout)
+    for gridcol, w in zip(table._tbl.find(qn("w:tblGrid")).findall(qn("w:gridCol")), widths):
+        gridcol.set(qn("w:w"), str(int(round(Cm(w).twips))))
 
     # ── 繳費方式 ──
     doc.add_paragraph().paragraph_format.space_after = Pt(2)
