@@ -78,7 +78,7 @@
 | `{sum_tuition}` `{sum_material}` `{sum_deduction}` `{sum_total}` | 小計 |
 | `{note}` | 備註 |
 
-預設範本在 `範本/報價單範本.docx`（B5，182×257mm）。
+預設範本在 `範本/報價單範本.docx`（B5 橫式，257×182mm）。
 若要把改好的範本設成**內建預設**，執行 `python3 embed_template.py`。
 
 ## 四、資安說明

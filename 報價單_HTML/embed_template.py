@@ -28,7 +28,7 @@ def main():
 
     js = (
         "/*!\n"
-        " * template-b5.js ── 內建的預設 Word 範本（B5 182x257mm，docxtemplater 語法）\n"
+        " * template-b5.js ── 內建的預設 Word 範本（B5 橫式 257x182mm，docxtemplater 語法）\n"
         " * 由 embed_template.py 從 範本/報價單範本.docx 自動產生，請勿手動編輯。\n"
         " * 想改版面：用 Word 改 範本/報價單範本.docx 後重跑 embed_template.py，\n"
         " * 或直接在頁面上用「更換範本」載入你自己的 .docx。\n"
