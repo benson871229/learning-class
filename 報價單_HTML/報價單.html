@@ -47,7 +47,8 @@
   .btn-lg{ padding:12px 22px; font-size:1rem; }
   .file-row{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin-bottom:8px; }
   .pill{ font-size:.75rem; padding:3px 10px; border-radius:99px; background:#f3f4f6; color:var(--muted); }
-  .pill.ok{ background:#dcfce7; color:#166534; }
+  /* 綠色小標籤：依需求隱藏，載入成功後維持灰色。想恢復就把下一行取消註解 */
+  /* .pill.ok{ background:#dcfce7; color:#166534; } */
   table{ width:100%; border-collapse:collapse; }
   th{ font-size:.72rem; text-transform:uppercase; letter-spacing:.03em; color:var(--muted);
       text-align:left; padding:8px 6px; border-bottom:1px solid var(--line); font-weight:700; }
@@ -62,12 +63,14 @@
   .final b{ color:var(--brand); font-size:1.25rem; }
   .msg{ padding:10px 14px; border-radius:8px; margin-bottom:12px; font-size:.85rem; display:none; }
   .msg.err{ display:block; background:#fee2e2; color:#991b1b; }
-  .msg.ok{ display:block; background:#dcfce7; color:#166534; }
+  /* 綠色成功提示條：依需求隱藏（錯誤訊息仍會顯示）。想恢復就把下一行取消註解 */
+  /* .msg.ok{ display:block; background:#dcfce7; color:#166534; } */
   .hint{ font-size:.76rem; color:var(--muted); margin-top:6px; }
   .actions{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
   footer{ text-align:center; color:var(--muted); font-size:.75rem; padding:22px; }
-  .safe{ background:#f0fdf4; border:1px solid #bbf7d0; border-radius:10px; padding:10px 14px;
-         font-size:.76rem; color:#166534; margin-top:10px; }
+  /* 綠框資安說明：依需求隱藏（HTML 區塊也一併註解）。想恢復就把下面兩行取消註解 */
+  /* .safe{ background:#f0fdf4; border:1px solid #bbf7d0; border-radius:10px; padding:10px 14px;
+         font-size:.76rem; color:#166534; margin-top:10px; } */
 </style>
 </head>
 <body>
@@ -102,10 +105,13 @@
       <span class="pill" id="pill-template">使用內建 B5 範本</span>
     </div>
     <p class="hint">想改版面就用 Word 編輯範本再載入，保留佔位符即可（見 README）。</p>
+    <!-- 綠框資安說明：依需求隱藏。想恢復就取消這段註解（CSS 的 .safe 規則也要一併取消）
     <div class="safe">
-      🔒 這個頁面沒有伺服器，也無法對外連線（CSP <code>connect-src 'none'</code>）。
+      🔒 這個頁面沒有伺服器，也無法對外連線（CSP connect-src 'none'）。
       Excel 只在你的瀏覽器內解析，資料不會離開這台電腦。
     </div>
+    -->
+
   </div>
 
   <!-- 2. 學生 -->
@@ -164,6 +170,42 @@
     <input id="note" type="text" placeholder="例：英文班每月計8堂課" autocomplete="off">
   </div>
 
+  <!-- 5. 批次 -->
+  <div class="card">
+    <h2><span class="step">5</span>批次合併（多份印成一份）</h2>
+    <div class="file-row">
+      <button class="btn-o" id="btn-batch-add">＋ 把目前這份加入批次</button>
+      <button class="btn-o" id="btn-batch-excel">📋 載入報名清單（Excel）</button>
+      <span class="pill" id="pill-batch">批次清單：0 份</span>
+    </div>
+    <p class="hint">
+      報名清單每一列是一筆課程，需有「<b>學生姓名</b>」「<b>課程名稱</b>」「<b>學費</b>」欄，
+      可另有「日期起訖」「教材費」「扣除金額」「開立日期」「備註」。
+      <b>同一位學生的多筆課程請分成多列</b>，系統會自動依姓名合併成一份報價單。
+    </p>
+    <div class="wrap-x">
+      <table>
+        <thead>
+          <tr>
+            <th style="min-width:40px">#</th>
+            <th style="min-width:120px">學生姓名</th>
+            <th style="min-width:70px">開立日期</th>
+            <th class="num" style="min-width:60px">課程數</th>
+            <th class="num" style="min-width:90px">應付總計</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="batch-rows"></tbody>
+      </table>
+    </div>
+    <p class="hint" id="batch-empty">尚未加入任何報價單。合併後每位學生各占一頁，列印一次即可。</p>
+    <div class="actions" style="margin-top:14px">
+      <button class="btn btn-lg" id="btn-batch-word">📚 下載合併 Word（0 份）</button>
+      <button class="btn-g" id="btn-batch-record">📊 匯出批次紀錄 Excel</button>
+      <button class="btn-o" id="btn-batch-clear">清空批次</button>
+    </div>
+  </div>
+
   <!-- 動作 -->
   <div class="card">
     <div class="actions">
@@ -172,7 +214,7 @@
       <button class="btn-o" id="btn-clear">清空重填</button>
     </div>
     <p class="hint">
-      Word 下載後可直接用 Word 編輯。「匯出紀錄」會把這張報價單存成一份 Excel，方便日後對帳。
+      這一排只處理<b>目前這一份</b>。要一次印很多份，請用上面的「批次合併」。
     </p>
   </div>
 </main>
