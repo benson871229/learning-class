@@ -101,8 +101,10 @@
       不載入也能用，直接手動輸入即可。
     </p>
     <div class="file-row" style="margin-top:12px">
-      <button class="btn-o" id="btn-template">更換 Word 範本</button>
-      <span class="pill" id="pill-template">使用內建 B5 範本</span>
+      <button class="btn-o" id="btn-tpl-payment">更換繳費單範本</button>
+      <span class="pill" id="pill-tpl-payment">內建（A5 橫式）</span>
+      <button class="btn-o" id="btn-tpl-receipt">更換收據範本</button>
+      <span class="pill" id="pill-tpl-receipt">內建（A4 三聯）</span>
     </div>
     <p class="hint">想改版面就用 Word 編輯範本再載入，保留佔位符即可（見 README）。</p>
     <!-- 綠框資安說明：依需求隱藏。想恢復就取消這段註解（CSS 的 .safe 規則也要一併取消）
@@ -128,9 +130,19 @@
       </div>
       <div>
         <label for="issue-date">開立日期</label>
-        <input id="issue-date" type="text" placeholder="例：115/6/1" autocomplete="off">
+        <input id="issue-date" type="text" placeholder="例：115/9/1" autocomplete="off">
       </div>
     </div>
+    <div class="grid g2" style="margin-top:12px">
+      <div>
+        <label for="sel-branch">收據分校</label>
+        <select id="sel-branch">
+          <option value="壽豐路">壽豐路（壽豐分班・楠梓區壽豐路302號）</option>
+          <option value="翠屏路">翠屏路（楠梓區翠屏路59號）</option>
+        </select>
+      </div>
+    </div>
+    <p class="hint">分校只影響<b>收據</b>的抬頭與班址；繳費單不分校。</p>
   </div>
 
   <!-- 3. 課程 -->
@@ -200,7 +212,8 @@
     </div>
     <p class="hint" id="batch-empty">尚未加入任何報價單。合併後每位學生各占一頁，列印一次即可。</p>
     <div class="actions" style="margin-top:14px">
-      <button class="btn btn-lg" id="btn-batch-word">📚 下載合併 Word（0 份）</button>
+      <button class="btn btn-lg" id="btn-batch-word">📚 合併繳費單（0 份）</button>
+      <button class="btn btn-lg" id="btn-batch-receipt">🧾 合併收據（0 份）</button>
       <button class="btn-g" id="btn-batch-record">📊 匯出批次紀錄 Excel</button>
       <button class="btn-o" id="btn-batch-clear">清空批次</button>
     </div>
@@ -209,7 +222,8 @@
   <!-- 動作 -->
   <div class="card">
     <div class="actions">
-      <button class="btn btn-lg" id="btn-word">📄 下載 Word 報價單（B5）</button>
+      <button class="btn btn-lg" id="btn-word">📄 下載繳費單（A5 橫式）</button>
+      <button class="btn btn-lg" id="btn-receipt">🧾 下載收據（A4 三聯）</button>
       <button class="btn-g" id="btn-record">📊 匯出紀錄 Excel</button>
       <button class="btn-o" id="btn-clear">清空重填</button>
     </div>
@@ -225,7 +239,7 @@
 <script src="lib/docxtemplater.min.js"></script>
 <script src="lib/FileSaver.min.js"></script>
 <script src="lib/xlsx-lite.js"></script>
-<script src="lib/template-b5.js"></script>
+<script src="lib/templates.js"></script>
 <script src="app.js"></script>
 </body>
 </html>
