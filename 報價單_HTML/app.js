@@ -19,8 +19,10 @@
   var state = {
     students: [],       // [{name, ...}]
     courses: [],        // [{name, tuition, material, note}]
-    templateBuf: null,  // ArrayBuffer；null = 用內建 B5 範本
-    batch: []           // [{name, date, note, rows}]：待合併成一份 Word 的報價單
+    tplPayment: null,   // ArrayBuffer；null = 用內建繳費單範本
+    tplReceipt: null,   // ArrayBuffer；null = 用內建收據範本
+    branch: '壽豐路',    // 收據抬頭要印哪一個分班
+    batch: []           // [{name, date, note, rows}]：待合併成一份 Word 的單據
   };
 
   /* ── 小工具 ── */
@@ -113,14 +115,16 @@
     });
   }
 
-  function loadTemplate() {
+  function loadTemplate(kind) {
+    var isReceipt = kind === 'receipt';
     chooseFile('.docx', function (buf, filename) {
       // 粗略驗證是不是 docx（zip 檔頭 PK\x03\x04）
       var head = new Uint8Array(buf.slice(0, 4));
       if (head[0] !== 0x50 || head[1] !== 0x4B) throw new Error('這不是有效的 .docx 檔');
-      state.templateBuf = buf;
-      setPill('pill-template', '自訂範本：' + filename, true);
-      showMsg('已套用自訂範本（' + filename + '）');
+      if (isReceipt) state.tplReceipt = buf; else state.tplPayment = buf;
+      setPill(isReceipt ? 'pill-tpl-receipt' : 'pill-tpl-payment',
+              '自訂範本：' + filename, true);
+      showMsg('已套用自訂' + (isReceipt ? '收據' : '繳費單') + '範本（' + filename + '）');
     });
   }
 
@@ -300,14 +304,112 @@
   function deduct(n) { return n === 0 ? '' : '-' + n; }
 
   // 目前的範本內容（自訂優先，否則用內建 B5）
-  function templateBytes() {
-    return state.templateBuf
-      ? new Uint8Array(state.templateBuf)
-      : base64ToUint8(TEMPLATE_B5_BASE64);
+  function templateBytes(kind) {
+    if (kind === 'receipt') {
+      return state.tplReceipt ? new Uint8Array(state.tplReceipt)
+                              : base64ToUint8(TEMPLATE_RECEIPT_BASE64);
+    }
+    return state.tplPayment ? new Uint8Array(state.tplPayment)
+                            : base64ToUint8(TEMPLATE_PAYMENT_BASE64);
+  }
+
+  /* ── 分校資料 ──
+   * 翠屏路的抬頭刻意沒有「分班」後綴，與壽豐路不同，這是原稿就有的寫法。
+   * 證號與電話兩邊相同，屬固定文字寫在範本裡，不在這裡設定。 */
+  var BRANCHES = {
+    '壽豐路': {
+      title: '高雄市私立Fun學院文理短期補習班壽豐分班',
+      addr: '高雄市楠梓區壽豐路302號'
+    },
+    '翠屏路': {
+      title: '高雄市私立Fun學院文理短期補習班',
+      addr: '高雄市楠梓區翠屏路59號'
+    }
+  };
+
+  /* 金額轉國字大寫（收據「實收金額」欄用）。
+   * 例：12500 → 壹萬貳仟伍佰、100005 → 壹拾萬零伍
+   * 組與組之間是否要補「零」，看的是低位那一組有沒有滿千。 */
+  function amountToChinese(num) {
+    var n = Math.round(Math.abs(Number(num) || 0));
+    if (n === 0) return '零';
+    var DIGITS = ['零', '壹', '貳', '參', '肆', '伍', '陸', '柒', '捌', '玖'];
+    var UNITS = ['', '拾', '佰', '仟'];
+    var GROUPS = ['', '萬', '億', '兆'];
+    var out = '', gi = 0, prev = null;
+    while (n > 0 && gi < GROUPS.length) {
+      var group = n % 10000;
+      n = Math.floor(n / 10000);
+      if (group > 0) {
+        var part = '', pendingZero = false, g = group, ui = 0;
+        while (g > 0) {
+          var d = g % 10;
+          g = Math.floor(g / 10);
+          if (d === 0) {
+            pendingZero = part !== '';
+          } else {
+            if (pendingZero) { part = '零' + part; pendingZero = false; }
+            part = DIGITS[d] + UNITS[ui] + part;
+          }
+          ui++;
+        }
+        if (out !== '' && prev !== null && prev < 1000) out = '零' + out;
+        out = part + GROUPS[gi] + out;
+      }
+      prev = group;
+      gi++;
+    }
+    return out;
+  }
+
+  // 由課程日期推出收據的修業期間：115/9/1-115/9/30 → 自115年9月1日起至115年9月30日止
+  function periodText(quote) {
+    var raw = '';
+    for (var i = 0; i < quote.rows.length; i++) {
+      if (quote.rows[i].date) { raw = quote.rows[i].date; break; }
+    }
+    if (!raw) return '';
+    function ymd(s) {
+      var p = String(s).trim().split('/');
+      return p.length === 3 ? p[0] + '年' + p[1] + '月' + p[2] + '日' : String(s).trim();
+    }
+    var parts = raw.split('-');
+    return parts.length >= 2
+      ? '自' + ymd(parts[0]) + '起至' + ymd(parts[1]) + '止'
+      : ymd(raw);
+  }
+
+  // 收據內容由繳費單的資料推導：姓名、班別、金額都跟著繳費單走
+  function receiptContext(quote) {
+    var b = BRANCHES[state.branch] || BRANCHES['壽豐路'];
+    var total = 0, names = [];
+    for (var i = 0; i < quote.rows.length; i++) {
+      total += quote.rows[i].total;
+      if (quote.rows[i].name) names.push(quote.rows[i].name);
+    }
+    return {
+      branch_title: b.title,
+      branch_addr: b.addr,
+      student_name: quote.name,
+      class_name: names.join('+'),
+      period: periodText(quote),
+      amount: String(total),
+      amount_cn: amountToChinese(total)
+    };
   }
 
   // 把一份報價（{name, note, rows}）算好小計並填入範本，回傳 docxtemplater 實例
-  function renderQuote(quote) {
+  // kind: 'payment'（繳費單）或 'receipt'（收據）
+  function renderQuote(quote, kind) {
+    var doc = new window.docxtemplater(new PizZip(templateBytes(kind)), {
+      paragraphLoop: true,
+      linebreaks: true
+    });
+    doc.render(kind === 'receipt' ? receiptContext(quote) : paymentContext(quote));
+    return doc;
+  }
+
+  function paymentContext(quote) {
     var st = 0, sm = 0, sd = 0, stot = 0, courses = [];
     for (var i = 0; i < quote.rows.length; i++) {
       var r = quote.rows[i];
@@ -318,19 +420,13 @@
         deduction: deduct(r.deduction), total: money(r.total)
       });
     }
-
-    var doc = new window.docxtemplater(new PizZip(templateBytes()), {
-      paragraphLoop: true,
-      linebreaks: true
-    });
-    doc.render({
+    return {
       student_name: quote.name,
       courses: courses,
       sum_tuition: money(st), sum_material: money(sm),
       sum_deduction: deduct(sd), sum_total: money(stot),
       note: quote.note
-    });
-    return doc;
+    };
   }
 
   // 從 docxtemplater 錯誤中挖出比較好懂的說明
@@ -347,15 +443,19 @@
     });
   }
 
-  function makeWord() {
+  var DOC_LABEL = { payment: '繳費單', receipt: '收據' };
+
+  function makeWord(kind) {
     var quote = currentQuote();
     if (!quote) return;
+    var label = DOC_LABEL[kind];
     try {
-      saveAs(zipToBlob(renderQuote(quote).getZip()),
-             '報價單_' + safeFileName(quote.name) + '.docx');
-      showMsg('Word 已下載（B5 版面，可直接用 Word 編輯）');
+      saveAs(zipToBlob(renderQuote(quote, kind).getZip()),
+             label + '_' + safeFileName(quote.name) + '.docx');
+      showMsg(label + ' Word 已下載' +
+              (kind === 'receipt' ? '（' + state.branch + '分校，A4 三聯）' : '（A5 橫式）'));
     } catch (e) {
-      showMsg('產生 Word 失敗：' + renderErr(e), 'err');
+      showMsg('產生 ' + label + ' 失敗：' + renderErr(e), 'err');
     }
   }
 
@@ -420,11 +520,11 @@
     return xml;
   }
 
-  function mergeQuotes(quotes) {
+  function mergeQuotes(quotes, kind) {
     var container = null, parts = [], sectPr = '';
 
     for (var i = 0; i < quotes.length; i++) {
-      var zip = renderQuote(quotes[i]).getZip();
+      var zip = renderQuote(quotes[i], kind).getZip();
       var piece = splitBody(zip.file('word/document.xml').asText());
       if (i === 0) { container = zip; sectPr = piece.sectPr; }
       parts.push(renumber(piece.inner, i));
@@ -484,7 +584,8 @@
 
     var n = state.batch.length;
     setPill('pill-batch', '批次清單：' + n + ' 份', n > 0);
-    $('btn-batch-word').textContent = '📚 下載合併 Word（' + n + ' 份）';
+    $('btn-batch-word').textContent = '📚 合併繳費單（' + n + ' 份）';
+    $('btn-batch-receipt').textContent = '🧾 合併收據（' + n + ' 份）';
     $('batch-empty').style.display = n ? 'none' : '';
   }
 
@@ -550,18 +651,19 @@
     });
   }
 
-  function batchMakeWord() {
-    if (!state.batch.length) { showMsg('批次清單是空的，請先加入報價單', 'err'); return; }
+  function batchMakeWord(kind) {
+    if (!state.batch.length) { showMsg('批次清單是空的，請先加入單據', 'err'); return; }
+    var label = DOC_LABEL[kind];
     try {
-      var zip = mergeQuotes(state.batch);
+      var zip = mergeQuotes(state.batch, kind);
       var n = state.batch.length;
       var fname = n === 1
-        ? '報價單_' + safeFileName(state.batch[0].name) + '.docx'
-        : '報價單合併_' + n + '份.docx';
+        ? label + '_' + safeFileName(state.batch[0].name) + '.docx'
+        : label + '合併_' + n + '份.docx';
       saveAs(zipToBlob(zip), fname);
-      showMsg('已下載合併 Word：共 ' + n + ' 份，每位學生各一頁，可直接整份列印');
+      showMsg('已下載合併' + label + '：共 ' + n + ' 份，每位學生各一頁，可直接整份列印');
     } catch (e) {
-      showMsg('合併失敗：' + renderErr(e), 'err');
+      showMsg('合併' + label + '失敗：' + renderErr(e), 'err');
     }
   }
 
@@ -637,15 +739,25 @@
   function init() {
     $('btn-students').addEventListener('click', loadStudents);
     $('btn-courses').addEventListener('click', loadCourses);
-    $('btn-template').addEventListener('click', loadTemplate);
+    $('btn-tpl-payment').addEventListener('click', function () { loadTemplate('payment'); });
+    $('btn-tpl-receipt').addEventListener('click', function () { loadTemplate('receipt'); });
+
+    var branchSel = $('sel-branch');
+    branchSel.value = state.branch;
+    branchSel.addEventListener('change', function () {
+      state.branch = this.value;
+      showMsg('收據分校已切換為：' + state.branch);
+    });
     $('btn-addrow').addEventListener('click', addRow);
-    $('btn-word').addEventListener('click', makeWord);
+    $('btn-word').addEventListener('click', function () { makeWord('payment'); });
+    $('btn-receipt').addEventListener('click', function () { makeWord('receipt'); });
     $('btn-record').addEventListener('click', exportRecord);
     $('btn-clear').addEventListener('click', clearAll);
 
     $('btn-batch-add').addEventListener('click', batchAddCurrent);
     $('btn-batch-excel').addEventListener('click', batchLoadExcel);
-    $('btn-batch-word').addEventListener('click', batchMakeWord);
+    $('btn-batch-word').addEventListener('click', function () { batchMakeWord('payment'); });
+    $('btn-batch-receipt').addEventListener('click', function () { batchMakeWord('receipt'); });
     $('btn-batch-record').addEventListener('click', batchExportRecord);
     $('btn-batch-clear').addEventListener('click', batchClear);
 
