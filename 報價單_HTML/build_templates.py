@@ -143,6 +143,79 @@ def build_payment():
     print(f"繳費單範本 → {out}")
 
 
+def _el(parent, tag, **attrs):
+    """在 parent 底下取得或建立子元素（tag 用 w: 前綴短名）。"""
+    from docx.oxml.ns import qn
+    q = qn(tag)
+    el = parent.find(q)
+    if el is None:
+        el = parent.makeelement(q, {})
+        parent.append(el)
+    for k, v in attrs.items():
+        el.set(qn(k), v)
+    return el
+
+
+def fit_receipt_on_one_page(doc):
+    """讓三聯確實印在同一頁。
+
+    原稿的三聯表格約 266mm，加上表格前的空段落（12pt，約 5.5mm）就會超過
+    A4 版心的 271mm，只差零點幾毫米——任何一點內容變動都會把第三聯擠到第二頁。
+    而「班別」欄僅 57.5mm（約 12 字），一旦學生報兩門以上，課程名稱串接後就會
+    折行，三聯各多一行又是 16mm，必定跑版。
+
+    這裡做三件事把餘裕拉回來，都不動原稿的視覺設計：
+      1. 表格前後的空段落縮到 1pt
+      2. 退費規定（6.5pt 細明文字）改為固定行高，省下每聯約 3mm
+      3. 「班別」欄加寬、姓名欄相應縮窄，讓常見的課程串接維持一行
+    另外為每一列加上 cantSplit，萬一真的溢出也是整聯移動，不會從中間被切斷。
+    """
+    from docx.oxml.ns import qn
+    from docx.shared import Mm
+
+    body = doc.element.body
+
+    # ① 表格前後的空段落縮到 1pt（w:sz 以半點為單位，故 val=2）
+    for p in body.findall(qn('w:p')):
+        if not ''.join(t.text or '' for t in p.iter(qn('w:t'))).strip():
+            pPr = _el(p, 'w:pPr')
+            _el(pPr, 'w:spacing', **{'w:after': '0', 'w:before': '0',
+                                     'w:line': '20', 'w:lineRule': 'exact'})
+            _el(_el(pPr, 'w:rPr'), 'w:sz', **{'w:val': '2'})
+
+    table = doc.tables[0]
+
+    for row in table.rows:
+        # ② 整列不跨頁
+        _el(_el(row._tr, 'w:trPr'), 'w:cantSplit')
+
+        # 直接操作底層 w:tc：row.cells 會把合併儲存格依所跨欄數重複展開，
+        # 這個表格用了 gridSpan，取 row.cells 會拿到 9 格而不是實際的 4 格。
+        tcs = row._tr.findall(qn('w:tc'))
+        texts = [''.join(t.text or '' for t in tc.iter(qn('w:t'))) for tc in tcs]
+
+        # ③ 退費規定：固定行高，避免 6.5pt 細字被行距撐開
+        for tc, txt in zip(tcs, texts):
+            if '補習班於學生繳納費用後' in txt:
+                for para in tc.findall(qn('w:p')):
+                    pPr = _el(para, 'w:pPr')
+                    _el(pPr, 'w:spacing', **{'w:after': '0', 'w:before': '0',
+                                             'w:line': '140', 'w:lineRule': 'exact'})
+
+        # ④ 三聯之間的分隔空列從 7.8mm 收到 4mm。裁切線仍看得出來，
+        #    但多出的 7.6mm 足以吸收「班別」萬一折行時多出的高度。
+        if not any(t.strip() for t in texts):
+            th = _el(_el(row._tr, 'w:trPr'), 'w:trHeight')
+            th.set(qn('w:val'), str(int(Mm(4).twips)))
+            th.set(qn('w:hRule'), 'exact')
+
+        # ⑤ 「班別」欄加寬、姓名欄相應縮窄，維持整列仍是 185mm
+        if texts and texts[0].strip() == '學生姓名' and len(tcs) == 4:
+            for tc, mm in zip(tcs, (30, 55, 25, 75)):
+                tcPr = _el(tc, 'w:tcPr')
+                _el(tcPr, 'w:tcW', **{'w:w': str(int(Mm(mm).twips)), 'w:type': 'dxa'})
+
+
 # ── 收據 ──────────────────────────────────────────────────
 
 def build_receipt():
@@ -161,6 +234,9 @@ def build_receipt():
     for old, new in pairs:
         n = replace_everywhere(doc, old, new)
         print(f"   {old[:22]:24s} → {new:18s} 置換 {n} 處")
+
+    fit_receipt_on_one_page(doc)
+    print("   已套用單頁排版調整（縮空段落／固定細字行高／加寬班別欄／列不跨頁）")
 
     out = OUT / "收據範本.docx"
     doc.save(out)
