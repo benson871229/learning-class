@@ -412,12 +412,9 @@
 
   var TWIP_PER_PT = 20;
   var LINE_FACTOR = 1.30;      // 單行行高相對字級的倍數（中文字型約 1.2~1.4）
-  /* 每一列的固定開銷（框線、列內距）。tblCellMar 上下雖然是 0，實際排版
-   * 每列仍多吃約 1.8mm；收據有 30 列，漏算就少估 45mm，足以差一整頁。
-   * 這個值是拿 LibreOffice 實際排版二分搜尋校準出來的。 */
-  var CELL_PAD = 100;
+  var CELL_PAD = 40;           // 每列框線與內距的餘量（twips）
   var CELL_SIDE_PAD = 216;     // 左右內距 108×2（Word 預設），扣掉才是可排字寬度
-  var SAFETY = 0.92;           // 估算一定有誤差，寧可早一點縮
+  var SAFETY = 0.88;           // 估算約低估一成，留足餘裕免得又爆頁
   var MIN_SZ = 10;             // 字級下限 5pt（w:sz 以半點為單位）
   var MIN_SCALE = 0.55;
   var STYLES = 'word/styles.xml';
@@ -440,6 +437,17 @@
       if (v != null && (m === null || v > m)) m = v;
     }
     return m;
+  }
+
+  /* 文字所佔寬度（twips）。中日韓字是全形，數字與英文約半形——
+   * 先前一律當全形，收據裡滿是數字（證號、電話、金額、日期），
+   * 換行次數因此被嚴重高估，整份高度多算了五成。 */
+  function textWidth(s, emTw) {
+    var w = 0;
+    for (var i = 0; i < s.length; i++) {
+      w += s.charCodeAt(i) < 0x2E80 ? emTw * 0.5 : emTw;
+    }
+    return w;
   }
 
   function textOf(el) {
@@ -509,8 +517,7 @@
     var sp = ownSpacing(p);
     var lines = 1;
     if (widthTw > 0) {
-      var per = Math.max(1, Math.floor(widthTw / (pt * TWIP_PER_PT)));
-      lines = Math.max(1, Math.ceil(textOf(p).length / per));
+      lines = Math.max(1, Math.ceil(textWidth(textOf(p), pt * TWIP_PER_PT) / widthTw));
     }
     var h = lines * lineHeight(sp, pt, grid, snapsToGrid(p));
     if (sp) h += (attr(sp, 'w:before') || 0) + (attr(sp, 'w:after') || 0);
@@ -528,18 +535,74 @@
     return total + CELL_PAD;
   }
 
-  function rowHeight(tr, defaultSz, grid) {
-    var need = 0, tcs = tr.childNodes;
-    for (var i = 0; i < tcs.length; i++) {
-      if (tcs[i].nodeType === 1 && tcs[i].tagName === 'w:tc') {
-        need = Math.max(need, cellHeight(tcs[i], defaultSz, grid));
+  function directCells(tr) {
+    var out = [], kids = tr.childNodes;
+    for (var i = 0; i < kids.length; i++) {
+      if (kids[i].nodeType === 1 && kids[i].tagName === 'w:tc') out.push(kids[i]);
+    }
+    return out;
+  }
+
+  function directRows(tbl) {
+    var out = [], kids = tbl.childNodes;
+    for (var i = 0; i < kids.length; i++) {
+      if (kids[i].nodeType === 1 && kids[i].tagName === 'w:tr') out.push(kids[i]);
+    }
+    return out;
+  }
+
+  function vMergeOf(tc) {
+    var tcPr = null, kids = tc.childNodes;
+    for (var i = 0; i < kids.length; i++) {
+      if (kids[i].nodeType === 1 && kids[i].tagName === 'w:tcPr') { tcPr = kids[i]; break; }
+    }
+    if (!tcPr) return null;
+    var vm = tcPr.getElementsByTagName('w:vMerge')[0];
+    return vm ? (vm.getAttribute('w:val') || 'continue') : null;
+  }
+
+  function declaredHeight(tr) {
+    var th = tr.getElementsByTagName('w:trHeight')[0];
+    if (!th) return { h: 0, exact: false };
+    return { h: attr(th, 'w:val') || 0, exact: th.getAttribute('w:hRule') === 'exact' };
+  }
+
+  /* 整個表格各列的高度。
+   * 垂直合併（vMerge）的儲存格高度要分攤到它跨越的每一列，不能整份算給起始列——
+   * 收據的退費規定就跨了「學費／實收金額／繳費日期」三列，
+   * 全算在第一列會讓每一聯多估 12mm，三聯就是 36mm。 */
+  function tableRowHeights(tbl, defaultSz, grid) {
+    var trs = directRows(tbl), n = trs.length;
+    var need = [];
+    for (var i = 0; i < n; i++) need.push(0);
+
+    for (var r = 0; r < n; r++) {
+      var tcs = directCells(trs[r]);
+      for (var c = 0; c < tcs.length; c++) {
+        var vm = vMergeOf(tcs[c]);
+        if (vm === 'continue') continue;              // 延續列本身不帶內容
+        var h = cellHeight(tcs[c], defaultSz, grid);
+        if (vm === 'restart') {
+          var span = 1;
+          for (var k = r + 1; k < n; k++) {
+            var kc = directCells(trs[k]);
+            if (c < kc.length && vMergeOf(kc[c]) === 'continue') span++;
+            else break;
+          }
+          var per = h / span;
+          for (var m = r; m < r + span; m++) need[m] = Math.max(need[m], per);
+        } else {
+          need[r] = Math.max(need[r], h);
+        }
       }
     }
-    var th = tr.getElementsByTagName('w:trHeight')[0];
-    var declared = th ? (attr(th, 'w:val') || 0) : 0;
-    // trHeight 預設是 atLeast：宣告值與實際需求取大者
-    return th && th.getAttribute('w:hRule') === 'exact'
-      ? declared : Math.max(declared, need);
+
+    var total = 0;
+    for (var q = 0; q < n; q++) {
+      var d = declaredHeight(trs[q]);
+      total += d.exact ? d.h : Math.max(d.h, need[q]);
+    }
+    return total;
   }
 
   function gridPitchOf(body) {
@@ -558,8 +621,7 @@
       if (el.tagName === 'w:p') {
         total += paraHeight(el, defaultSz, widthTw, grid);
       } else if (el.tagName === 'w:tbl') {
-        var trs = el.getElementsByTagName('w:tr');
-        for (var j = 0; j < trs.length; j++) total += rowHeight(trs[j], defaultSz, grid);
+        total += tableRowHeights(el, defaultSz, grid);
       }
     }
     return total;

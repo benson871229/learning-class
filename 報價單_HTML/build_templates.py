@@ -216,6 +216,32 @@ def fit_receipt_on_one_page(doc):
                 _el(tcPr, 'w:tcW', **{'w:w': str(int(Mm(mm).twips)), 'w:type': 'dxa'})
 
 
+def unwrap_header_shapes(path):
+    """讓頁首的浮動標籤不要把本文往下推。
+
+    頁首那四個「第N聯」「NO.」標籤是絕對定位的 VML 圖形，卻帶著
+    <w10:wrap type="square"/>（文繞圖），Word 會讓本文避開它們，
+    於是三聯整個被往下擠約 40mm，頁面上方留下一大片空白。
+    改成不繞排後標籤位置不變，但不再佔用本文的版面。
+    """
+    import zipfile, shutil, tempfile, os
+    zin = zipfile.ZipFile(path)
+    tmp = path.with_suffix('.tmp')
+    n = 0
+    with zipfile.ZipFile(tmp, 'w', zipfile.ZIP_DEFLATED) as zo:
+        for item in zin.infolist():
+            data = zin.read(item.filename)
+            if item.filename.startswith('word/header'):
+                xml = data.decode('utf8')
+                n += xml.count('<w10:wrap type="square"/>')
+                xml = xml.replace('<w10:wrap type="square"/>', '')
+                data = xml.encode('utf8')
+            zo.writestr(item, data)
+    zin.close()
+    shutil.move(str(tmp), str(path))
+    return n
+
+
 # ── 收據 ──────────────────────────────────────────────────
 
 def build_receipt():
@@ -240,6 +266,8 @@ def build_receipt():
 
     out = OUT / "收據範本.docx"
     doc.save(out)
+    n = unwrap_header_shapes(out)
+    print(f"   頁首 {n} 個浮動標籤改為不繞排（原本會把本文往下推約 40mm）")
     print(f"收據範本 → {out}")
 
 
