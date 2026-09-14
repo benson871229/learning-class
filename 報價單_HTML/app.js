@@ -411,11 +411,15 @@
    */
 
   var TWIP_PER_PT = 20;
-  var LINE_FACTOR = 1.35;      // 行高相對字級的粗估倍數
-  var CELL_PAD = 100;          // 儲存格上下內距（twips）
-  var SAFETY = 0.96;           // 估算難免有誤差，留一點餘裕
-  var MIN_SZ = 14;             // 字級下限 7pt（w:sz 以半點為單位）
-  var MIN_SCALE = 0.55;        // 單頁優先，但再小就不好讀了
+  var LINE_FACTOR = 1.30;      // 單行行高相對字級的倍數（中文字型約 1.2~1.4）
+  /* 每一列的固定開銷（框線、列內距）。tblCellMar 上下雖然是 0，實際排版
+   * 每列仍多吃約 1.8mm；收據有 30 列，漏算就少估 45mm，足以差一整頁。
+   * 這個值是拿 LibreOffice 實際排版二分搜尋校準出來的。 */
+  var CELL_PAD = 100;
+  var CELL_SIDE_PAD = 216;     // 左右內距 108×2（Word 預設），扣掉才是可排字寬度
+  var SAFETY = 0.92;           // 估算一定有誤差，寧可早一點縮
+  var MIN_SZ = 10;             // 字級下限 5pt（w:sz 以半點為單位）
+  var MIN_SCALE = 0.55;
   var STYLES = 'word/styles.xml';
   var DOCUMENT = 'word/document.xml';
 
@@ -451,47 +455,111 @@
     return d.getElementsByTagName('parsererror').length ? null : d;
   }
 
-  // 文件的預設字級。沒有明確 w:sz 的文字都吃這個值，縮放時必須一起處理，
+  // 沒有明確 w:sz 的文字都吃 styles.xml 的預設字級，縮放時必須一起處理，
   // 否則只縮到寫死字級的部分，整體高度幾乎不會變。
   function defaultSizeOf(sdoc) {
     if (!sdoc) return 24;
     var dd = sdoc.getElementsByTagName('w:docDefaults')[0];
-    var v = dd && firstSz(dd);
-    return v || 24;
+    return (dd && firstSz(dd)) || 24;
   }
 
-  function paraHeight(p, defaultSz) {
-    var sz = firstSz(p) || defaultSz;
-    var h = (sz / 2) * TWIP_PER_PT * LINE_FACTOR;
-    var sp = p.getElementsByTagName('w:spacing');
-    if (sp.length) {
-      var after = attr(sp[0], 'w:after');
-      if (after) h += after;
+  // 直屬於 el 的 w:spacing（在它自己的 pPr 裡），不抓子元素的
+  function ownSpacing(el) {
+    var pPr = null, kids = el.childNodes;
+    for (var i = 0; i < kids.length; i++) {
+      if (kids[i].nodeType === 1 && kids[i].tagName === 'w:pPr') { pPr = kids[i]; break; }
     }
+    if (!pPr) return null;
+    var k2 = pPr.childNodes;
+    for (var j = 0; j < k2.length; j++) {
+      if (k2[j].nodeType === 1 && k2[j].tagName === 'w:spacing') return k2[j];
+    }
+    return null;
+  }
+
+  /* 單行行高。除了 w:line（固定值或倍數），還要考慮文件的行網格：
+   * sectPr 的 docGrid linePitch 會把每一行撐到固定高度，字級縮小也不會變矮。
+   * 這兩份範本的 linePitch 是 360（18pt），收據有 92 個段落受它鎖死，
+   * 光網格就吃掉約 584mm——這才是三聯擠不進一頁的主因。 */
+  function lineHeight(sp, pt, gridPitch, snaps) {
+    var base = pt * TWIP_PER_PT * LINE_FACTOR;
+    var rule = sp && sp.getAttribute('w:lineRule');
+    var line = sp && attr(sp, 'w:line');
+    if (rule === 'exact') return line || base;      // 固定行距不受網格影響
+    if (line) base = rule === 'atLeast' ? Math.max(line, base)
+                                        : pt * TWIP_PER_PT * (line / 240);
+    return snaps && gridPitch ? Math.max(base, gridPitch) : base;
+  }
+
+  // 段落是否跟著行網格走（pPr 裡 snapToGrid 設 0 就不跟）
+  function snapsToGrid(p) {
+    var pPr = null, kids = p.childNodes;
+    for (var i = 0; i < kids.length; i++) {
+      if (kids[i].nodeType === 1 && kids[i].tagName === 'w:pPr') { pPr = kids[i]; break; }
+    }
+    if (!pPr) return true;
+    var sg = pPr.getElementsByTagName('w:snapToGrid')[0];
+    return !(sg && sg.getAttribute('w:val') === '0');
+  }
+
+  /* 段落高度。先前漏算了 w:spacing 的 before 與 w:line 倍數，
+   * 六門課的繳費單因此被低估約 8mm，才會估得下卻實際爆頁。 */
+  function paraHeight(p, defaultSz, widthTw, grid) {
+    var pt = (firstSz(p) || defaultSz) / 2;
+    var sp = ownSpacing(p);
+    var lines = 1;
+    if (widthTw > 0) {
+      var per = Math.max(1, Math.floor(widthTw / (pt * TWIP_PER_PT)));
+      lines = Math.max(1, Math.ceil(textOf(p).length / per));
+    }
+    var h = lines * lineHeight(sp, pt, grid, snapsToGrid(p));
+    if (sp) h += (attr(sp, 'w:before') || 0) + (attr(sp, 'w:after') || 0);
     return h;
   }
 
-  function rowHeight(tr, defaultSz) {
-    var th = tr.getElementsByTagName('w:trHeight');
-    if (th.length) {
-      var v = attr(th[0], 'w:val');
-      if (v) return v;
-    }
-    var sz = maxSz(tr) || defaultSz;
-    return (sz / 2) * TWIP_PER_PT * LINE_FACTOR + CELL_PAD;
+  /* 儲存格高度：要把文字換行算進去。
+   * 收據的退費規定只宣告 8.6mm 的 trHeight，實際卻要 20mm 以上，
+   * 若只信 trHeight 就會嚴重低估整份文件。 */
+  function cellHeight(tc, defaultSz, grid) {
+    var tcW = tc.getElementsByTagName('w:tcW')[0];
+    var w = (attr(tcW, 'w:w') || 0) - CELL_SIDE_PAD;
+    var total = 0, ps = tc.getElementsByTagName('w:p');
+    for (var i = 0; i < ps.length; i++) total += paraHeight(ps[i], defaultSz, w, grid);
+    return total + CELL_PAD;
   }
 
-  // body 內容總高（twips）。只走頂層元素，表格列一併計入。
-  function contentHeight(body, defaultSz) {
+  function rowHeight(tr, defaultSz, grid) {
+    var need = 0, tcs = tr.childNodes;
+    for (var i = 0; i < tcs.length; i++) {
+      if (tcs[i].nodeType === 1 && tcs[i].tagName === 'w:tc') {
+        need = Math.max(need, cellHeight(tcs[i], defaultSz, grid));
+      }
+    }
+    var th = tr.getElementsByTagName('w:trHeight')[0];
+    var declared = th ? (attr(th, 'w:val') || 0) : 0;
+    // trHeight 預設是 atLeast：宣告值與實際需求取大者
+    return th && th.getAttribute('w:hRule') === 'exact'
+      ? declared : Math.max(declared, need);
+  }
+
+  function gridPitchOf(body) {
+    var sect = body.getElementsByTagName('w:sectPr')[0];
+    var dg = sect && sect.getElementsByTagName('w:docGrid')[0];
+    if (!dg || dg.getAttribute('w:type') === 'none') return 0;
+    return attr(dg, 'w:linePitch') || 0;
+  }
+
+  function contentHeight(body, defaultSz, widthTw) {
+    var grid = gridPitchOf(body);
     var total = 0, kids = body.childNodes;
     for (var i = 0; i < kids.length; i++) {
       var el = kids[i];
       if (el.nodeType !== 1) continue;
       if (el.tagName === 'w:p') {
-        total += paraHeight(el, defaultSz);
+        total += paraHeight(el, defaultSz, widthTw, grid);
       } else if (el.tagName === 'w:tbl') {
         var trs = el.getElementsByTagName('w:tr');
-        for (var j = 0; j < trs.length; j++) total += rowHeight(trs[j], defaultSz);
+        for (var j = 0; j < trs.length; j++) total += rowHeight(trs[j], defaultSz, grid);
       }
     }
     return total;
@@ -501,7 +569,11 @@
     var list = xdoc.getElementsByTagName(tag);
     for (var i = 0; i < list.length; i++) {
       var v = attr(list[i], 'w:val');
-      if (v) list[i].setAttribute('w:val', String(Math.max(floor, Math.round(v * k))));
+      if (!v) continue;
+      // 只縮不放：本來就小於下限的字（例如 6.5pt 的退費規定）若直接套下限，
+      // 反而會被放大，整份文件越縮越高。
+      var next = Math.max(floor, Math.round(v * k));
+      list[i].setAttribute('w:val', String(Math.min(v, next)));
     }
   }
 
@@ -512,24 +584,42 @@
       scaleTags(docs[i], 'w:szCs', k, MIN_SZ);
     }
     scaleTags(xdoc, 'w:trHeight', k, 1);
-  }
-
-  // 拿掉表格裡完全空白的備用列（原稿留來手寫用，課程多時純屬浪費）
-  function dropBlankRows(body, keepOne) {
-    var tbls = body.getElementsByTagName('w:tbl');
-    for (var i = 0; i < tbls.length; i++) {
-      var trs = tbls[i].getElementsByTagName('w:tr');
-      for (var j = trs.length - 1; j >= 0; j--) {
-        if (textOf(trs[j]).trim()) continue;
-        if (keepOne) { keepOne = false; continue; }
-        trs[j].parentNode.removeChild(trs[j]);
+    // 行網格：不縮它的話，字縮了行高仍被鎖在 18pt，整份高度幾乎不動
+    var dgs = xdoc.getElementsByTagName('w:docGrid');
+    for (var g = 0; g < dgs.length; g++) {
+      var lp = attr(dgs[g], 'w:linePitch');
+      if (lp) dgs[g].setAttribute('w:linePitch', String(Math.max(1, Math.round(lp * k))));
+    }
+    // 段落間距也要一起收，否則縮了字級、間距原樣佔位
+    var sps = xdoc.getElementsByTagName('w:spacing');
+    for (var m = 0; m < sps.length; m++) {
+      var sp = sps[m];
+      ['w:before', 'w:after'].forEach(function (a) {
+        var v = attr(sp, a);
+        if (v) sp.setAttribute(a, String(Math.round(v * k)));
+      });
+      if (sp.getAttribute('w:lineRule') === 'exact') {
+        var l = attr(sp, 'w:line');
+        if (l) sp.setAttribute('w:line', String(Math.round(l * k)));
       }
     }
   }
 
-  /* 套版後把內容收進一頁：先刪空白備用列，再等比縮小字級與列高。
-   * 高度是估算的，所以縮放採多次收斂而非一次到位。
-   * 量測直接讀產生出來的 XML，換上自訂範本一樣有效。 */
+  // 拿掉表格裡完全空白的列。原稿留著給手寫，但系統是依課程數自動長列，
+  // 留著只會佔掉版面，使用者也不想看到。
+  function dropBlankRows(body) {
+    var tbls = body.getElementsByTagName('w:tbl');
+    for (var i = 0; i < tbls.length; i++) {
+      var trs = tbls[i].getElementsByTagName('w:tr');
+      for (var j = trs.length - 1; j >= 0; j--) {
+        if (!textOf(trs[j]).trim()) trs[j].parentNode.removeChild(trs[j]);
+      }
+    }
+  }
+
+  /* 套版後把內容收進一頁：先刪空白列，再等比縮小字級、列高與間距。
+   * 高度是估算的，所以採多次收斂；量測直接讀產生出來的 XML，
+   * 因此使用者換上自訂範本一樣有效。 */
   function fitToOnePage(zip) {
     var xdoc = parseXml(zip, DOCUMENT);
     if (!xdoc) return;
@@ -545,24 +635,30 @@
 
     var avail = (attr(pgSz, 'w:h') - (attr(pgMar, 'w:top') || 0)
                  - (attr(pgMar, 'w:bottom') || 0)) * SAFETY;
+    var widthTw = (attr(pgSz, 'w:w') || 0) - (attr(pgMar, 'w:left') || 0)
+                  - (attr(pgMar, 'w:right') || 0);
     if (!(avail > 0)) return;
 
+    dropBlankRows(body);                       // 空白列一律不留
+
     var dsz = defaultSizeOf(sdoc);
-    if (contentHeight(body, dsz) <= avail) return;    // 本來就放得下
-
-    dropBlankRows(body, true);                        // 先留一列空白
-    if (contentHeight(body, dsz) > avail) dropBlankRows(body, false);
-
-    // 縮放：每輪依當下高度重算比例，最多三輪，總縮放不低於 MIN_SCALE
-    var applied = 1;
-    for (var pass = 0; pass < 3; pass++) {
-      var need = contentHeight(body, dsz);
-      if (need <= avail) break;
-      var k = Math.max(MIN_SCALE / applied, avail / need);
-      if (k >= 0.999) break;
-      scaleAll(xdoc, sdoc, k);
-      applied *= k;
-      dsz = Math.max(MIN_SZ, Math.round(dsz * k));
+    if (contentHeight(body, dsz, widthTw) > avail) {
+      // 二分搜尋「放得下的最大縮放比例」。
+      // 先前是逐次依當下高度修正，但縮放與高度不是線性關係，
+      // 每輪都會多縮一點，十二門課會一路縮到 6.5pt 卻還剩 24mm 空間。
+      var lo = MIN_SCALE, hi = 1, best = MIN_SCALE;
+      for (var it = 0; it < 7; it++) {
+        var mid = (lo + hi) / 2;
+        var trial = xdoc.cloneNode(true);
+        scaleAll(trial, null, mid);
+        var tb = trial.getElementsByTagName('w:body')[0];
+        if (contentHeight(tb, Math.max(MIN_SZ, Math.round(dsz * mid)), widthTw) <= avail) {
+          best = mid; lo = mid;
+        } else {
+          hi = mid;
+        }
+      }
+      scaleAll(xdoc, sdoc, best);
     }
 
     var ser = new XMLSerializer();
