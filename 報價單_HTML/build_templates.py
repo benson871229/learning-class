@@ -13,6 +13,7 @@
 """
 from pathlib import Path
 import copy
+import re
 
 from docx import Document
 
@@ -140,6 +141,8 @@ def build_payment():
 
     out = OUT / "繳費單範本.docx"
     doc.save(out)
+    n = normalize_fonts(out)
+    print(f"   字型統一：中文{CN_FONT}／英數{EN_FONT}（{n} 處）")
     print(f"繳費單範本 → {out}")
 
 
@@ -271,7 +274,85 @@ def build_receipt():
     doc.save(out)
     n = unwrap_header_shapes(out)
     print(f"   頁首 {n} 個浮動標籤改為不繞排（原本會把本文往下推約 40mm）")
+    n = normalize_fonts(out)
+    print(f"   字型統一：中文{CN_FONT}／英數{EN_FONT}（{n} 處）")
     print(f"收據範本 → {out}")
+
+
+# ── 字型正規化 ────────────────────────────────────────────
+
+CN_FONT = "標楷體"      # 中文
+EN_FONT = "Times New Roman"   # 英文、數字、其他符號
+
+_RFONTS_RE = re.compile(r'<w:rFonts\b([^>]*?)/>')
+_ATTR_RE = re.compile(r'([\w:]+)="([^"]*)"')
+
+
+def _rfonts_tag(attrs_text):
+    """重寫單一 <w:rFonts/>：中文走標楷體，其餘走 Times New Roman。
+
+    主題字型（asciiTheme 等）優先權高於明寫的字型名，因此必須拿掉，
+    否則 Word 仍會用 theme1.xml 裡的字型。w:hint 保留，它決定
+    全形標點這類「兩邊都說得通」的字元要算中文還是英文。
+    """
+    attrs = dict(_ATTR_RE.findall(attrs_text))
+    hint = attrs.get("w:hint")
+    out = ['w:ascii="%s"' % EN_FONT, 'w:hAnsi="%s"' % EN_FONT,
+           'w:eastAsia="%s"' % CN_FONT, 'w:cs="%s"' % EN_FONT]
+    if hint:
+        out.append('w:hint="%s"' % hint)
+    return "<w:rFonts %s/>" % " ".join(out)
+
+
+def normalize_fonts(path):
+    """把 docx 裡所有字型設定統一成：中文標楷體、英數符號 Times New Roman。
+
+    三個地方都要改，缺一就會有文字漏網：
+      document.xml  逐一 run 上的字型
+      styles.xml    docDefaults 與各樣式（沒寫 rFonts 的 run 繼承這裡）
+      header/footer 頁首頁尾
+    """
+    import zipfile, shutil, tempfile
+    tmp = Path(tempfile.mkstemp(suffix=".docx")[1])
+    zin = zipfile.ZipFile(str(path))
+    count = 0
+    with zipfile.ZipFile(str(tmp), "w", zipfile.ZIP_DEFLATED) as zo:
+        for item in zin.infolist():
+            data = zin.read(item.filename)
+            name = item.filename
+            if (name == "word/document.xml" or name == "word/styles.xml"
+                    or name.startswith("word/header")
+                    or name.startswith("word/footer")):
+                xml = data.decode("utf8")
+                xml, n = _RFONTS_RE.subn(
+                    lambda m: _rfonts_tag(m.group(1)), xml)
+                count += n
+                if name == "word/styles.xml":
+                    xml, k = _ensure_default_rfonts(xml)
+                    count += k
+                data = xml.encode("utf8")
+            zo.writestr(item, data)
+    zin.close()
+    shutil.move(str(tmp), str(path))
+    return count
+
+
+def _ensure_default_rfonts(xml):
+    """docDefaults 若根本沒寫 rFonts，補一個，讓沒指定字型的文字也吃到。"""
+    if "<w:rPrDefault>" not in xml:
+        return xml, 0
+    head, sep, tail = xml.partition("<w:rPrDefault>")
+    if "<w:rFonts" in tail.split("</w:rPrDefault>")[0]:
+        return xml, 0          # 已經有了，前面的 subn 改過
+    tag = _rfonts_tag('w:hint="eastAsia"')
+    block = tail.split("</w:rPrDefault>")[0]
+    if "<w:rPr>" in block:
+        tail = tail.replace("<w:rPr>", "<w:rPr>" + tag, 1)
+    elif "<w:rPr/>" in block:
+        tail = tail.replace("<w:rPr/>", "<w:rPr>" + tag + "</w:rPr>", 1)
+    else:
+        tail = "<w:rPr>" + tag + "</w:rPr>" + tail
+    return head + sep + tail, 1
 
 
 if __name__ == "__main__":
