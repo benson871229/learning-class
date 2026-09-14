@@ -399,6 +399,177 @@
   }
 
   // 把一份報價（{name, note, rows}）算好小計並填入範本，回傳 docxtemplater 實例
+
+  /* ── 自動縮到一頁 ──
+   *
+   * 繳費單的版心只有 123mm，基本內容就佔 77mm，每多一門課再多 8.4mm，
+   * 所以六門課以上就會被推到第二頁。這裡在套版完成後量一次實際高度，
+   * 超出就先拿掉表格裡的空白備用列，再不夠才等比縮小字級與列高。
+   *
+   * 量測直接讀產生出來的 document.xml，而不是寫死範本的數字，
+   * 這樣使用者換上自己的範本一樣有效。
+   */
+
+  var TWIP_PER_PT = 20;
+  var LINE_FACTOR = 1.35;      // 行高相對字級的粗估倍數
+  var CELL_PAD = 100;          // 儲存格上下內距（twips）
+  var SAFETY = 0.96;           // 估算難免有誤差，留一點餘裕
+  var MIN_SZ = 14;             // 字級下限 7pt（w:sz 以半點為單位）
+  var MIN_SCALE = 0.55;        // 單頁優先，但再小就不好讀了
+  var STYLES = 'word/styles.xml';
+  var DOCUMENT = 'word/document.xml';
+
+  function attr(el, name) {
+    var v = el && el.getAttribute(name);
+    return v == null ? null : parseInt(v, 10);
+  }
+
+  function firstSz(el) {
+    var list = el.getElementsByTagName('w:sz');
+    return list.length ? attr(list[0], 'w:val') : null;
+  }
+
+  function maxSz(el) {
+    var list = el.getElementsByTagName('w:sz'), m = null;
+    for (var i = 0; i < list.length; i++) {
+      var v = attr(list[i], 'w:val');
+      if (v != null && (m === null || v > m)) m = v;
+    }
+    return m;
+  }
+
+  function textOf(el) {
+    var list = el.getElementsByTagName('w:t'), s = '';
+    for (var i = 0; i < list.length; i++) s += list[i].textContent || '';
+    return s;
+  }
+
+  function parseXml(zip, path) {
+    var f = zip.file(path);
+    if (!f) return null;
+    var d = new DOMParser().parseFromString(f.asText(), 'application/xml');
+    return d.getElementsByTagName('parsererror').length ? null : d;
+  }
+
+  // 文件的預設字級。沒有明確 w:sz 的文字都吃這個值，縮放時必須一起處理，
+  // 否則只縮到寫死字級的部分，整體高度幾乎不會變。
+  function defaultSizeOf(sdoc) {
+    if (!sdoc) return 24;
+    var dd = sdoc.getElementsByTagName('w:docDefaults')[0];
+    var v = dd && firstSz(dd);
+    return v || 24;
+  }
+
+  function paraHeight(p, defaultSz) {
+    var sz = firstSz(p) || defaultSz;
+    var h = (sz / 2) * TWIP_PER_PT * LINE_FACTOR;
+    var sp = p.getElementsByTagName('w:spacing');
+    if (sp.length) {
+      var after = attr(sp[0], 'w:after');
+      if (after) h += after;
+    }
+    return h;
+  }
+
+  function rowHeight(tr, defaultSz) {
+    var th = tr.getElementsByTagName('w:trHeight');
+    if (th.length) {
+      var v = attr(th[0], 'w:val');
+      if (v) return v;
+    }
+    var sz = maxSz(tr) || defaultSz;
+    return (sz / 2) * TWIP_PER_PT * LINE_FACTOR + CELL_PAD;
+  }
+
+  // body 內容總高（twips）。只走頂層元素，表格列一併計入。
+  function contentHeight(body, defaultSz) {
+    var total = 0, kids = body.childNodes;
+    for (var i = 0; i < kids.length; i++) {
+      var el = kids[i];
+      if (el.nodeType !== 1) continue;
+      if (el.tagName === 'w:p') {
+        total += paraHeight(el, defaultSz);
+      } else if (el.tagName === 'w:tbl') {
+        var trs = el.getElementsByTagName('w:tr');
+        for (var j = 0; j < trs.length; j++) total += rowHeight(trs[j], defaultSz);
+      }
+    }
+    return total;
+  }
+
+  function scaleTags(xdoc, tag, k, floor) {
+    var list = xdoc.getElementsByTagName(tag);
+    for (var i = 0; i < list.length; i++) {
+      var v = attr(list[i], 'w:val');
+      if (v) list[i].setAttribute('w:val', String(Math.max(floor, Math.round(v * k))));
+    }
+  }
+
+  function scaleAll(xdoc, sdoc, k) {
+    var docs = sdoc ? [xdoc, sdoc] : [xdoc];
+    for (var i = 0; i < docs.length; i++) {
+      scaleTags(docs[i], 'w:sz', k, MIN_SZ);
+      scaleTags(docs[i], 'w:szCs', k, MIN_SZ);
+    }
+    scaleTags(xdoc, 'w:trHeight', k, 1);
+  }
+
+  // 拿掉表格裡完全空白的備用列（原稿留來手寫用，課程多時純屬浪費）
+  function dropBlankRows(body, keepOne) {
+    var tbls = body.getElementsByTagName('w:tbl');
+    for (var i = 0; i < tbls.length; i++) {
+      var trs = tbls[i].getElementsByTagName('w:tr');
+      for (var j = trs.length - 1; j >= 0; j--) {
+        if (textOf(trs[j]).trim()) continue;
+        if (keepOne) { keepOne = false; continue; }
+        trs[j].parentNode.removeChild(trs[j]);
+      }
+    }
+  }
+
+  /* 套版後把內容收進一頁：先刪空白備用列，再等比縮小字級與列高。
+   * 高度是估算的，所以縮放採多次收斂而非一次到位。
+   * 量測直接讀產生出來的 XML，換上自訂範本一樣有效。 */
+  function fitToOnePage(zip) {
+    var xdoc = parseXml(zip, DOCUMENT);
+    if (!xdoc) return;
+    var sdoc = parseXml(zip, STYLES);
+
+    var body = xdoc.getElementsByTagName('w:body')[0];
+    if (!body) return;
+    var sect = body.getElementsByTagName('w:sectPr')[0];
+    if (!sect) return;
+    var pgSz = sect.getElementsByTagName('w:pgSz')[0];
+    var pgMar = sect.getElementsByTagName('w:pgMar')[0];
+    if (!pgSz || !pgMar) return;
+
+    var avail = (attr(pgSz, 'w:h') - (attr(pgMar, 'w:top') || 0)
+                 - (attr(pgMar, 'w:bottom') || 0)) * SAFETY;
+    if (!(avail > 0)) return;
+
+    var dsz = defaultSizeOf(sdoc);
+    if (contentHeight(body, dsz) <= avail) return;    // 本來就放得下
+
+    dropBlankRows(body, true);                        // 先留一列空白
+    if (contentHeight(body, dsz) > avail) dropBlankRows(body, false);
+
+    // 縮放：每輪依當下高度重算比例，最多三輪，總縮放不低於 MIN_SCALE
+    var applied = 1;
+    for (var pass = 0; pass < 3; pass++) {
+      var need = contentHeight(body, dsz);
+      if (need <= avail) break;
+      var k = Math.max(MIN_SCALE / applied, avail / need);
+      if (k >= 0.999) break;
+      scaleAll(xdoc, sdoc, k);
+      applied *= k;
+      dsz = Math.max(MIN_SZ, Math.round(dsz * k));
+    }
+
+    var ser = new XMLSerializer();
+    zip.file(DOCUMENT, ser.serializeToString(xdoc));
+    if (sdoc) zip.file(STYLES, ser.serializeToString(sdoc));
+  }
+
   // kind: 'payment'（繳費單）或 'receipt'（收據）
   function renderQuote(quote, kind) {
     var doc = new window.docxtemplater(new PizZip(templateBytes(kind)), {
@@ -406,6 +577,7 @@
       linebreaks: true
     });
     doc.render(kind === 'receipt' ? receiptContext(quote) : paymentContext(quote));
+    fitToOnePage(doc.getZip());
     return doc;
   }
 
