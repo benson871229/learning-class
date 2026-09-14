@@ -682,6 +682,25 @@
   /* 套版後把內容收進一頁：先刪空白列，再等比縮小字級、列高與間距。
    * 高度是估算的，所以採多次收斂；量測直接讀產生出來的 XML，
    * 因此使用者換上自訂範本一樣有效。 */
+  /* 頁首佔掉的版面。頁首若比上邊界高，本文會被往下推，
+   * 可用高度要扣掉超出的部分，否則會誤判成放得下。 */
+  function headerOverflow(zip, sect, defaultSz) {
+    var ref = sect.getElementsByTagName('w:headerReference')[0];
+    if (!ref) return 0;
+    var hdoc = null;
+    for (var i = 1; i <= 3 && !hdoc; i++) hdoc = parseXml(zip, 'word/header' + i + '.xml');
+    if (!hdoc) return 0;
+    var root = hdoc.documentElement, h = 0, kids = root.childNodes;
+    for (var j = 0; j < kids.length; j++) {
+      if (kids[j].nodeType === 1 && kids[j].tagName === 'w:p') {
+        h += paraHeight(kids[j], defaultSz, 0, 0);
+      }
+    }
+    var pgMar = sect.getElementsByTagName('w:pgMar')[0];
+    var fromTop = (attr(pgMar, 'w:header') || 0) + h;
+    return Math.max(0, fromTop - (attr(pgMar, 'w:top') || 0));
+  }
+
   function fitToOnePage(zip) {
     var xdoc = parseXml(zip, DOCUMENT);
     if (!xdoc) return;
@@ -695,15 +714,17 @@
     var pgMar = sect.getElementsByTagName('w:pgMar')[0];
     if (!pgSz || !pgMar) return;
 
+    var dsz0 = defaultSizeOf(sdoc);
     var avail = (attr(pgSz, 'w:h') - (attr(pgMar, 'w:top') || 0)
-                 - (attr(pgMar, 'w:bottom') || 0)) * SAFETY;
+                 - (attr(pgMar, 'w:bottom') || 0)
+                 - headerOverflow(zip, sect, dsz0)) * SAFETY;
     var widthTw = (attr(pgSz, 'w:w') || 0) - (attr(pgMar, 'w:left') || 0)
                   - (attr(pgMar, 'w:right') || 0);
     if (!(avail > 0)) return;
 
     dropBlankRows(body);                       // 空白列一律不留
 
-    var dsz = defaultSizeOf(sdoc);
+    var dsz = dsz0;
     if (contentHeight(body, dsz, widthTw) > avail) {
       // 二分搜尋「放得下的最大縮放比例」。
       // 先前是逐次依當下高度修正，但縮放與高度不是線性關係，
