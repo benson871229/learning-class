@@ -221,8 +221,10 @@ def unwrap_header_shapes(path):
 
     頁首那四個「第N聯」「NO.」標籤是絕對定位的 VML 圖形，卻帶著
     <w10:wrap type="square"/>（文繞圖），Word 會讓本文避開它們，
-    於是三聯整個被往下擠約 40mm，頁面上方留下一大片空白。
-    改成不繞排後標籤位置不變，但不再佔用本文的版面。
+    於是三聯整個被往下擠，頁面上方留下一大片空白。
+
+    要改成 type="none"（維持浮動、不繞排），不能把 <w10:wrap> 整個刪掉——
+    少了這個元素，Word 會把圖形當成內嵌物件，頁首反而被撐高，內容更容易溢出。
     """
     import zipfile, shutil, tempfile, os
     zin = zipfile.ZipFile(path)
@@ -234,7 +236,8 @@ def unwrap_header_shapes(path):
             if item.filename.startswith('word/header'):
                 xml = data.decode('utf8')
                 n += xml.count('<w10:wrap type="square"/>')
-                xml = xml.replace('<w10:wrap type="square"/>', '')
+                xml = xml.replace('<w10:wrap type="square"/>',
+                                  '<w10:wrap type="none"/>')
                 data = xml.encode('utf8')
             zo.writestr(item, data)
     zin.close()
