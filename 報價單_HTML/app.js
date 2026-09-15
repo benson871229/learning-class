@@ -414,7 +414,7 @@
   var LINE_FACTOR = 1.30;      // 單行行高相對字級的倍數（中文字型約 1.2~1.4）
   var CELL_PAD = 40;           // 每列框線與內距的餘量（twips）
   var CELL_SIDE_PAD = 216;     // 左右內距 108×2（Word 預設），扣掉才是可排字寬度
-  var SAFETY = 0.88;           // 估算約低估一成，留足餘裕免得又爆頁
+  var SAFETY = 0.88;           // 估算誤差（最壞低估 7%）與整列不可分割的餘裕
   var MIN_SZ = 10;             // 字級下限 5pt（w:sz 以半點為單位）
   var MIN_SCALE = 0.35;        // 12 門課又都是超長課名時會用到
   var STYLES = 'word/styles.xml';
@@ -450,9 +450,21 @@
     return w;
   }
 
+  /* 段落裡的「會排版的文字」。
+   * 浮動圖形（w:drawing／w:pict／mc:AlternateContent）裡的文字是絕對定位的，
+   * 不佔段落的行，必須跳過——收據的「第N聯」標籤就錨在抬頭那一格裡，
+   * 一起算進去會讓抬頭列被誤判成三行，每一聯多估 13mm。 */
+  var FLOATING = { 'w:drawing': 1, 'w:pict': 1, 'mc:AlternateContent': 1 };
+
   function textOf(el) {
-    var list = el.getElementsByTagName('w:t'), s = '';
-    for (var i = 0; i < list.length; i++) s += list[i].textContent || '';
+    var s = '';
+    var kids = el.childNodes;
+    for (var i = 0; i < kids.length; i++) {
+      var k = kids[i];
+      if (k.nodeType !== 1) continue;
+      if (FLOATING[k.tagName]) continue;
+      s += k.tagName === 'w:t' ? (k.textContent || '') : textOf(k);
+    }
     return s;
   }
 
@@ -527,10 +539,24 @@
   /* 儲存格高度：要把文字換行算進去。
    * 收據的退費規定只宣告 8.6mm 的 trHeight，實際卻要 20mm 以上，
    * 若只信 trHeight 就會嚴重低估整份文件。 */
+  /* 儲存格裡「會排版的段落」。同樣要跳過浮動圖形：文字方塊內部也有 w:p，
+   * 一併算進來的話，錨在抬頭格裡的兩個標籤會替每一聯多算約 18mm。 */
+  function blockParas(el, out) {
+    out = out || [];
+    var kids = el.childNodes;
+    for (var i = 0; i < kids.length; i++) {
+      var k = kids[i];
+      if (k.nodeType !== 1 || FLOATING[k.tagName]) continue;
+      if (k.tagName === 'w:p') out.push(k);
+      else blockParas(k, out);
+    }
+    return out;
+  }
+
   function cellHeight(tc, defaultSz, grid) {
     var tcW = tc.getElementsByTagName('w:tcW')[0];
     var w = (attr(tcW, 'w:w') || 0) - CELL_SIDE_PAD;
-    var total = 0, ps = tc.getElementsByTagName('w:p');
+    var total = 0, ps = blockParas(tc);
     for (var i = 0; i < ps.length; i++) total += paraHeight(ps[i], defaultSz, w, grid);
     return total + CELL_PAD;
   }
@@ -743,7 +769,8 @@
     dropBlankRows(body);                       // 空白列一律不留
 
     var scale = 1;
-    if (contentHeight(body, dsz0, widthTw) > avail) {
+    var raw = contentHeight(body, dsz0, widthTw);
+    if (raw > avail) {
       // 二分搜尋「放得下的最大縮放比例」。
       // 先前是逐次依當下高度修正，但縮放與高度不是線性關係，
       // 每輪都會多縮一點，十二門課會一路縮到 6.5pt 卻還剩 24mm 空間。
@@ -766,6 +793,7 @@
     // 供自動化測試核對估高與實際渲染的落差；只讀不寫，不影響產出。
     window.__fit = {
       avail: avail,
+      raw: raw,
       height: contentHeight(body, Math.max(MIN_SZ, Math.round(dsz0 * scale)), widthTw),
       scale: scale
     };
