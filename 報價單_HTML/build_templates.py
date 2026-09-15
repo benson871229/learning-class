@@ -251,38 +251,160 @@ def fit_receipt_on_one_page(doc):
                 _el(tcPr, 'w:tcW', **{'w:w': str(int(Mm(mm).twips)), 'w:type': 'dxa'})
 
 
-def unwrap_header_shapes(path):
-    """讓頁首／頁尾的浮動標籤不要把本文往下推。
+def move_labels_into_body(path):
+    """把「第N聯」「NO.」六個標籤從頁首／頁尾搬進本文，並改成相對頁面定位。
 
-    「第一聯／第二聯」「NO.」在頁首，「第三聯」在頁尾（用負的 margin-top
-    往上浮到第三聯旁邊）——兩邊都要處理，只改頁首的話，頁尾那兩個仍會
-    繞排，把本文從下方往上擠。
+    這是收據一直跑版的主因。那六個標籤是絕對定位的浮動文字方塊，但它們
+    錨定在頁首／頁尾的段落上（relativeFrom="paragraph"）。Word 與 LibreOffice
+    都會把頁首撐到足以容納它們——最下面那個離頁首起點 296.7pt，頁首因此高達
+    115mm，本文被壓到只剩 155mm，三聯無論如何縮都放不下。
 
-    這些標籤是絕對定位的 VML 圖形，卻帶著
-    <w10:wrap type="square"/>（文繞圖），Word 會讓本文避開它們，
-    於是三聯整個被往下擠，頁面上方留下一大片空白。
+    實測：把 headerReference／footerReference 拿掉，同一份檔案立刻從 2 頁變 1 頁、
+    表格從 129.4mm 回到 13.3mm。但標籤不能跟著消失，所以搬進本文、改成
+    relativeFrom="page" 的絕對座標，位置照舊、卻不再撐開任何東西。
 
-    要改成 type="none"（維持浮動、不繞排），不能把 <w10:wrap> 整個刪掉——
-    少了這個元素，Word 會把圖形當成內嵌物件，頁首反而被撐高，內容更容易溢出。
+    只把 style 改成 page 是不夠的（試過，仍是 2 頁）——錨點本身必須離開頁首。
     """
-    import zipfile, shutil, tempfile, os
-    zin = zipfile.ZipFile(path)
-    tmp = path.with_suffix('.tmp')
-    n = 0
-    with zipfile.ZipFile(tmp, 'w', zipfile.ZIP_DEFLATED) as zo:
-        for item in zin.infolist():
-            data = zin.read(item.filename)
-            if (item.filename.startswith('word/header')
-                    or item.filename.startswith('word/footer')):
-                xml = data.decode('utf8')
-                n += xml.count('<w10:wrap type="square"/>')
-                xml = xml.replace('<w10:wrap type="square"/>',
-                                  '<w10:wrap type="none"/>')
-                data = xml.encode('utf8')
-            zo.writestr(item, data)
+    import zipfile, shutil, tempfile
+    from lxml import etree
+
+    EMU = 12700.0                      # 1pt
+    PAGE_H, LEFT_MARGIN = 841.89, 36.0    # A4 高、左邊界 720 twips
+
+    zin = zipfile.ZipFile(str(path))
+    parts = {i.filename: zin.read(i.filename) for i in zin.infolist()}
+    order = [i.filename for i in zin.infolist()]
     zin.close()
+
+    doc = etree.fromstring(parts["word/document.xml"])
+    nsmap = doc.nsmap
+    W = "{%s}" % nsmap["w"]
+    WP = "{http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing}"
+
+    body = doc.find(W + "body")
+    sect = body.find(W + "sectPr")
+    pgMar = sect.find(W + "pgMar")
+    hdr_base = float(pgMar.get(W + "header") or 0) / 20.0
+    ftr_base = PAGE_H - float(pgMar.get(W + "footer") or 0) / 20.0
+
+    found = []
+    for name, base in (("word/header1.xml", hdr_base),
+                       ("word/footer1.xml", ftr_base)):
+        if name not in parts:
+            continue
+        root = etree.fromstring(parts[name])
+        for run in root.iter(W + "r"):
+            anchor = None
+            for a in run.iter(WP + "anchor"):
+                anchor = a
+                break
+            if anchor is None:
+                continue
+            posv = anchor.find(WP + "positionV")
+            off = posv.find(WP + "posOffset")
+            y = base + float(off.text) / EMU
+            txt = "".join(t.text or "" for t in run.iter(W + "t"))
+            found.append({"run": run, "y": y, "no": "NO." in txt,
+                          "text": txt, "anchor": anchor})
+        parts[name] = etree.tostring(root, xml_declaration=True,
+                                     encoding="UTF-8", standalone=True)
+
+    if not found:
+        return 0
+
+    # 依原本的上下順序決定各屬於第幾聯：兩組（標籤／號碼）各自由上往下排
+    copies = {}
+    for kind in (False, True):
+        group = sorted([f for f in found if f["no"] is kind], key=lambda f: f["y"])
+        for i, f in enumerate(group):
+            f["copy"] = i
+    copies = max((f["copy"] for f in found), default=0) + 1
+
+    # 錨點放在「該聯抬頭那一列」的儲存格裡，垂直方向相對於該段落。
+    # 不用頁面絕對座標：列高宣告的是最小值，實際會被內容撐大（實測每聯
+    # 比宣告多約 7mm），用絕對座標會一聯比一聯偏，第三聯會掉到上一聯的簽名列。
+    # 錨在自己那一列上，就永遠跟著自己那一聯走。
+    tbl = body.find(W + "tbl")
+    hosts = []
+    for tr in tbl.findall(W + "tr"):
+        txt = "".join(t.text or "" for t in tr.iter(W + "t"))
+        if "{branch_title}" in txt:
+            tc = tr.find(W + "tc")
+            hosts.append(tc.find(W + "p"))
+    if len(hosts) < copies:
+        hosts = [body.find(W + "p")] * copies
+
+    for f in sorted(found, key=lambda f: (f["copy"], f["no"])):
+        x = LEFT_MARGIN + _shape_left(f["anchor"], WP)
+        y = -2.0 + (21.3 if f["no"] else 0.0)      # 相對抬頭段落
+        _repos_anchor(f["anchor"], WP, x, y, EMU)
+        _repos_vml(f["run"], W, x, y)
+        hosts[f["copy"]].append(f["run"])
+
+    # 錨點已經不在頁首／頁尾，參照拿掉，本文才會從版心頂端開始
+    for ref in list(sect):
+        if ref.tag in (W + "headerReference", W + "footerReference"):
+            sect.remove(ref)
+
+    parts["word/document.xml"] = etree.tostring(
+        doc, xml_declaration=True, encoding="UTF-8", standalone=True)
+
+    tmp = Path(tempfile.mkstemp(suffix=".docx")[1])
+    with zipfile.ZipFile(str(tmp), "w", zipfile.ZIP_DEFLATED) as zo:
+        for name in order:
+            zo.writestr(name, parts[name])
     shutil.move(str(tmp), str(path))
-    return n
+    return len(found)
+
+
+def _shape_left(anchor, WP):
+    """取出原本的水平位移（pt）。原本相對於文字欄，加上左邊界就是頁面座標。"""
+    posh = anchor.find(WP + "positionH")
+    off = posh.find(WP + "posOffset")
+    return float(off.text) / 12700.0
+
+
+def _repos_anchor(anchor, WP, x, y, EMU):
+    from lxml import etree
+    # 水平用頁面座標（標籤要落在版心右緣，不受儲存格限制），
+    # 垂直相對於所在段落，才會跟著那一聯移動。
+    anchor.set("layoutInCell", "0")
+    for tag, rel, val in ((WP + "positionH", "page", x),
+                          (WP + "positionV", "paragraph", y)):
+        el = anchor.find(tag)
+        el.set("relativeFrom", rel)
+        off = el.find(WP + "posOffset")
+        off.text = str(int(round(val * EMU)))
+    # 改成完全不繞排。原本是 wrapSquare：搬進本文後，本文會繞著這六個標籤排，
+    # 第三聯因此被撐開一百多 mm，照樣溢出第二頁。
+    for kid in list(anchor):
+        if kid.tag.startswith(WP + "wrap"):
+            anchor.remove(kid)
+    extent = anchor.find(WP + "extent")
+    idx = list(anchor).index(extent) + 1 if extent is not None else len(anchor)
+    eff = anchor.find(WP + "effectExtent")
+    if eff is not None:
+        idx = list(anchor).index(eff) + 1
+    anchor.insert(idx, etree.SubElement(anchor, WP + "wrapNone"))
+
+
+def _repos_vml(run, W, x, y):
+    """VML 後備圖形也要一起改，否則舊版 Word 會畫在別的位置。"""
+    import re as _re
+    for el in run.iter():
+        st = el.get("style")
+        if not st or "position:absolute" not in st:
+            continue
+        st = _re.sub(r'margin-left:-?[\d.]+pt', 'margin-left:%.2fpt' % x, st)
+        st = _re.sub(r'margin-top:-?[\d.]+pt', 'margin-top:%.2fpt' % y, st)
+        st = st.replace("mso-position-horizontal-relative:text",
+                        "mso-position-horizontal-relative:page")
+        st = st.replace("mso-position-vertical-relative:text",
+                        "mso-position-vertical-relative:paragraph")
+        el.set("style", st)
+    W10 = "{urn:schemas-microsoft-com:office:word}wrap"
+    for el in run.iter(W10):
+        el.set("type", "none")
 
 
 # ── 收據 ──────────────────────────────────────────────────
@@ -309,8 +431,8 @@ def build_receipt():
 
     out = OUT / "收據範本.docx"
     doc.save(out)
-    n = unwrap_header_shapes(out)
-    print(f"   頁首頁尾 {n} 個浮動標籤改為不繞排（原本會把本文擠掉約 40mm）")
+    n = move_labels_into_body(out)
+    print(f"   {n} 個「第N聯／NO.」標籤搬進本文並改為相對頁面定位")
     n = normalize_fonts(out)
     print(f"   字型統一：中文{CN_FONT}／英數{EN_FONT}（{n} 處）")
     n = fix_element_order(out)
