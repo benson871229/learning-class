@@ -143,6 +143,8 @@ def build_payment():
     doc.save(out)
     n = normalize_fonts(out)
     print(f"   字型統一：中文{CN_FONT}／英數{EN_FONT}（{n} 處）")
+    n = fix_element_order(out)
+    print(f"   子元素順序修正 {n} 處")
     print(f"繳費單範本 → {out}")
 
 
@@ -167,9 +169,20 @@ def fit_receipt_on_one_page(doc):
     而「班別」欄僅 57.5mm（約 12 字），一旦學生報兩門以上，課程名稱串接後就會
     折行，三聯各多一行又是 16mm，必定跑版。
 
-    這裡做三件事把餘裕拉回來，都不動原稿的視覺設計：
+    真正的元凶是**行網格**：sectPr 的 <w:docGrid w:type="lines" w:linePitch="360"/>
+    把每一行鎖在 18pt，不管字級多小。退費規定那格是 6.5pt、十幾行的細字，
+    照字級算約 9mm，被網格撐成 89mm——三聯就是 267mm，單這一項就爆掉一頁。
+    只縮字級完全沒有用，因為行高根本不看字級。
+
+    第二個元凶是表格的浮動定位（tblpPr / tblpYSpec="center"）：三聯表格被當成
+    浮動物件並垂直置中，只要比版心高一點點就整塊被擠到下一頁，上方還留一大片
+    空白。改成一般表格後它會從版心頂端往下排，224mm 正好單頁。
+
+    這裡做的事，都不動原稿的視覺設計：
+      0. 關掉行網格（docGrid 改 default，並逐段加 snapToGrid=0）
+      0-2. 表格改回非浮動，水平置中改用 w:jc
       1. 表格前後的空段落縮到 1pt
-      2. 退費規定（6.5pt 細明文字）改為固定行高，省下每聯約 3mm
+      2. 退費規定（6.5pt 細明文字）改為固定行高
       3. 「班別」欄加寬、姓名欄相應縮窄，讓常見的課程串接維持一行
     另外為每一列加上 cantSplit，萬一真的溢出也是整聯移動，不會從中間被切斷。
     """
@@ -177,6 +190,14 @@ def fit_receipt_on_one_page(doc):
     from docx.shared import Mm
 
     body = doc.element.body
+
+    # ⓪ 關掉行網格。docGrid 是「每行固定 linePitch」，字級縮再小行高也不變；
+    #    type="default" 代表沒有網格，行高才會跟著字級走。
+    #    另外逐段補 snapToGrid=0，避免任何樣式層級又把網格打開。
+    for dg in body.iter(qn('w:docGrid')):
+        dg.set(qn('w:type'), 'default')
+    for para in body.iter(qn('w:p')):
+        _el(_el(para, 'w:pPr'), 'w:snapToGrid', **{'w:val': '0'})
 
     # ① 表格前後的空段落縮到 1pt（w:sz 以半點為單位，故 val=2）
     for p in body.findall(qn('w:p')):
@@ -187,6 +208,17 @@ def fit_receipt_on_one_page(doc):
             _el(_el(pPr, 'w:rPr'), 'w:sz', **{'w:val': '2'})
 
     table = doc.tables[0]
+
+    # ⓪-2 把三聯表格從「浮動」改回一般表格。
+    #     原稿的 tblPr 帶 <w:tblpPr tblpYSpec="center">，表格被當成浮動物件
+    #     並在頁面上「垂直置中」。這種表格一旦比版心高一點就整塊往下一頁擠，
+    #     上方還會留下一大片空白——實測 2 頁、頂端空 66mm。
+    #     改成一般表格後，它就從版心頂端老實往下排：224mm，剛好單頁。
+    #     表格寬 185mm 幾乎等於版心寬，所以水平置中改用 w:jc 保留即可。
+    tblPr = table._tbl.find(qn('w:tblPr'))
+    for tblp in tblPr.findall(qn('w:tblpPr')):
+        tblPr.remove(tblp)
+    _el(tblPr, 'w:jc', **{'w:val': 'center'})
 
     for row in table.rows:
         # ② 整列不跨頁
@@ -220,9 +252,13 @@ def fit_receipt_on_one_page(doc):
 
 
 def unwrap_header_shapes(path):
-    """讓頁首的浮動標籤不要把本文往下推。
+    """讓頁首／頁尾的浮動標籤不要把本文往下推。
 
-    頁首那四個「第N聯」「NO.」標籤是絕對定位的 VML 圖形，卻帶著
+    「第一聯／第二聯」「NO.」在頁首，「第三聯」在頁尾（用負的 margin-top
+    往上浮到第三聯旁邊）——兩邊都要處理，只改頁首的話，頁尾那兩個仍會
+    繞排，把本文從下方往上擠。
+
+    這些標籤是絕對定位的 VML 圖形，卻帶著
     <w10:wrap type="square"/>（文繞圖），Word 會讓本文避開它們，
     於是三聯整個被往下擠，頁面上方留下一大片空白。
 
@@ -236,7 +272,8 @@ def unwrap_header_shapes(path):
     with zipfile.ZipFile(tmp, 'w', zipfile.ZIP_DEFLATED) as zo:
         for item in zin.infolist():
             data = zin.read(item.filename)
-            if item.filename.startswith('word/header'):
+            if (item.filename.startswith('word/header')
+                    or item.filename.startswith('word/footer')):
                 xml = data.decode('utf8')
                 n += xml.count('<w10:wrap type="square"/>')
                 xml = xml.replace('<w10:wrap type="square"/>',
@@ -273,9 +310,11 @@ def build_receipt():
     out = OUT / "收據範本.docx"
     doc.save(out)
     n = unwrap_header_shapes(out)
-    print(f"   頁首 {n} 個浮動標籤改為不繞排（原本會把本文往下推約 40mm）")
+    print(f"   頁首頁尾 {n} 個浮動標籤改為不繞排（原本會把本文擠掉約 40mm）")
     n = normalize_fonts(out)
     print(f"   字型統一：中文{CN_FONT}／英數{EN_FONT}（{n} 處）")
+    n = fix_element_order(out)
+    print(f"   子元素順序修正 {n} 處")
     print(f"收據範本 → {out}")
 
 
@@ -353,6 +392,99 @@ def _ensure_default_rfonts(xml):
     else:
         tail = "<w:rPr>" + tag + "</w:rPr>" + tail
     return head + sep + tail, 1
+
+
+# ── OOXML 子元素順序 ──────────────────────────────────────
+
+# WordprocessingML 的 schema 是 xsd:sequence，子元素順序寫錯，Word 會直接
+# 忽略放錯位置的那個元素（LibreOffice 則照收）。先前收據的 w:spacing 被放到
+# w:rPr 後面、w:cantSplit 被放到 w:trHeight 後面，於是所有壓縮行高的設定
+# 在 Word 裡等於沒寫——排版量測全對，實際列印卻是兩頁，原因就在這裡。
+CHILD_ORDER = {
+    "pPr": ["pStyle", "keepNext", "keepLines", "pageBreakBefore", "framePr",
+            "widowControl", "numPr", "suppressLineNumbers", "pBdr", "shd",
+            "tabs", "suppressAutoHyphens", "kinsoku", "wordWrap",
+            "overflowPunct", "topLinePunct", "autoSpaceDE", "autoSpaceDN",
+            "bidi", "adjustRightInd", "snapToGrid", "spacing", "ind",
+            "contextualSpacing", "mirrorIndents", "suppressOverlap", "jc",
+            "textDirection", "textAlignment", "textboxTightWrap", "outlineLvl",
+            "divId", "cnfStyle", "rPr", "sectPr", "pPrChange"],
+    "rPr": ["rStyle", "rFonts", "b", "bCs", "i", "iCs", "caps", "smallCaps",
+            "strike", "dstrike", "outline", "shadow", "emboss", "imprint",
+            "noProof", "snapToGrid", "vanish", "webHidden", "color", "spacing",
+            "w", "kern", "position", "sz", "szCs", "highlight", "u", "effect",
+            "bdr", "shd", "fitText", "vertAlign", "rtl", "cs", "em", "lang",
+            "eastAsianLayout", "specVanish", "oMath", "rPrChange"],
+    "trPr": ["cnfStyle", "divId", "gridBefore", "gridAfter", "wBefore",
+             "wAfter", "cantSplit", "trHeight", "tblHeader", "tblCellSpacing",
+             "jc", "hidden", "ins", "del", "trPrChange"],
+    "tcPr": ["cnfStyle", "tcW", "gridSpan", "hMerge", "vMerge", "tcBorders",
+             "shd", "noWrap", "tcMar", "textDirection", "tcFitText", "vAlign",
+             "hideMark", "cellIns", "cellDel", "cellMerge", "tcPrChange"],
+    "tblPr": ["tblStyle", "tblpPr", "tblOverlap", "bidiVisual",
+              "tblStyleRowBandSize", "tblStyleColBandSize", "tblW", "jc",
+              "tblCellSpacing", "tblInd", "tblBorders", "shd", "tblLayout",
+              "tblCellMar", "tblLook", "tblCaption", "tblDescription",
+              "tblPrChange"],
+    "sectPr": ["headerReference", "footerReference", "footnotePr", "endnotePr",
+               "type", "pgSz", "pgMar", "paperSrc", "pgBorders", "lnNumType",
+               "pgNumType", "cols", "formProt", "vAlign", "noEndnote",
+               "titlePg", "textDirection", "bidi", "rtlGutter", "docGrid",
+               "printerSettings", "sectPrChange"],
+}
+
+W_NS = "{http://schemas.openxmlformats.org/wordprocessingml/2006/main}"
+
+
+def _reorder(el):
+    """遞迴把子元素排回 schema 順序。含未知元素的節點一律不動，以免弄巧成拙。"""
+    n = 0
+    for child in el:
+        n += _reorder(child)
+    tag = el.tag
+    if not isinstance(tag, str) or not tag.startswith(W_NS):
+        return n
+    order = CHILD_ORDER.get(tag[len(W_NS):])
+    if order is None:
+        return n
+    kids = list(el)
+    names = []
+    for k in kids:
+        if not isinstance(k.tag, str) or not k.tag.startswith(W_NS):
+            return n                      # 有非 w: 元素，不碰
+        names.append(k.tag[len(W_NS):])
+    if any(name not in order for name in names):
+        return n                          # 有沒列在表裡的元素，不碰
+    idx = [order.index(name) for name in names]
+    if idx == sorted(idx):
+        return n
+    for k in sorted(kids, key=lambda k: order.index(k.tag[len(W_NS):])):
+        el.append(k)                      # append 會搬移既有節點
+    return n + 1
+
+
+def fix_element_order(path):
+    """把 docx 各部分的子元素順序修正到 Word 能接受的樣子。"""
+    import zipfile, shutil, tempfile
+    from lxml import etree
+    tmp = Path(tempfile.mkstemp(suffix=".docx")[1])
+    zin = zipfile.ZipFile(str(path))
+    fixed = 0
+    with zipfile.ZipFile(str(tmp), "w", zipfile.ZIP_DEFLATED) as zo:
+        for item in zin.infolist():
+            data = zin.read(item.filename)
+            name = item.filename
+            if (name in ("word/document.xml", "word/styles.xml")
+                    or name.startswith("word/header")
+                    or name.startswith("word/footer")):
+                root = etree.fromstring(data)
+                fixed += _reorder(root)
+                data = etree.tostring(root, xml_declaration=True,
+                                      encoding="UTF-8", standalone=True)
+            zo.writestr(item, data)
+    zin.close()
+    shutil.move(str(tmp), str(path))
+    return fixed
 
 
 if __name__ == "__main__":

@@ -416,7 +416,7 @@
   var CELL_SIDE_PAD = 216;     // 左右內距 108×2（Word 預設），扣掉才是可排字寬度
   var SAFETY = 0.88;           // 估算約低估一成，留足餘裕免得又爆頁
   var MIN_SZ = 10;             // 字級下限 5pt（w:sz 以半點為單位）
-  var MIN_SCALE = 0.55;
+  var MIN_SCALE = 0.35;        // 12 門課又都是超長課名時會用到
   var STYLES = 'word/styles.xml';
   var DOCUMENT = 'word/document.xml';
 
@@ -608,7 +608,10 @@
   function gridPitchOf(body) {
     var sect = body.getElementsByTagName('w:sectPr')[0];
     var dg = sect && sect.getElementsByTagName('w:docGrid')[0];
-    if (!dg || dg.getAttribute('w:type') === 'none') return 0;
+    // w:type 的「沒有網格」是 default，不是 none；兩個都要當成沒網格，
+    // 否則關掉網格的範本仍會被當成每行鎖 18pt，估高整個偏掉。
+    var ty = dg && dg.getAttribute('w:type');
+    if (!dg || ty === 'none' || ty === 'default') return 0;
     return attr(dg, 'w:linePitch') || 0;
   }
 
@@ -682,23 +685,38 @@
   /* 套版後把內容收進一頁：先刪空白列，再等比縮小字級、列高與間距。
    * 高度是估算的，所以採多次收斂；量測直接讀產生出來的 XML，
    * 因此使用者換上自訂範本一樣有效。 */
-  /* 頁首佔掉的版面。頁首若比上邊界高，本文會被往下推，
-   * 可用高度要扣掉超出的部分，否則會誤判成放得下。 */
-  function headerOverflow(zip, sect, defaultSz) {
-    var ref = sect.getElementsByTagName('w:headerReference')[0];
-    if (!ref) return 0;
-    var hdoc = null;
-    for (var i = 1; i <= 3 && !hdoc; i++) hdoc = parseXml(zip, 'word/header' + i + '.xml');
-    if (!hdoc) return 0;
-    var root = hdoc.documentElement, h = 0, kids = root.childNodes;
+  /* 頁首／頁尾佔掉的版面。
+   * 頁首從 w:header 處開始往下排，比上邊界低就會把本文往下推；
+   * 頁尾從 w:footer 處往上排，同理會從下方吃掉空間。
+   * 兩邊都要扣，只扣頁首會把可用高度多算十幾 mm，誤判成放得下。 */
+  function partHeight(zip, prefix, defaultSz) {
+    var pdoc = null;
+    for (var i = 1; i <= 3 && !pdoc; i++) pdoc = parseXml(zip, 'word/' + prefix + i + '.xml');
+    if (!pdoc) return 0;
+    var kids = pdoc.documentElement.childNodes, h = 0;
     for (var j = 0; j < kids.length; j++) {
       if (kids[j].nodeType === 1 && kids[j].tagName === 'w:p') {
         h += paraHeight(kids[j], defaultSz, 0, 0);
       }
     }
+    return h;
+  }
+
+  function marginOverflow(zip, sect, defaultSz) {
     var pgMar = sect.getElementsByTagName('w:pgMar')[0];
-    var fromTop = (attr(pgMar, 'w:header') || 0) + h;
-    return Math.max(0, fromTop - (attr(pgMar, 'w:top') || 0));
+    if (!pgMar) return 0;
+    var over = 0;
+    if (sect.getElementsByTagName('w:headerReference')[0]) {
+      over += Math.max(0, (attr(pgMar, 'w:header') || 0)
+                       + partHeight(zip, 'header', defaultSz)
+                       - (attr(pgMar, 'w:top') || 0));
+    }
+    if (sect.getElementsByTagName('w:footerReference')[0]) {
+      over += Math.max(0, (attr(pgMar, 'w:footer') || 0)
+                       + partHeight(zip, 'footer', defaultSz)
+                       - (attr(pgMar, 'w:bottom') || 0));
+    }
+    return over;
   }
 
   function fitToOnePage(zip) {
@@ -717,15 +735,15 @@
     var dsz0 = defaultSizeOf(sdoc);
     var avail = (attr(pgSz, 'w:h') - (attr(pgMar, 'w:top') || 0)
                  - (attr(pgMar, 'w:bottom') || 0)
-                 - headerOverflow(zip, sect, dsz0)) * SAFETY;
+                 - marginOverflow(zip, sect, dsz0)) * SAFETY;
     var widthTw = (attr(pgSz, 'w:w') || 0) - (attr(pgMar, 'w:left') || 0)
                   - (attr(pgMar, 'w:right') || 0);
     if (!(avail > 0)) return;
 
     dropBlankRows(body);                       // 空白列一律不留
 
-    var dsz = dsz0;
-    if (contentHeight(body, dsz, widthTw) > avail) {
+    var scale = 1;
+    if (contentHeight(body, dsz0, widthTw) > avail) {
       // 二分搜尋「放得下的最大縮放比例」。
       // 先前是逐次依當下高度修正，但縮放與高度不是線性關係，
       // 每輪都會多縮一點，十二門課會一路縮到 6.5pt 卻還剩 24mm 空間。
@@ -735,14 +753,22 @@
         var trial = xdoc.cloneNode(true);
         scaleAll(trial, null, mid);
         var tb = trial.getElementsByTagName('w:body')[0];
-        if (contentHeight(tb, Math.max(MIN_SZ, Math.round(dsz * mid)), widthTw) <= avail) {
+        if (contentHeight(tb, Math.max(MIN_SZ, Math.round(dsz0 * mid)), widthTw) <= avail) {
           best = mid; lo = mid;
         } else {
           hi = mid;
         }
       }
       scaleAll(xdoc, sdoc, best);
+      scale = best;
     }
+
+    // 供自動化測試核對估高與實際渲染的落差；只讀不寫，不影響產出。
+    window.__fit = {
+      avail: avail,
+      height: contentHeight(body, Math.max(MIN_SZ, Math.round(dsz0 * scale)), widthTw),
+      scale: scale
+    };
 
     var ser = new XMLSerializer();
     zip.file(DOCUMENT, ser.serializeToString(xdoc));
